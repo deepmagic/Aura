@@ -1,29 +1,63 @@
 $padding: 8px;
-$border: 2px #0c1f3f solid;
+$border: 1px #0c1f3f solid;
+// $border: 1px transparent solid;
+
+$color-bg1: #0e387e;
+$color-bg2: #3b78c0;
+
+$color-highlight: #fdcd32;
 
 ::-webkit-scrollbar { display:none; }
 
 * {
     box-sizing: border-box;
 }
-
 #app, html, body {
     margin: 0;
     height: 100%;
     width: 100%;
-    font-family: arial;
     overflow: hidden;
-    background: #0f3981;
-    color: #7faeff;
+    background: linear-gradient($color-bg1, $color-bg2);
+    color: #fff;
+    font-size: 16px;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .aura {
     display: flex;
     height: 100%;
 }
-.midi {
+
+.panel {
+    $panel-width: 350px;
+
+    position: fixed;
+    height: 100%;
+    width: $panel-width;
+    right: 0;
+    background-image: url('/images/egg-shell.png');
+    background-color: #181818;
+    box-shadow: inset 1px 0 4px #333;
+
+    transform: translateX($panel-width);
+    transition: transform 0.5s ease;
     padding: $padding;
 
+    &.open {
+        transform: translateX(0px);
+    }
+    .close {
+        cursor: pointer;
+        position: absolute;
+        width:32px;
+        height:32px;
+        top: $padding;
+        right: $padding;
+        i { font-size: 2em; font-weight: bold }
+    }
+}
+
+.midi {
     .inputs {
         display: flex;
         flex-direction: column;
@@ -38,6 +72,9 @@ $track-block-height: 120px;
 $track-block-width: 200px;
 $track-instrument-height: 100px;
 
+$left-keys-width: 100px;
+$keys-height: 50px;
+
 .sequencer {
     user-select: none;
     flex:1;
@@ -50,6 +87,10 @@ $track-instrument-height: 100px;
         text-align:center;
         height: 32px;
         border-bottom: $border;
+        font-size: 18px;
+        line-height: 1;
+        font-weight: bold;
+        padding: 4px;
     }
 
     .song {
@@ -58,7 +99,7 @@ $track-instrument-height: 100px;
         flex-direction: column;
         overflow:hidden;
 
-        .instrument.scene, .track-head.scene {
+        .track-head.fixed, .instrument.fixed {
             width: $track-block-width;
         }
 
@@ -75,6 +116,8 @@ $track-instrument-height: 100px;
                 text-align: center;
                 min-width: $track-block-width;
                 border-right: $border;
+                font-weight: bold;
+                line-height: 1.9;
             }
         }
 
@@ -90,17 +133,13 @@ $track-instrument-height: 100px;
                 .scene-head {
                     height: $track-block-height;
                     border-bottom: $border;
-
-                    &:last-child {
-                        border-bottom: none;
-                    }
                 }
             }
             .loops {
                 display: flex;
                 overflow: auto;
                 flex-direction: column;
-                background: linear-gradient(#5985d424 30%, #0b2c63);
+
 
                 .loop-set {
                     display:flex;
@@ -112,10 +151,6 @@ $track-instrument-height: 100px;
                         border-right: $border;
                         border-bottom: $border;
                     }
-                    &:last-child .loop {
-                        border-bottom: none;
-                    }
-
                 }
             }
         }
@@ -125,7 +160,6 @@ $track-instrument-height: 100px;
             flex: 1;
             max-height: 100px;
             border-top: $border;
-            color: #fff;
             background: linear-gradient(#181818 30%, #000);
 
             .instruments {
@@ -139,27 +173,136 @@ $track-instrument-height: 100px;
             }
         }
     }
-    .play-control {
+
+    .pattern {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow:hidden;
+
+        .pattern-header {
+            display:flex;
+            height: 64px;
+            border-bottom: $border;
+
+            .pattern-control {
+                width: $left-keys-width;
+                border-right: $border;
+            }
+
+            .bars {
+                flex:1;
+                display:flex;
+                overflow: auto;
+                flex-direction: column;
+
+                .bar-row {
+                    display:flex;
+                    flex: 1;
+                    border-bottom: $border;
+                    max-height: 22px;
+                    line-height: 1.8;
+
+                    .bar {
+                        flex: 1;
+                        font-size: 0.8em;
+                        border-right: $border;
+                        text-align: center;
+                    }
+                }
+                .spacer {
+                    height: 20px;
+                    background: rgba(119, 158, 204, 0.5);
+                }
+                .sub-bars {
+                    flex: 1;
+                }
+            }
+        }
+        .pattern-content {
+            display: flex;
+            flex: 1;
+
+            .left {
+                border-right: $border;
+                min-width: $track-block-width;
+                overflow: auto;
+                &.keys {
+                    min-width: $left-keys-width;
+
+                    .note {
+                        text-align: center;
+                        font-size: 0.8em;
+                        border-right: 22px solid rgba(255,255,255, 0.8);
+                        margin-top: 1px;
+                        background: rgba($color-bg2, 0.3);
+                        height: 32px;
+                        line-height: 2.6;
+                        box-shadow: inset 0 1px 1px #4880c4;
+
+                        &.sharp {
+                            border-right: 22px solid rgba(0, 0, 0, 0.8);
+                        }
+                    }
+                }
+            }
+            .right {
+                overflow: auto;
+            }
+        }
+        .pattern-footer {
+            display: flex;
+
+            .foot-switch {
+                border-top: $border;
+                border-right: $border;
+                width: $left-keys-width;
+            }
+        }
+    }
+
+    .transport-control {
+        display: flex;
         color: #fff;
-        background: #181818;
+        background-image: url('/images/egg-shell.png');
+        background-color: #181818;
         padding: 4px;
-        height: 38px;
+        height: 42px;
         border-top: 1px #333 solid;
-        box-shadow: inset 0 1px 1px #333;
 
         button {
             padding:4px 16px;
-            color:#fff;
+            color:#999;
             background: #181818;
             border: 2px #000 solid;
-            margin-right: 3px;
             box-shadow: inset 0 1px 1px #333, 1px 1px 3px rgba(0,0,0,0.7);
             border-radius: 3px;
             outline: none;
             text-shadow: 0 0 2px #000;
+            margin-right: 4px;
+            height: 32px;
+            i { line-height: 0.9 }
+
             &:active {
                 box-shadow: inset 0 1px 1px #000, 0 0 0;
             }
-        }        
+
+            &.textbtn {
+                font-weight: bold;
+                padding: 4px 2px;
+            }
+
+            &.tempo {
+                margin-left: 8px;
+                padding: 4px;
+            }
+
+            &.function {
+                margin-right: 12px;
+                &.active {
+                    color: #fa0;
+                }
+            }
+        }
     }
 }

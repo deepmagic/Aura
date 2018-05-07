@@ -1,12 +1,16 @@
 const path = require('path');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const WebpackAutoInject = require('webpack-auto-inject-version');
 
 module.exports = {
   entry: { main: './src/aura.js' },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'main.js'
+  },
+  resolve: {
+       modules: [path.resolve(__dirname, 'src/'), 'node_modules'],
   },
   module: {
     rules: [
@@ -47,6 +51,7 @@ module.exports = {
       template: "./src/index.html",
       filename: "./index.html"
     }),
-    new ExtractTextPlugin({filename: 'style.css'})
+    new ExtractTextPlugin({filename: 'style.css'}),
+    new WebpackAutoInject()
   ]
 };

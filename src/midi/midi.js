@@ -1,10 +1,12 @@
 import React from 'react'
-import WebMidi from 'webmidi';
+import WebMidi from 'webmidi'
 
 // TEMP
 import Tone from 'tone'
-const fmSynth = new Tone.PolySynth(6, Tone.DuoSynth).toMaster();
-// const fmSynth = new Tone.FMSynth().toMaster()
+const chorus = new Tone.Chorus(4, 2.5, 0.5).toMaster()
+const filter = new Tone.Filter(200, 'lowpass').toMaster()
+const fmSynth = new Tone.PolySynth(6, Tone.AMSynth).chain(chorus, filter)
+fmSynth.set({oscillator: {type: 'sawtooth'}})
 
 const MidiDevice = ({ device, onClick, selected }) => {
     // - {device.state} - {device.type} - {device.connection} - {device.manufacturer}
@@ -15,6 +17,12 @@ const MidiDevice = ({ device, onClick, selected }) => {
         </div>
     )
 }
+
+const clampFloat = (low, high, value) =>
+    Math.max(high * (value/127), low)
+
+const clampInt = (low, high, value) =>
+    Math.round(clampFloat(low, high, value))
 
 export class Midi extends React.Component {
     constructor() {
@@ -38,6 +46,7 @@ export class Midi extends React.Component {
                 console.log("WebMidi could not be enabled.", err)
             } else {
                 this.setState({midi: WebMidi})
+                this.selectInput( WebMidi.getInputById(window.localStorage['lastMidi']) )
             }
         })
     }
@@ -52,14 +61,23 @@ export class Midi extends React.Component {
     }
     controlchange (msg) {
         console.log('controlchange', msg)
+        if (msg.controller.number === 20) {
+            fmSynth.set({harmonicity: msg.value})
+        }
+
+        if (msg.controller.number === 21) {
+            filter.frequency.value = clampInt(20, 22000, msg.value)
+        }
     }
 
     selectInput(input) {
-        console.log('input', input);
+        if (!input) return
+
         input.addListener('noteon', 'all', this.noteon)
         input.addListener('noteoff', 'all', this.noteoff)
         input.addListener('controlchange', 'all', this.controlchange)
         this.setState({input})
+        window.localStorage['lastMidi'] = input.id
     }
     renderInputs() {
         return this.state.midi.inputs.map((input, index) =>
