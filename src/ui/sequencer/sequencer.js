@@ -52,7 +52,7 @@ const song = {
 }
 
 const pattern = {
-    bars: 4
+    bars: 8
 }
 
 const hide = {

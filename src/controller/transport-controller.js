@@ -1,4 +1,4 @@
-// bottom bar controller - play/record/stop etc
+import Tone from 'tone'
 
 export const transportController = () => {
 
@@ -6,10 +6,10 @@ export const transportController = () => {
         console.log('record')
     }
     const stop = () => {
-        console.log('stop')
+        Tone.Transport.stop()
     }
     const play = () => {
-        console.log('play')
+        Tone.Transport.start()
     }
     const toggleRepeat = () => {
         console.log('toggleRepeat')
@@ -22,3 +22,9 @@ export const transportController = () => {
         toggleRepeat,
     }
 }
+
+function loopCallback(time){
+	console.log("loop");
+}
+var loop = new Tone.Loop(loopCallback, 2);
+loop.start(0)

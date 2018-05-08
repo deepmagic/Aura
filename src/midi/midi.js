@@ -4,8 +4,8 @@ import WebMidi from 'webmidi'
 // TEMP
 import Tone from 'tone'
 const chorus = new Tone.Chorus(4, 2.5, 0.5).toMaster()
-const filter = new Tone.Filter(200, 'lowpass').toMaster()
-const fmSynth = new Tone.PolySynth(6, Tone.AMSynth).chain(chorus, filter)
+const filter = new Tone.Filter(200, 'lowpass', -24).toMaster()
+const fmSynth = new Tone.PolySynth(6, Tone.AMSynth).chain(filter, chorus)
 fmSynth.set({oscillator: {type: 'sawtooth'}})
 
 const MidiDevice = ({ device, onClick, selected }) => {
@@ -52,21 +52,25 @@ export class Midi extends React.Component {
     }
 
     noteon (msg) {
-        console.log('noteon', msg)
+        //console.log('noteon', msg)
         fmSynth.triggerAttack(`${msg.note.name}${msg.note.octave}`, undefined, msg.velocity);
     }
     noteoff (msg) {
-        console.log('noteoff', msg)
+        //console.log('noteoff', msg)
         fmSynth.triggerRelease(`${msg.note.name}${msg.note.octave}`);
     }
     controlchange (msg) {
-        console.log('controlchange', msg)
+        //console.log('controlchange', msg)
         if (msg.controller.number === 20) {
             fmSynth.set({harmonicity: msg.value})
         }
 
         if (msg.controller.number === 21) {
-            filter.frequency.value = clampInt(20, 22000, msg.value)
+            filter.frequency.value = clampFloat(20, 12000, msg.value)
+            // console.log('filter', filter.frequency.value, msg.value)
+        }
+        if (msg.controller.number === 22) {
+            filter.Q.value = clampFloat(0, 120, msg.value)
         }
     }
 

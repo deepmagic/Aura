@@ -1,9 +1,14 @@
 $padding: 8px;
 $border: 1px #0c1f3f solid;
-// $border: 1px transparent solid;
+$border-trans: 1px transparent solid;
 
+$color-text: #fff;
 $color-bg1: #0e387e;
 $color-bg2: #3b78c0;
+$color-light: #4880c4;
+$color-50white: rgba(255,255,255,0.5);
+$color-midi-note-velocity: #6ba2af;
+$color-midi-note: #8fd8ea;
 
 $color-highlight: #fdcd32;
 
@@ -18,7 +23,7 @@ $color-highlight: #fdcd32;
     width: 100%;
     overflow: hidden;
     background: linear-gradient($color-bg1, $color-bg2);
-    color: #fff;
+    color: $color-text;
     font-size: 16px;
     font-family: 'Open Sans', sans-serif;
 }
@@ -224,7 +229,7 @@ $keys-height: 50px;
             flex: 1;
 
             .left {
-                border-right: $border;
+                border-right: $border-trans;
                 min-width: $track-block-width;
                 overflow: auto;
                 &.keys {
@@ -233,37 +238,63 @@ $keys-height: 50px;
                     .note {
                         text-align: center;
                         font-size: 0.8em;
-                        border-right: 22px solid rgba(255,255,255, 0.8);
+                        border-right: 22px solid rgba(255,255,255, 0.6);
                         margin-top: 1px;
                         background: rgba($color-bg2, 0.3);
                         height: 32px;
                         line-height: 2.6;
-                        box-shadow: inset 0 1px 1px #4880c4;
+                        box-shadow: inset 0 1px 1px $color-light;
 
                         &.sharp {
-                            border-right: 22px solid rgba(0, 0, 0, 0.8);
+                            border-right: 22px solid rgba(0, 0, 0, 0.6);
                         }
                     }
                 }
             }
             .right {
                 overflow: auto;
+                display:flex;
+
+                .grid {
+                    .midi-note {
+                        fill: $color-midi-note;
+                    }
+                    .bar-line {
+                        stroke-width: 1;
+                        stroke: $color-50white;
+                    }
+                    .bar-sub-line {
+                        stroke-width: 0.3;
+                        stroke: rgba(255,255,255,0.25);
+                    }
+                    .bar-cross-line {
+                        stroke-width: 0.6;
+                        stroke: rgba(255,255,255,0.25);
+                    }
+                }
+                .canvas-test {
+                    border: 1px red solid;
+                }
             }
         }
         .pattern-footer {
             display: flex;
+            height: 50px;
 
             .foot-switch {
                 border-top: $border;
                 border-right: $border;
                 width: $left-keys-width;
             }
+            .velocity {
+
+            }
         }
     }
 
     .transport-control {
         display: flex;
-        color: #fff;
+        color: $color-text;
         background-image: url('/images/egg-shell.png');
         background-color: #181818;
         padding: 4px;
