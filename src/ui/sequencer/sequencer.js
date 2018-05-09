@@ -52,22 +52,20 @@ const song = {
 }
 
 const pattern = {
-    bars: 8
+    bars: 4
 }
-
 const hide = {
     display: 'none'
 }
+
 export class SequencerView extends React.Component {
 
     render () {
         return (
             <div className='sequencer'>
                 <SeqHeader />
-
-                <Song song={song}          style={ this.props.ui.expand ? hide : null } />
+                <Song    song={song}       style={ this.props.ui.expand ? hide : null } />
                 <Pattern pattern={pattern} style={ this.props.ui.expand ? null : hide } />
-
                 <TransportControl tempo={song.tempo} />
             </div>
         )

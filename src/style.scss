@@ -6,6 +6,8 @@ $color-text: #fff;
 $color-bg1: #0e387e;
 $color-bg2: #3b78c0;
 $color-light: #4880c4;
+$color-light2: #5e9cc2;
+$color-mid: #2f5d94;
 $color-50white: rgba(255,255,255,0.5);
 $color-midi-note-velocity: #6ba2af;
 $color-midi-note: #8fd8ea;
@@ -193,6 +195,25 @@ $keys-height: 50px;
             .pattern-control {
                 width: $left-keys-width;
                 border-right: $border;
+                display: flex;
+                background: $color-light2;
+
+                .draw, .select {
+                    cursor: pointer;
+                    color: $color-bg1;
+                    flex: 1;
+                    margin: 4px;
+                    font-size: 0.7em;
+                    text-align: center;
+                    padding-top: 8px;
+                    border-radius: 1px;
+
+                    i { font-size: 2.5em }
+
+                    &.active {
+                        background-color: $color-highlight;
+                    }
+                }
             }
 
             .bars {
@@ -200,19 +221,29 @@ $keys-height: 50px;
                 display:flex;
                 overflow: auto;
                 flex-direction: column;
-
+                position: relative;
                 .bar-row {
                     display:flex;
                     flex: 1;
                     border-bottom: $border;
-                    max-height: 22px;
+                    height: 22px;
                     line-height: 1.8;
-
+                    background: rgba($color-midi-note, 0.7);
+                    .bar-range {
+                        z-index: 1;
+                        position: absolute;
+                        background: rgba($color-highlight, 0.7);
+                        width: 455px;
+                        height: 21px;
+                    }
                     .bar {
+                        z-index: 2;
                         flex: 1;
                         font-size: 0.8em;
                         border-right: $border;
                         text-align: center;
+                        color: $color-bg1;
+                        line-height: 1.6;
                     }
                 }
                 .spacer {
@@ -220,7 +251,18 @@ $keys-height: 50px;
                     background: rgba(119, 158, 204, 0.5);
                 }
                 .sub-bars {
+                    display:flex;
                     flex: 1;
+                    .sub-bar {
+                        flex: 1;
+                        font-size: 0.7em;
+                        line-height: 1.6;
+                        border-right: 2px #fff solid;
+                        padding-left: 4px;
+                    }
+                    .sub-bar:last-child {
+                        border-right: none;
+                    }
                 }
             }
         }
@@ -259,17 +301,20 @@ $keys-height: 50px;
                     .midi-note {
                         fill: $color-midi-note;
                     }
+                    .midi-note-v {
+                        fill: $color-midi-note-velocity;
+                    }
                     .bar-line {
                         stroke-width: 1;
-                        stroke: $color-50white;
+                        stroke: rgba(255,255,255,0.3);
                     }
                     .bar-sub-line {
-                        stroke-width: 0.3;
-                        stroke: rgba(255,255,255,0.25);
+                        stroke-width: 1;
+                        stroke: rgba(255,255,255,0.1);
                     }
                     .bar-cross-line {
-                        stroke-width: 0.6;
-                        stroke: rgba(255,255,255,0.25);
+                        stroke-width: 1;
+                        stroke: rgba(255,255,255,0.15);
                     }
                 }
                 .canvas-test {
@@ -285,9 +330,17 @@ $keys-height: 50px;
                 border-top: $border;
                 border-right: $border;
                 width: $left-keys-width;
+                background: $color-mid;
             }
-            .velocity {
+            .modulation {
+                background: darken($color-mid, 10%);
+                border-top: 3px #2b4d8c solid;
+                border-bottom: 3px #2b4d8c solid;
 
+                .bar-line {
+                    stroke-width: 3;
+                    stroke: rgba(255,255,255,0.1);
+                }
             }
         }
     }
