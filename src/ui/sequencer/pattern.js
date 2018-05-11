@@ -39,7 +39,7 @@ export class Pattern extends React.Component {
                 this.setState({offsetBar: this.state.offsetBar + 1 })
             }
         } else { // down
-            if(this.state.offsetBar > 0) {
+            if(this.state.offsetBar > -3) {
                 this.setState({offsetBar: this.state.offsetBar - 1 })
             }
         }
@@ -144,8 +144,8 @@ class Grid extends React.Component {
                         <BarLine key={bar} bar={bar} bars={bars} />)
                 }
                 {
-                    [...Array(bars*64).keys()].map(bar =>
-                        <BarSubLine key={bar} bar={bar} />)
+                    [...Array(bars*16).keys()].map(bar =>
+                        <BarSubLine key={bar} bar={bar} bars={bars} />)
                 }
                 {
                     [...Array(120).keys()].map(bar =>
@@ -166,8 +166,8 @@ const BarLine = ({bar, bars}) => {
     const x = BARSIZE / bars * (bar + 1)
     return <line className='bar-line' x1={x} y1={0} x2={x} y2={MAX_HEIGHT} />
 }
-const BarSubLine = ({bar}) => {
-    const x = (BARSIZE/8) * (bar + 1)
+const BarSubLine = ({bar, bars}) => {
+    const x = (BARSIZE / bars / 4) * (bar + 1)
     return <line className='bar-sub-line' x1={x} y1={0} x2={x} y2={MAX_HEIGHT} />
 }
 const BarCrossLine = ({bar}) => {

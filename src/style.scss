@@ -197,6 +197,7 @@ $keys-height: 50px;
                 border-right: $border;
                 display: flex;
                 background: $color-light2;
+                font-weight: bold;
 
                 .draw, .select {
                     cursor: pointer;
