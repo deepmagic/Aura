@@ -1,14 +1,20 @@
 import React from 'react'
 import { Icon } from 'ui/common/icon'
 
+// bars, max 16
+// zoom = min 1 - max 8 bars
+    // scroll horizontally to view more
+// barwidth = pageWidth / zoom
+// svgWidth = bars * barwidth
+const ZOOM_MAX = 8
+const ZOOM_MIN = 1
+
 export class Pattern extends React.Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.onScroll = this.onScroll.bind(this)
         this.lockscroll = '__lock_scroll__'
-        this.state = {
-            offsetBar: 0
-        }
+        this.state = { zoom: props.pattern.bars }
     }
     unlockScroll (...args) {
         args.forEach(el => {
@@ -33,41 +39,49 @@ export class Pattern extends React.Component {
         }
     }
     onWheel = (event) => {
+        let zoom = this.state.zoom
 
         if(event.deltaY < 0) { // up
-            if(this.state.offsetBar < 12) {
-                this.setState({offsetBar: this.state.offsetBar + 1 })
+            if(this.state.zoom < ZOOM_MAX) {
+                zoom++
             }
         } else { // down
-            if(this.state.offsetBar > -3) {
-                this.setState({offsetBar: this.state.offsetBar - 1 })
+            if(this.state.zoom > ZOOM_MIN) {
+                zoom--
             }
         }
 
+        this.setState({ zoom })
         event.preventDefault()
+
+        console.log('zoom', zoom)
     }
     render() {
-        const { pattern: { bars }, style } = this.props
-
-        const BARS = bars + this.state.offsetBar
+        const { pattern: { bars, notes }, style } = this.props
 
         return (
             <div className='pattern' style={style} onWheel={this.onWheel}>
                 <div className='pattern-header'>
                     <PatternControl tool='select' />
-                    <Bars bars={BARS} />
+                    <Bars bars={bars} />
                 </div>
                 <div className='pattern-content'>
                     <div className='left keys dragscroll' ref={l => this.left = l} onScroll={this.onScroll}>
-                        <PatternKeys key={60} />
+                        <PatternKeys />
                     </div>
                     <div className='right dragscroll' ref={r => this.right = r} onScroll={this.onScroll}>
-                        <Grid bars={BARS} />
+                        <Grid
+                            bars={bars}
+                            notes={notes}
+                            zoom={this.state.zoom} />
                     </div>
                 </div>
                 <div className='pattern-footer'>
                     <div className='foot-switch' />
-                    <Modulation bars={BARS} />
+                    <Modulation
+                        bars={bars}
+                        notes={notes}
+                        zoom={this.state.zoom} />
                 </div>
             </div>
         )
@@ -124,16 +138,45 @@ const Note = ({note, octave}) =>
         {`${note}${octave}`}
     </div>
 
-// 33 = note height + border
+// 33  = note height + border
 // 101 = note width + border
-const MAX_HEIGHT = notes.length * octaves.length * 33
-const MAX_WIDTH = 1920 - 101
-const BARSIZE = 455
 const NOTESIZE = 33
+const BARSIZE = 455
+const QUNSIZE = BARSIZE / 4
+const SXNSIZE = BARSIZE / 16
+const MAX_HEIGHT = notes.length * octaves.length * NOTESIZE
+const MAX_WIDTH = 1920 - 101
+
+const getNoteOffset = (time) => {
+    return time.bar*BARSIZE + time.n4*QUNSIZE + time.n16*SXNSIZE
+}
+const parseTransportTime = (time) => {
+    const [bar, n4, n16] = time.split(':')
+    return {
+        bar: parseInt(bar, 10),
+        n4 : parseInt(n4, 10),
+        n16: parseFloat(n16),
+    }
+}
+const getNoteProps = ({ n, o, v, on, off }) => {
+    const x = getNoteOffset(parseTransportTime(on))
+    const w = getNoteOffset(parseTransportTime(off)) - x
+    const y = notes.indexOf(n) * octaves.indexOf(o) * NOTESIZE
+
+    return { x, y, w, v }
+}
+const getNoteVelocityProps = ({ n, o, v, on, off }, h) => {
+    // TODO remove redundancy
+    const x = getNoteOffset(parseTransportTime(on))
+    const w = getNoteOffset(parseTransportTime(off)) - x
+    const y = h - v * h
+
+    return { x, y, w, v }
+}
 
 class Grid extends React.Component {
     render() {
-        const { bars } = this.props
+        const { bars, notes } = this.props
         const x = BARSIZE/8
         const y = NOTESIZE
 
@@ -151,17 +194,14 @@ class Grid extends React.Component {
                     [...Array(120).keys()].map(bar =>
                         <BarCrossLine key={bar} bar={bar} />)
                 }
-                <React.Fragment>
-                    <NoteBar x={x*3} y={y} w={x} v={0.2} />
-                    <NoteBar x={x*5} y={y*2} w={x} v={0.2} />
-                    <NoteBar x={x*10} y={y*3} w={x*2} v={0.2} />
-                    <NoteBar x={x*12} y={y*6} w={x*4} v={0.5} />
-                </React.Fragment>
+                {
+                    notes.map((note, index) => <NoteBox key={index} {...getNoteProps(note)} />)
+                }
             </svg>
         )
     }
 }
-// vertical bar delimiters
+// bar lines
 const BarLine = ({bar, bars}) => {
     const x = BARSIZE / bars * (bar + 1)
     return <line className='bar-line' x1={x} y1={0} x2={x} y2={MAX_HEIGHT} />
@@ -175,28 +215,43 @@ const BarCrossLine = ({bar}) => {
     return <line className='bar-cross-line' x1={0} y1={y} x2={MAX_WIDTH} y2={y} />
 }
 
+// note boxes
 const NOTE_OFFSET = 2
 const NOTE_HEIGHT = 30
-const NoteBar = ({x, y, w, v}) => {
+const NoteBox = ({x, y, w, v}) => {
     return (
         <React.Fragment>
-            <rect className='midi-note'   x={x} y={y+NOTE_OFFSET} width={w} height={NOTE_HEIGHT  } />
-            <rect className='midi-note-v' x={x} y={y+NOTE_OFFSET} width={w} height={NOTE_HEIGHT*v} />
+            <rect className='midi-note'   x={x} y={y+NOTE_OFFSET} width={w} height={NOTE_HEIGHT} />
+            <rect className='midi-note-v' x={x} y={y+NOTE_OFFSET} width={w} height={NOTE_HEIGHT*(1-v)} />
         </React.Fragment>
     )
 }
 
 class Modulation extends React.Component {
     render() {
-        const { bars } = this.props
+        const { bars, notes } = this.props
+        const h = 50
 
         return (
-            <svg className='modulation' height={50} width={MAX_WIDTH} shapeRendering='crispEdges'>
+            <svg className='modulation' height={h} width={MAX_WIDTH} shapeRendering='crispEdges'>
                 {
                     [...Array(bars*4).keys()].map(bar =>
                         <BarLine key={bar} bar={bar} bars={bars} />)
                 }
+                {
+                    notes.map((note, index) =>
+                        <NoteVelocityBar key={index} h={h} {...getNoteVelocityProps(note, h)} />)
+                }
             </svg>
         )
     }
+}
+
+const NoteVelocityBar = ({ x, y, h }) => {
+    return (
+        <React.Fragment>
+            <line className='note-vel-line' x1={x} y1={y} x2={x} y2={h} />
+            <circle className='note-vel-circle' cx={x} cy={y} r={4} shapeRendering='auto' />
+        </React.Fragment>
+    );
 }

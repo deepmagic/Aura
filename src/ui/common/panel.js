@@ -19,7 +19,6 @@ export class Panel extends React.Component {
     }
 
     render() {
-
         return (
             <div className={`panel ${this.state.open ? 'open' : ''}`}>
                 <div className='close' onClick={this.close}>

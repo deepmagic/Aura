@@ -7,6 +7,7 @@ import { TransportControl } from './transport-control'
 const song = {
     title: 'name',
     tempo: 120,
+    timeSignature: 4,
 
     scenes: [
         {sceneid: 1, title: ''},
@@ -52,7 +53,13 @@ const song = {
 }
 
 const pattern = {
-    bars: 4
+    bars: 4,
+    notes: [
+        { n: 'C',  o: 9, v: 0.9, on: '0:0:0.0', off: '0:0:1.0' },
+        { n: 'D#', o: 9, v: 0.9, on: '1:0:0.0', off: '1:0:1.0' },
+        { n: 'C',  o: 9, v: 0.9, on: '2:0:0.0', off: '2:0:1.0' },
+        { n: 'D#', o: 9, v: 0.5, on: '3:0:0.0', off: '3:0:1.0' },
+    ]
 }
 const hide = {
     display: 'none'

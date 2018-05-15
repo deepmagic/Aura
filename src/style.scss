@@ -38,6 +38,7 @@ $color-highlight: #fdcd32;
 .panel {
     $panel-width: 350px;
 
+    z-index: 100;
     position: fixed;
     height: 100%;
     width: $panel-width;
@@ -94,7 +95,7 @@ $keys-height: 50px;
         text-align:center;
         height: 32px;
         border-bottom: $border;
-        font-size: 18px;
+        font-size: 1.2em;
         line-height: 1;
         font-weight: bold;
         padding: 4px;
@@ -193,9 +194,9 @@ $keys-height: 50px;
             border-bottom: $border;
 
             .pattern-control {
+                display: flex;
                 width: $left-keys-width;
                 border-right: $border;
-                display: flex;
                 background: $color-light2;
                 font-weight: bold;
 
@@ -223,6 +224,7 @@ $keys-height: 50px;
                 overflow: auto;
                 flex-direction: column;
                 position: relative;
+
                 .bar-row {
                     display:flex;
                     flex: 1;
@@ -230,6 +232,7 @@ $keys-height: 50px;
                     height: 22px;
                     line-height: 1.8;
                     background: rgba($color-midi-note, 0.7);
+
                     .bar-range {
                         z-index: 1;
                         position: absolute;
@@ -237,6 +240,7 @@ $keys-height: 50px;
                         width: 455px;
                         height: 21px;
                     }
+
                     .bar {
                         z-index: 2;
                         flex: 1;
@@ -251,9 +255,11 @@ $keys-height: 50px;
                     height: 20px;
                     background: rgba(119, 158, 204, 0.5);
                 }
+
                 .sub-bars {
                     display:flex;
                     flex: 1;
+
                     .sub-bar {
                         flex: 1;
                         font-size: 0.7em;
@@ -261,6 +267,7 @@ $keys-height: 50px;
                         border-right: 2px #fff solid;
                         padding-left: 4px;
                     }
+
                     .sub-bar:last-child {
                         border-right: none;
                     }
@@ -294,30 +301,31 @@ $keys-height: 50px;
                     }
                 }
             }
+
             .right {
                 overflow: auto;
-                display:flex;
 
                 .grid {
-                    .midi-note {
-                        fill: $color-midi-note;
-                    }
-                    .midi-note-v {
-                        fill: $color-midi-note-velocity;
-                    }
+                    .midi-note { fill: $color-midi-note; }
+
+                    .midi-note-v { fill: $color-midi-note-velocity; }
+
                     .bar-line {
                         stroke-width: 1;
                         stroke: rgba(255,255,255,0.3);
                     }
+
                     .bar-sub-line {
                         stroke-width: 1;
                         stroke: rgba(255,255,255,0.1);
                     }
+
                     .bar-cross-line {
                         stroke-width: 1;
                         stroke: rgba(255,255,255,0.15);
                     }
                 }
+
                 .canvas-test {
                     border: 1px red solid;
                 }
@@ -341,6 +349,16 @@ $keys-height: 50px;
                 .bar-line {
                     stroke-width: 3;
                     stroke: rgba(255,255,255,0.1);
+                }
+
+                .note-vel-circle {
+                    stroke-width: 2;
+                    stroke: $color-midi-note;
+                    fill: $color-midi-note-velocity;
+                }
+                .note-vel-line {
+                    stroke-width: 1;
+                    stroke: $color-midi-note;
                 }
             }
         }

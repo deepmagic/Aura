@@ -23,8 +23,17 @@ export const transportController = () => {
     }
 }
 
-function loopCallback(time){
-	console.log("loop");
+const fmSynth = new Tone.PolySynth(6, Tone.AMSynth).toMaster()
+fmSynth.set({oscillator: {type: 'sawtooth'}})
+
+function loopCallback(time) {
+	console.log("loop", time, Tone.Transport.position, Tone.Transport.progress)
+    fmSynth.triggerAttackRelease('C2','16n');
 }
-var loop = new Tone.Loop(loopCallback, 2);
+
+// Tone.Transport.bpm.value = 120
+Tone.Transport.setLoopPoints(0, '4m')
+Tone.Transport.loop = true
+
+var loop = new Tone.Loop(loopCallback, '1m')
 loop.start(0)
