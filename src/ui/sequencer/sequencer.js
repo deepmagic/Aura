@@ -53,7 +53,7 @@ const song = {
 }
 
 const pattern = {
-    bars: 8,
+    bars: 4,
     notes: [
         { n: 'C',  o: 9, v: 0.9, on: '0:0:0.0', off: '0:0:1.0' },
         { n: 'D#', o: 9, v: 0.9, on: '1:0:0.0', off: '1:0:1.0' },

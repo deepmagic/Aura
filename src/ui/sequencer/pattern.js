@@ -13,21 +13,23 @@ import { Icon } from 'ui/common/icon'
 const notes = ["A#", "A", "G#", "G", "F#", "F", "E", "D#", "D", "C#", "C"]
 const octaves = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
 const NOTEHEIGHT = 33
-const BARSIZE = 455
-const QUNSIZE = BARSIZE / 4
-const SXNSIZE = BARSIZE / 16
 const MAX_HEIGHT = notes.length * octaves.length * NOTEHEIGHT
-const MAX_WIDTH = 1920 - 101
-const SCREENWIDTH = 1920 - 101
+const MAX_WIDTH = 1920 - 100
+const SCREENWIDTH = 1920 - 100
 const ZOOM_MAX = 8
 const ZOOM_MIN = 1
+const BARDIV = 4
+const TIMESIG = 4
 
 export class Pattern extends React.Component {
     constructor(props) {
         super(props)
         this.onScroll = this.onScroll.bind(this)
         this.lockscroll = '__lock_scroll__'
-        this.state = { zoom: props.pattern.bars }
+        this.state = {
+            offsetLeft: 0,
+            zoom: Math.min(this.props.pattern.bars, ZOOM_MAX)
+        }
     }
     unlockScroll (...args) {
         args.forEach(el => {
@@ -48,37 +50,60 @@ export class Pattern extends React.Component {
             this.lockScroll(this.right)
         } else if (event.target === this.right && !this.right[this.lockscroll]) {
             this.left.scrollTop = event.target.scrollTop
-            this.lockScroll(this.left)
+            this.modulation.scrollLeft = event.target.scrollLeft
+            this.subbars.scrollLeft = event.target.scrollLeft
+            this.lockScroll(this.left, this.modulation, this.subbars)
+        } else if (event.target === this.modulation && !this.modulation[this.lockscroll]) {
+            this.right.scrollLeft = event.target.scrollLeft
+            this.subbars.scrollLeft = event.target.scrollLeft
+            this.lockScroll(this.right, this.subbars)
         }
+
+        this.setState({offsetLeft: this.right.scrollLeft})
     }
     onWheel = (event) => {
-        let zoom = this.state.zoom
+        const zoom = this.state.zoom + (event.deltaY < 0 ? -1 : 1)
 
-        if(event.deltaY < 0) { // down
-            if(this.state.zoom > ZOOM_MIN) {
-                zoom--
-            }
-        } else { // up
-            if(this.state.zoom < Math.min(this.props.pattern.bars, ZOOM_MAX)) {
-                zoom++
-            }
+        if ((zoom >= ZOOM_MIN) &&
+            (zoom <= Math.min(this.props.pattern.bars, ZOOM_MAX))) {
+            this.setState({ zoom })
         }
 
-        this.setState({ zoom })
         event.preventDefault()
-
-        console.log('zoom', zoom)
     }
     render() {
         const { pattern: { bars, notes }, style } = this.props
         const barsize = SCREENWIDTH / this.state.zoom
         const width = barsize * bars
+        const rangeStyle = {
+            transform: `translateX(${this.state.offsetLeft * this.state.zoom / bars}px)`,
+            width: SCREENWIDTH / bars * this.state.zoom
+        }
 
         return (
             <div className='pattern' style={style} onWheel={this.onWheel}>
                 <div className='pattern-header'>
                     <PatternControl tool='select' />
-                    <Bars bars={bars} />
+
+                    <div className='bars'>
+                        <div className='bar-row'>
+                            <div className='bar-range' style={rangeStyle} />
+                            {
+                                [...Array(bars).keys()].map(bar =>
+                                    <Bar key={bar} bar={bar} />)
+                            }
+                        </div>
+                        <div className='spacer' />
+                        <div className='sub-bars-con' ref={sb => this.subbars = sb} onScroll={this.onScroll}>
+                            <div className='sub-bars' style={{ width: width }}>
+                                {
+                                    [...Array(bars).keys()].map(bar =>
+                                        [...Array(TIMESIG).keys()].map(sub =>
+                                            <SubBar key={sub+bar} sub={sub} bar={bar} />))
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div className='pattern-content'>
                     <div className='left keys dragscroll' ref={l => this.left = l} onScroll={this.onScroll}>
@@ -90,18 +115,19 @@ export class Pattern extends React.Component {
                             height={MAX_HEIGHT}
                             bars={bars}
                             barsize={barsize}
-                            notes={notes}
-                            zoom={this.state.zoom} />
+                            notes={notes} />
                     </div>
                 </div>
                 <div className='pattern-footer'>
                     <div className='foot-switch' />
-                    <Modulation
-                        bars={bars}
-                        barsize={barsize}
-                        height={50}
-                        notes={notes}
-                        zoom={this.state.zoom} />
+                    <div className='footer-right dragscroll' ref={m => this.modulation = m} onScroll={this.onScroll}>
+                        <Modulation
+                            width={width}
+                            height={50}
+                            bars={bars}
+                            barsize={barsize}
+                            notes={notes} />
+                    </div>
                 </div>
             </div>
         )
@@ -121,22 +147,6 @@ const PatternControl = ({ tool }) =>
         </div>
     </div>
 
-const Bars = ({ bars }) => {
-    return (
-        <div className='bars'>
-            <div className='bar-row'>
-                <div className='bar-range' />
-                { [...Array(bars).keys()].map(bar => <Bar key={bar} bar={bar} />) }
-            </div>
-            <div className='spacer' />
-            <div className='sub-bars'>
-                { [...Array(bars).keys()].map(bar =>
-                    [...Array(4).keys()].map(sub => <SubBar key={sub+bar} sub={sub} bar={bar} />)
-                ) }
-            </div>
-        </div>
-    )
-}
 const Bar = ({bar}) =>
     <div className='bar'>{`${bar + 1} Bar`}</div>
 const SubBar = ({sub, bar}) =>
@@ -183,44 +193,57 @@ const getNoteVelocityProps = ({ n, o, v, on, off }, height, barsize) => {
     return { x, y, w, v }
 }
 
-class Grid extends React.Component {
+class Grid extends React.PureComponent {
     render() {
         const { bars, notes, barsize, width, height } = this.props
 
         return (
             <svg className='grid' width={width} height={height} shapeRendering='crispEdges'>
                 {
-                    [...Array(bars*bars).keys()].map(bar =>
-                        <BarLine key={bar} bar={bar} bars={bars} barsize={barsize} />)
+                    [...Array(bars*TIMESIG).keys()].map(bar =>
+                        <BarLine
+                            key={bar}
+                            bar={bar}
+                            barsize={barsize} />)
                 }
                 {
-                    [...Array(bars*bars*16).keys()].map(bar =>
-                        <BarSubLine key={bar} bar={bar} bars={bars} barsize={barsize} />)
+                    [...Array(bars*bars*BARDIV).keys()].map(bar =>
+                        <BarSubLine
+                            key={bar}
+                            bar={bar}
+                            barsize={barsize} />)
                 }
                 {
                     [...Array(120).keys()].map(bar =>
-                        <BarCrossLine key={bar} bar={bar} noteheight={NOTEHEIGHT} width={width} />)
+                        <BarHorizontalLine
+                            key={bar}
+                            bar={bar}
+                            noteheight={NOTEHEIGHT}
+                            width={width} />)
                 }
                 {
                     notes.map((note, index) =>
-                        <NoteBox key={index} {...getNoteProps(note, barsize)} />)
+                        <NoteBox
+                            key={index}
+                            {...getNoteProps(note, barsize)} />)
                 }
             </svg>
         )
     }
 }
+
 // bar lines
-const BarLine = ({bar, bars, barsize}) => {
-    const x = barsize / bars * (bar + 1)
+const BarLine = ({bar, barsize}) => {
+    const x = barsize / TIMESIG * (bar + 1)
     return <line className='bar-line' x1={x} y1={0} x2={x} y2={MAX_HEIGHT} />
 }
-const BarSubLine = ({bar, bars, barsize}) => {
-    const x = (barsize / bars / 4) * (bar + 1)
+const BarSubLine = ({bar, barsize}) => {
+    const x = (barsize / TIMESIG / BARDIV) * (bar + 1)
     return <line className='bar-sub-line' x1={x} y1={0} x2={x} y2={MAX_HEIGHT} />
 }
-const BarCrossLine = ({bar, noteheight, width}) => {
+const BarHorizontalLine = ({bar, noteheight, width}) => {
     const y = noteheight * (bar + 1)
-    return <line className='bar-cross-line' x1={0} y1={y} x2={width} y2={y} />
+    return <line className='bar-horizontal-line' x1={0} y1={y} x2={width} y2={y} />
 }
 
 // note boxes
@@ -235,12 +258,12 @@ const NoteBox = ({x, y, w, v}) => {
     )
 }
 
-class Modulation extends React.Component {
+class Modulation extends React.PureComponent {
     render() {
-        const { bars, notes, barsize, height } = this.props
+        const { bars, notes, barsize, width, height } = this.props
 
         return (
-            <svg className='modulation' height={height} width={SCREENWIDTH} shapeRendering='crispEdges'>
+            <svg className='modulation' width={width} height={height} shapeRendering='crispEdges'>
                 {
                     [...Array(bars*bars*4).keys()].map(bar =>
                         <BarLine key={bar} bar={bar} bars={bars} barsize={barsize} />)

@@ -237,7 +237,6 @@ $keys-height: 50px;
                         z-index: 1;
                         position: absolute;
                         background: rgba($color-highlight, 0.7);
-                        width: 455px;
                         height: 21px;
                     }
 
@@ -255,10 +254,13 @@ $keys-height: 50px;
                     height: 20px;
                     background: rgba(119, 158, 204, 0.5);
                 }
-
+                .sub-bars-con {
+                    width: 100%;
+                    overflow: auto;
+                    flex: 1;
+                }
                 .sub-bars {
                     display:flex;
-                    flex: 1;
 
                     .sub-bar {
                         flex: 1;
@@ -279,9 +281,10 @@ $keys-height: 50px;
             flex: 1;
 
             .left {
+                overflow: auto;
                 border-right: $border-trans;
                 min-width: $track-block-width;
-                overflow: auto;
+
                 &.keys {
                     min-width: $left-keys-width;
 
@@ -320,14 +323,10 @@ $keys-height: 50px;
                         stroke: rgba(255,255,255,0.1);
                     }
 
-                    .bar-cross-line {
+                    .bar-horizontal-line {
                         stroke-width: 1;
                         stroke: rgba(255,255,255,0.15);
                     }
-                }
-
-                .canvas-test {
-                    border: 1px red solid;
                 }
             }
         }
@@ -338,17 +337,24 @@ $keys-height: 50px;
             .foot-switch {
                 border-top: $border;
                 border-right: $border;
-                width: $left-keys-width;
+                min-width: $left-keys-width;
                 background: $color-mid;
             }
+
+            .footer-right {
+                overflow-y: auto;
+                // min modulation height + 5px
+                height: 55px;
+            }
+
             .modulation {
-                background: darken($color-mid, 10%);
-                border-top: 3px #2b4d8c solid;
-                border-bottom: 3px #2b4d8c solid;
+                background: #295282; // darken($color-mid, 10%);
+                border-top: 3px $color-bg2 solid;
+                border-bottom: 3px $color-bg2 solid;
 
                 .bar-line {
                     stroke-width: 3;
-                    stroke: rgba(255,255,255,0.1);
+                    stroke: $color-bg2;
                 }
 
                 .note-vel-circle {
