@@ -14,7 +14,6 @@ const notes = ["A#", "A", "G#", "G", "F#", "F", "E", "D#", "D", "C#", "C"]
 const octaves = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
 const NOTEHEIGHT = 33
 const MAX_HEIGHT = notes.length * octaves.length * NOTEHEIGHT
-const MAX_WIDTH = 1920 - 100
 const SCREENWIDTH = 1920 - 100
 const ZOOM_MAX = 8
 const ZOOM_MIN = 1
@@ -146,12 +145,10 @@ const PatternControl = ({ tool }) =>
             Select
         </div>
     </div>
-
 const Bar = ({bar}) =>
     <div className='bar'>{`${bar + 1} Bar`}</div>
 const SubBar = ({sub, bar}) =>
     <div className='sub-bar'>{`${bar+1}.${sub+1}`}</div>
-
 const PatternKeys = () => {
     return (
         octaves.map((octave, o) =>
@@ -166,9 +163,8 @@ const Note = ({note, octave}) =>
         {`${note}${octave}`}
     </div>
 
-const getNoteOffset = (time, barsize) => {
-    return time.bar*barsize + time.n4*(barsize/4) + time.n16*(barsize/16)
-}
+const getNoteOffset = (time, barsize) =>
+    time.bar*barsize + time.n4*(barsize/4) + time.n16*(barsize/16)
 const parseTransportTime = (time) => {
     const [bar, n4, n16] = time.split(':')
     return {
@@ -231,7 +227,6 @@ class Grid extends React.PureComponent {
         )
     }
 }
-
 // bar lines
 const BarLine = ({bar, barsize}) => {
     const x = barsize / TIMESIG * (bar + 1)
@@ -245,7 +240,6 @@ const BarHorizontalLine = ({bar, noteheight, width}) => {
     const y = noteheight * (bar + 1)
     return <line className='bar-horizontal-line' x1={0} y1={y} x2={width} y2={y} />
 }
-
 // note boxes
 const NOTEOFFSET = 2
 const BOXHEIGHT = NOTEHEIGHT - 3

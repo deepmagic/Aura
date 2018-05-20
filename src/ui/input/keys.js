@@ -9,7 +9,7 @@ class Keys extends React.Component {
         }
     }
     toggleExpand = () => {
-        this.props.uiToggleExpand()
+        this.props.uiToggleSongPattern()
     }
     toggleTemp = () => {
         console.log('todo')
@@ -45,8 +45,8 @@ class Keys extends React.Component {
 }
 
 import { connect } from 'react-redux'
-import { uiToggleExpand } from 'actions/ui'
+import { uiToggleSongPattern } from 'actions/ui'
 
 export const AuraKeys = connect(null, {
-    uiToggleExpand
+    uiToggleSongPattern
 })(Keys)

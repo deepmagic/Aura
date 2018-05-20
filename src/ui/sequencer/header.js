@@ -9,7 +9,7 @@ export class SeqHeader extends React.Component {
         return (
             <div className='seq-header'>
                 Aura - v{version}
-                <Icon style={{transform: 'rotate(90deg)', float: 'right'}}>settings_ethernet</Icon>
+                <Icon style={{float: 'right'}}>swap_vert</Icon>
             </div>
         )
     }

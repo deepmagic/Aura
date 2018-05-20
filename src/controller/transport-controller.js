@@ -1,25 +1,35 @@
 import Tone from 'tone'
 
 export const transportController = () => {
-
+    let paused = false
     const record = () => {
         console.log('record')
     }
     const stop = () => {
         Tone.Transport.stop()
     }
-    const play = () => {
-        Tone.Transport.start()
+    const playpause = () => {
+        if (!paused && Tone.Transport.ticks) {
+            Tone.Transport.pause()
+            paused = true
+        } else {
+            Tone.Transport.start()
+            paused = false
+        }
     }
     const toggleRepeat = () => {
         console.log('toggleRepeat')
+    }
+    const isPaused = () => {
+        return paused
     }
 
     return {
         record,
         stop,
-        play,
+        playpause,
         toggleRepeat,
+        isPaused,
     }
 }
 

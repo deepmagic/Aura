@@ -1,7 +1,10 @@
 import React from 'react'
 
-export class Song extends React.Component {
+const getLoopid = (sceneid, trackid) => {
+    return `${sceneid}:${trackid}`
+}
 
+export class Song extends React.Component {
     constructor() {
         super()
         this.onScroll = this.onScroll.bind(this)
@@ -39,9 +42,8 @@ export class Song extends React.Component {
             this.lockScroll(this.trackheads, this.loops)
         }
     }
-
     render() {
-        const { song: { scenes, tracks, loops }, style } = this.props
+        const { song, scenes, tracks, loops, instruments, style } = this.props
 
         return (
             <div className='song' style={style}>
@@ -51,8 +53,7 @@ export class Song extends React.Component {
                     </div>
                     <div className='track-heads dragscroll' ref={th => this.trackheads = th} onScroll={this.onScroll}>
                         {
-                            tracks &&
-                            tracks.map((track) => <SongTrackHead key={track.trackid} {...track} />)
+                            tracks.ids.map((trackid) => <SongTrackHead key={trackid} {...tracks[trackid]} />)
                         }
                         <SongTrackHead />
                     </div>
@@ -60,22 +61,23 @@ export class Song extends React.Component {
                 <div className='song-content'>
                     <div className='scene-heads dragscroll' ref={sh => this.sceneheads = sh} onScroll={this.onScroll}>
                         {
-                            scenes &&
-                            scenes.map((scene) => <SongSceneHead key={scene.sceneid} {...scene} />)
+                            scenes.ids.map((sceneid) => <SongSceneHead key={sceneid} {...scenes[sceneid]} />)
                         }
                         <SongSceneHead sceneid='Add Scene' />
                     </div>
                     <div className='loops dragscroll' ref={ls => this.loops = ls} onScroll={this.onScroll}>
                         {
-                            loops &&
-                            loops.map((set, setid) => {
-                                return (
-                                    <SongLoopSet key={setid}>
-                                        { set.map((loop, loopid) => <SongLoop key={loopid} {...loop} />) }
-                                        <SongLoop />
-                                    </SongLoopSet>
-                                );
-                            })
+                            scenes.ids.map(sceneid =>
+                                <SongLoopSet key={sceneid}>
+                                    {
+                                        tracks.ids.map(trackid => {
+                                            const loopid = getLoopid(sceneid, trackid)
+                                            return <SongLoop key={loopid} {...loops[loopid]} />
+                                        })
+                                    }
+                                    <SongLoop />
+                                </SongLoopSet>
+                            )
                         }
                         <SongLoopSet />
                     </div>
@@ -86,8 +88,7 @@ export class Song extends React.Component {
                     </div>
                     <div className='instruments dragscroll' ref={ns => this.instruments = ns} onScroll={this.onScroll}>
                         {
-                            tracks &&
-                            tracks.map((track) => <SongInstrument key={track.trackid} num={track.trackid} {...track} />)
+                            instruments.ids.map((instid) => <SongInstrument key={instid} {...instruments[instid]} />)
                         }
                         <SongInstrument num='add' />
                     </div>
@@ -98,28 +99,29 @@ export class Song extends React.Component {
 }
 class SongSceneHead extends React.Component {
     render() {
-        const { sceneid } = this.props
-
         return (
             <div className='scene-head'>
-                Scene Head {sceneid}
+                {this.props.name}
             </div>
         )
     }
 }
 class SongTrackHead extends React.Component {
     render() {
-        const { name, trackid } = this.props
         return (
             <div className='track-head'>
-                {name} {trackid}
+                {this.props.name}
             </div>
         )
     }
 }
 class SongLoopSet extends React.Component {
     render () {
-        return <div className='loop-set'>{this.props.children}</div>
+        return (
+            <div className='loop-set'>
+                {this.props.children}
+            </div>
+        )
     }
 }
 class SongLoop extends React.Component {
@@ -135,7 +137,7 @@ class SongInstrument extends React.Component {
     render() {
         return (
             <div className='instrument'>
-                Instrument { this.props.num }
+                {this.props.name}
             </div>
         )
     }

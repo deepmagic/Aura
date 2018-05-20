@@ -396,6 +396,14 @@ $keys-height: 50px;
                 box-shadow: inset 0 1px 1px #000, 0 0 0;
             }
 
+            &.record {
+                &.active { color: #ce1d49 }
+            }
+            &.play {
+                &.paused { color: #066 }
+                &.active { color: #0ff }
+            }
+
             &.textbtn {
                 font-weight: bold;
                 padding: 4px 2px;
