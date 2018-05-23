@@ -1,6 +1,6 @@
 import React from 'react'
 import { SeqHeader } from './header'
-import { Song } from './song'
+import { SongView } from './song'
 import { Pattern } from './pattern'
 import { TransportControl } from './transport-control'
 
@@ -25,7 +25,7 @@ export class SequencerView extends React.Component {
         return (
             <div className='sequencer'>
                 <SeqHeader />
-                <Song
+                <SongView
                     song={song}
                     scenes={scenes}
                     tracks={tracks}

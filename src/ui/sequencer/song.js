@@ -1,6 +1,13 @@
 import React from 'react'
+import { Icon } from 'ui/common/icon'
 
-const getLoopid = (sceneid, trackid) => {
+// actions
+    // add scene
+        // add loop per track
+    // add instrument
+        // add loop per scene
+
+const getLoopId = (sceneid, trackid) => {
     return `${sceneid}:${trackid}`
 }
 
@@ -42,6 +49,44 @@ export class Song extends React.Component {
             this.lockScroll(this.trackheads, this.loops)
         }
     }
+
+    addScene = (copy = false) => {
+        const {
+            sceneAdd,
+            loopSetAdd,
+            scenes,
+            tracks
+        } = this.props
+        const sceneid = scenes.ids.length + 1
+        const newLoop = { notes: [], bars: 1 }
+        const loops = tracks.ids.reduce((loopSet, trackid) => {
+            return { ...loopSet, [getLoopId(sceneid, trackid)]: newLoop }
+        }, {})
+
+        sceneAdd(sceneid, { name: sceneid })
+        loopSetAdd(loops)
+    }
+    addInstrument = () => {
+        const {
+            trackAdd,
+            loopSetAdd,
+            instrumentAdd,
+            scenes,
+            tracks,
+            instruments
+        }  = this.props
+
+        const trackid = tracks.ids.length + 1
+        const newLoop = { notes: [], bars: 1 }
+        const loops = scenes.ids.reduce((loopSet, sceneid) => {
+            return { ...loopSet, [getLoopId(sceneid, trackid)]: newLoop }
+        }, {})
+
+        trackAdd(trackid, { name: trackid })
+        instrumentAdd(trackid, {})
+        loopSetAdd(loops)
+    }
+
     render() {
         const { song, scenes, tracks, loops, instruments, style } = this.props
 
@@ -55,7 +100,6 @@ export class Song extends React.Component {
                         {
                             tracks.ids.map((trackid) => <SongTrackHead key={trackid} {...tracks[trackid]} />)
                         }
-                        <SongTrackHead />
                     </div>
                 </div>
                 <div className='song-content'>
@@ -63,7 +107,7 @@ export class Song extends React.Component {
                         {
                             scenes.ids.map((sceneid) => <SongSceneHead key={sceneid} {...scenes[sceneid]} />)
                         }
-                        <SongSceneHead sceneid='Add Scene' />
+                        <SceneAdd add={this.addScene} copy={this.addScene.bind(this, true)} />
                     </div>
                     <div className='loops dragscroll' ref={ls => this.loops = ls} onScroll={this.onScroll}>
                         {
@@ -71,11 +115,11 @@ export class Song extends React.Component {
                                 <SongLoopSet key={sceneid}>
                                     {
                                         tracks.ids.map(trackid => {
-                                            const loopid = getLoopid(sceneid, trackid)
+                                            const loopid = getLoopId(sceneid, trackid)
                                             return <SongLoop key={loopid} {...loops[loopid]} />
                                         })
                                     }
-                                    <SongLoop />
+                                    <SongLoop placeholder />
                                 </SongLoopSet>
                             )
                         }
@@ -90,18 +134,34 @@ export class Song extends React.Component {
                         {
                             instruments.ids.map((instid) => <SongInstrument key={instid} {...instruments[instid]} />)
                         }
-                        <SongInstrument num='add' />
+                        <InstrumentAdd num='add' add={this.addInstrument} />
                     </div>
                 </div>
             </div>
         )
     }
 }
+import { connect } from 'react-redux'
+import { sceneAdd } from 'actions/scenes'
+import { trackAdd } from 'actions/tracks'
+import { loopSetAdd } from 'actions/loops'
+import { instrumentAdd } from 'actions/instruments'
+export const SongView = connect(
+    null, {
+    sceneAdd,
+    trackAdd,
+    loopSetAdd,
+    instrumentAdd,
+})(Song);
+
 class SongSceneHead extends React.Component {
     render() {
         return (
             <div className='scene-head'>
-                {this.props.name}
+                <Icon>play_arrow</Icon>
+                <div>
+                    {this.props.name}
+                </div>
             </div>
         )
     }
@@ -126,8 +186,9 @@ class SongLoopSet extends React.Component {
 }
 class SongLoop extends React.Component {
     render() {
+
         return (
-            <div className='loop'>
+            <div className={`loop ${this.props.placeholder ? 'placeholder' : ''}`}>
                 Loop { this.props.bars }
             </div>
         )
@@ -142,3 +203,15 @@ class SongInstrument extends React.Component {
         )
     }
 }
+
+const SceneAdd = ({add, copy}) =>
+    <div className='scene-add'>
+        <Icon onClick={add}>add_circle_outline</Icon>
+        <Icon onClick={copy}>filter_none</Icon>
+    </div>
+const InstrumentAdd = ({add}) =>
+    <div className='instrument-add'>
+        <div className='outline' onClick={add}>
+            <Icon>add_circle_outline</Icon>
+        </div>
+    </div>
