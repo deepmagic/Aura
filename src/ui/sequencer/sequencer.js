@@ -31,11 +31,13 @@ export class SequencerView extends React.Component {
                     tracks={tracks}
                     loops={loops}
                     instruments={instruments}
-                    style={ this.props.ui.songpattern ? hide : null } />
+                    style={ this.props.ui.songpattern || this.props.ui.instrumentselect ? hide : null } />
                 <Pattern
                     pattern={pattern}
                     style={ this.props.ui.songpattern ? null : hide } />
-                <TransportControl tempo={song.tempo} />
+                <TransportControl
+                    style={ this.props.ui.instrumentselect ? hide : null }
+                    {...song} />
             </div>
         )
     }

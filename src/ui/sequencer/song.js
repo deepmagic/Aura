@@ -1,18 +1,13 @@
 import React from 'react'
 import { Icon } from 'ui/common/icon'
-
-// actions
-    // add scene
-        // add loop per track
-    // add instrument
-        // add loop per scene
+import { InstrumentSelector } from 'ui/instruments/selector'
 
 const getLoopId = (sceneid, trackid) => {
     return `${sceneid}:${trackid}`
 }
 
 export class Song extends React.Component {
-    constructor() {
+    constructor () {
         super()
         this.onScroll = this.onScroll.bind(this)
         this.lockscroll = '__lock_scroll__'
@@ -30,7 +25,7 @@ export class Song extends React.Component {
         clearTimeout(this.scrollLock)
         this.scrollLock = setTimeout(this.unlockScroll.bind(this, ...args), 100)
     }
-    onScroll(event) {
+    onScroll (event) {
         if (event.target === this.trackheads && !this.trackheads[this.lockscroll]) {
             this.loops.scrollLeft       = event.target.scrollLeft
             this.instruments.scrollLeft = event.target.scrollLeft
@@ -66,16 +61,19 @@ export class Song extends React.Component {
         sceneAdd(sceneid, { name: sceneid })
         loopSetAdd(loops)
     }
-    addInstrument = () => {
+    addInstrument = (instrument = {}) => {
         const {
             trackAdd,
             loopSetAdd,
             instrumentAdd,
             scenes,
             tracks,
-            instruments
+            instruments,
+            uiToggleInstrumentSelect
         }  = this.props
+        console.log('addInstrument')
 
+        uiToggleInstrumentSelect(false)
         const trackid = tracks.ids.length + 1
         const newLoop = { notes: [], bars: 1 }
         const loops = scenes.ids.reduce((loopSet, sceneid) => {
@@ -83,79 +81,103 @@ export class Song extends React.Component {
         }, {})
 
         trackAdd(trackid, { name: trackid })
-        instrumentAdd(trackid, {})
+        instrumentAdd(trackid, instrument)
         loopSetAdd(loops)
     }
 
-    render() {
-        const { song, scenes, tracks, loops, instruments, style } = this.props
+    render = () => {
+        const {
+            song,
+            scenes,
+            tracks,
+            loops,
+            instruments,
+            style
+        } = this.props
 
         return (
-            <div className='song' style={style}>
-                <div className='song-header dragscroll'>
-                    <div className='track-head fixed'>
-                        Scene
+            <React.Fragment>
+                <InstrumentSelector
+                    style={this.props.instrumentselect ? null : {display: 'none'}}
+                    select={this.addInstrument} />
+                <div className='song' style={style}>
+                    <div className='song-header dragscroll'>
+                        <div className='track-head fixed'>
+                            Scene
+                        </div>
+                        <div className='track-heads dragscroll' ref={th => this.trackheads = th} onScroll={this.onScroll}>
+                            {
+                                tracks.ids.map((trackid) => <SongTrackHead key={trackid} {...tracks[trackid]} />)
+                            }
+                            <SongTrackHead />
+                        </div>
                     </div>
-                    <div className='track-heads dragscroll' ref={th => this.trackheads = th} onScroll={this.onScroll}>
-                        {
-                            tracks.ids.map((trackid) => <SongTrackHead key={trackid} {...tracks[trackid]} />)
-                        }
+                    <div className='song-content'>
+                        <div className='scene-heads dragscroll' ref={sh => this.sceneheads = sh} onScroll={this.onScroll}>
+                            {
+                                scenes.ids.map((sceneid) => <SongSceneHead key={sceneid} {...scenes[sceneid]} />)
+                            }
+                            <SceneAdd add={this.addScene} copy={this.addScene.bind(this, true)} />
+                        </div>
+                        <div className='loops dragscroll' ref={ls => this.loops = ls} onScroll={this.onScroll}>
+                            {
+                                scenes.ids.map(sceneid =>
+                                    <SongLoopSet key={sceneid}>
+                                        {
+                                            tracks.ids.map(trackid => {
+                                                const loopid = getLoopId(sceneid, trackid)
+                                                return <SongLoop key={loopid} loopid={loopid} {...loops[loopid]} />
+                                            })
+                                        }
+                                        <SongLoop placeholder />
+                                    </SongLoopSet>
+                                )
+                            }
+                            <SongLoopSet />
+                        </div>
+                    </div>
+                    <div className='song-footer'>
+                        <div className='instrument fixed'>
+                            Master
+                        </div>
+                        <div className='instruments dragscroll' ref={ns => this.instruments = ns} onScroll={this.onScroll}>
+                            {
+                                instruments.ids.map((instid) => <SongInstrument key={instid} {...instruments[instid]} />)
+                            }
+                            <InstrumentAdd num='add' add={this.props.uiToggleInstrumentSelect.bind(null, true)} />
+                        </div>
                     </div>
                 </div>
-                <div className='song-content'>
-                    <div className='scene-heads dragscroll' ref={sh => this.sceneheads = sh} onScroll={this.onScroll}>
-                        {
-                            scenes.ids.map((sceneid) => <SongSceneHead key={sceneid} {...scenes[sceneid]} />)
-                        }
-                        <SceneAdd add={this.addScene} copy={this.addScene.bind(this, true)} />
-                    </div>
-                    <div className='loops dragscroll' ref={ls => this.loops = ls} onScroll={this.onScroll}>
-                        {
-                            scenes.ids.map(sceneid =>
-                                <SongLoopSet key={sceneid}>
-                                    {
-                                        tracks.ids.map(trackid => {
-                                            const loopid = getLoopId(sceneid, trackid)
-                                            return <SongLoop key={loopid} {...loops[loopid]} />
-                                        })
-                                    }
-                                    <SongLoop placeholder />
-                                </SongLoopSet>
-                            )
-                        }
-                        <SongLoopSet />
-                    </div>
-                </div>
-                <div className='song-footer'>
-                    <div className='instrument fixed'>
-                        Master
-                    </div>
-                    <div className='instruments dragscroll' ref={ns => this.instruments = ns} onScroll={this.onScroll}>
-                        {
-                            instruments.ids.map((instid) => <SongInstrument key={instid} {...instruments[instid]} />)
-                        }
-                        <InstrumentAdd num='add' add={this.addInstrument} />
-                    </div>
-                </div>
-            </div>
+            </React.Fragment>
         )
     }
+
+    render () {
+        return this.props.instrumentselect
+            ? this.renderSelector()
+            : this.renderSong()
+    }
 }
+
 import { connect } from 'react-redux'
 import { sceneAdd } from 'actions/scenes'
 import { trackAdd } from 'actions/tracks'
 import { loopSetAdd } from 'actions/loops'
 import { instrumentAdd } from 'actions/instruments'
+import { uiToggleInstrumentSelect } from 'actions/ui'
 export const SongView = connect(
-    null, {
+    state => ({
+        instrumentselect: state.ui.instrumentselect
+    }), {
     sceneAdd,
     trackAdd,
     loopSetAdd,
     instrumentAdd,
+    uiToggleInstrumentSelect
 })(Song);
 
 class SongSceneHead extends React.Component {
-    render() {
+    render () {
         return (
             <div className='scene-head'>
                 <Icon>play_arrow</Icon>
@@ -167,7 +189,7 @@ class SongSceneHead extends React.Component {
     }
 }
 class SongTrackHead extends React.Component {
-    render() {
+    render () {
         return (
             <div className='track-head'>
                 {this.props.name}
@@ -185,17 +207,17 @@ class SongLoopSet extends React.Component {
     }
 }
 class SongLoop extends React.Component {
-    render() {
+    render () {
 
         return (
             <div className={`loop ${this.props.placeholder ? 'placeholder' : ''}`}>
-                Loop { this.props.bars }
+                { this.props.bars } { this.props.bars ? 'Bars' : '' } {this.props.loopid}
             </div>
         )
     }
 }
 class SongInstrument extends React.Component {
-    render() {
+    render () {
         return (
             <div className='instrument'>
                 {this.props.name}

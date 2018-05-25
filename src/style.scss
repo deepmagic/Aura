@@ -11,7 +11,7 @@ $color-highlight: #fdcd32;
 $color-play: #30a7ff;
 
 $padding: 8px;
-$border: 2px $color-bg1 solid;
+$border: 1px $color-bg1 solid;
 $border-trans: 1px transparent solid;
 $border-dark: 1px #333 solid;
 
@@ -246,6 +246,20 @@ $keys-height: 50px;
                     }
                 }
             }
+        }
+    }
+
+    .instruments-selector {
+        display: flex;
+        height: 100%;
+        flex-wrap: wrap;
+        overflow: auto;
+
+        .instrument {
+            flex: 1;
+            min-width: 25%;
+            height: 33.33%;
+            border: $border;
         }
     }
 

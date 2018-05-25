@@ -27,7 +27,7 @@ export class TransportControl extends React.Component {
     stop = () => {
         Tone.Transport.stop()
         this.record(false)
-        this.setState({playing: false})
+        this.setState({playing: false, paused: false})
     }
     playpause = () => {
         let paused = this.state.paused
@@ -49,6 +49,7 @@ export class TransportControl extends React.Component {
         })
     }
     render() {
+        const { style } = this.props
         const playClass = this.state.playing
             ? 'active'
             : this.state.paused
@@ -56,7 +57,7 @@ export class TransportControl extends React.Component {
             : ''
 
         return (
-            <div className='transport-control'>
+            <div className='transport-control' style={style}>
                 <button className='textbtn function'>
                     Function
                 </button>
