@@ -71,7 +71,6 @@ export class Song extends React.Component {
             instruments,
             uiToggleInstrumentSelect
         }  = this.props
-        console.log('addInstrument')
 
         uiToggleInstrumentSelect(false)
         const trackid = tracks.ids.length + 1

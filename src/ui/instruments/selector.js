@@ -27,8 +27,8 @@ const InstView = ({name, ...props}) =>
         {name}
     </div>
 
-export const InstrumentSelector = ({select, style}) =>
-    <div className='instruments-selector dragscroll' style={style}>
+export const InstrumentSelector = ({select, ...props}) =>
+    <div className='instruments-selector dragscroll' {...props}>
         {
             instruments.map((inst, index) =>
                 <InstView

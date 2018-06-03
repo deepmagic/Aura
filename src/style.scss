@@ -11,9 +11,10 @@ $color-highlight: #fdcd32;
 $color-play: #30a7ff;
 
 $padding: 8px;
-$border: 1px $color-bg1 solid;
-$border-trans: 1px transparent solid;
-$border-dark: 1px #333 solid;
+$border-size: 2px;
+$border: $border-size $color-bg1 solid;
+$border-trans: $border-size transparent solid;
+$border-dark: $border-size #333 solid;
 
 ::-webkit-scrollbar { display:none; }
 
@@ -100,6 +101,10 @@ $keys-height: 50px;
         line-height: 1;
         font-weight: bold;
         padding: 4px;
+        i {
+            font-size: 1.5em;
+            line-height: 0.8;
+        }
     }
 
     .song {
@@ -135,13 +140,14 @@ $keys-height: 50px;
             flex: 1;
 
             .scene-heads {
-                border-right: $border;
+                // border-right: $border;
                 min-width: $track-block-width;
                 overflow: auto;
+                margin-right: $border-size;
 
                 .scene-head {
                     height: $track-block-height;
-                    border-bottom: $border;
+                    // border-bottom: $border;
                     display: flex;
 
                     &:nth-child(odd) {
@@ -193,13 +199,20 @@ $keys-height: 50px;
                     display:flex;
                     min-height: $track-block-height;
 
+                    &:nth-child(odd) {
+                        .loop {
+                            background-color: rgba($color-bg2, 0.5);
+                        }
+                    }
+
                     .loop {
                         text-align: center;
                         min-width: $track-block-width;
-                        border-right: $border;
-                        border-bottom: $border;
+                        margin-right: $border-size;
+
                         &.placeholder {
                             border:none;
+                            background-color: transparent;
                         }
                     }
                 }
@@ -211,7 +224,9 @@ $keys-height: 50px;
             flex: 1;
             max-height: 100px;
             border-top: $border;
-            background: linear-gradient(#181818 30%, #000);
+            background-color: #181818;
+            // linear-gradient(#181818 30%, #000);
+            background: url('/images/egg-shell.png'), linear-gradient(#181818 30%, #000 150%);
             color: #999;
             text-shadow: 1px 1px 1px #000;
 
@@ -221,8 +236,9 @@ $keys-height: 50px;
             }
             .instrument {
                 text-align: center;
-                min-width: $track-block-width;
+                min-width: $track-block-width + $border-size;
                 border-right: $border-dark;
+                text-transform: capitalize;
             }
             .instrument-add {
                 @extend .instrument;
@@ -260,6 +276,7 @@ $keys-height: 50px;
             min-width: 25%;
             height: 33.33%;
             border: $border;
+            text-transform: capitalize;
         }
     }
 
