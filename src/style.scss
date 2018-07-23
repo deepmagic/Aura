@@ -281,6 +281,7 @@ $keys-height: 50px;
     }
 
     .pattern {
+        will-change: all;
         flex: 1;
         display: flex;
         flex-direction: column;
@@ -335,7 +336,7 @@ $keys-height: 50px;
                         z-index: 1;
                         position: absolute;
                         background: rgba($color-highlight, 0.7);
-                        height: 21px;
+                        height: 20px;
                     }
 
                     .bar {

@@ -52,11 +52,11 @@ export class Midi extends React.Component {
     }
 
     noteon (msg) {
-        //console.log('noteon', msg)
+        console.log('noteon', msg.note.name, msg.note.octave, Tone.Transport.position)
         fmSynth.triggerAttack(`${msg.note.name}${msg.note.octave}`, undefined, msg.velocity);
     }
     noteoff (msg) {
-        //console.log('noteoff', msg)
+        console.log('noteoff', msg)
         fmSynth.triggerRelease(`${msg.note.name}${msg.note.octave}`);
     }
     controlchange (msg) {

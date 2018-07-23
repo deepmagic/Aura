@@ -12,6 +12,7 @@ import { Icon } from 'ui/common/icon'
 // 101 = note width + border
 const notes = ["A#", "A", "G#", "G", "F#", "F", "E", "D#", "D", "C#", "C"]
 const octaves = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+const numkeys = octaves.length * notes.length
 const NOTEHEIGHT = 33
 const MAX_HEIGHT = notes.length * octaves.length * NOTEHEIGHT
 const SCREENWIDTH = 1920 - 100
@@ -70,6 +71,11 @@ export class Pattern extends React.Component {
 
         event.preventDefault()
     }
+
+    gridClick = (event) => {
+        console.log('event', event.nativeEvent.offsetX, event.nativeEvent.offsetY)
+    }
+
     render() {
         const { pattern: { bars, notes }, style } = this.props
         const barsize = SCREENWIDTH / this.state.zoom
@@ -108,7 +114,7 @@ export class Pattern extends React.Component {
                     <div className='left keys dragscroll' ref={l => this.left = l} onScroll={this.onScroll}>
                         <PatternKeys />
                     </div>
-                    <div className='right dragscroll' ref={r => this.right = r} onScroll={this.onScroll}>
+                    <div className='right dragscroll' ref={r => this.right = r} onScroll={this.onScroll} onClick={this.gridClick}>
                         <Grid
                             width={width}
                             height={MAX_HEIGHT}
@@ -210,7 +216,7 @@ class Grid extends React.PureComponent {
                             barsize={barsize} />)
                 }
                 {
-                    [...Array(120).keys()].map(bar =>
+                    [...Array(numkeys).keys()].map(bar =>
                         <BarHorizontalLine
                             key={bar}
                             bar={bar}

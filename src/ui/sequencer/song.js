@@ -150,12 +150,6 @@ export class Song extends React.Component {
             </React.Fragment>
         )
     }
-
-    render () {
-        return this.props.instrumentselect
-            ? this.renderSelector()
-            : this.renderSong()
-    }
 }
 
 import { connect } from 'react-redux'

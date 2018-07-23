@@ -90,6 +90,7 @@ export class TransportControl extends React.Component {
     }
 }
 
+// per loop
 const fmSynth = new Tone.PolySynth(6, Tone.AMSynth).toMaster()
 fmSynth.set({oscillator: {type: 'sawtooth'}})
 
@@ -98,9 +99,10 @@ function loopCallback(time) {
     fmSynth.triggerAttackRelease('C2','16n', time);
 }
 
+var loop = new Tone.Loop(loopCallback, '1m')
+loop.start(0)
+
+// global
 // Tone.Transport.bpm.value = 120
 Tone.Transport.setLoopPoints(0, '4m')
 Tone.Transport.loop = true
-
-var loop = new Tone.Loop(loopCallback, '1m')
-loop.start(0)
