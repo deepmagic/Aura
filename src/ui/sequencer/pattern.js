@@ -1,5 +1,5 @@
 import React from 'react'
-import { Icon } from 'ui/common/icon'
+import { PatternControl } from 'ui/sequencer/pattern-control'
 
 // bars, max 16
 // barsize = screenWidth / zoom
@@ -18,7 +18,7 @@ const MAX_HEIGHT = notes.length * octaves.length * NOTEHEIGHT
 const SCREENWIDTH = 1920 - 100
 const ZOOM_MAX = 8
 const ZOOM_MIN = 1
-const BARDIV = 4
+const BEATS = 4
 const TIMESIG = 4
 
 export class Pattern extends React.Component {
@@ -72,8 +72,27 @@ export class Pattern extends React.Component {
         event.preventDefault()
     }
 
+    // TODO mouseDown, mouseUp - draw notes via drag
     gridClick = (event) => {
-        console.log('event', event.nativeEvent.offsetX, event.nativeEvent.offsetY)
+        /// Y
+        const noteIndex  = Math.floor(event.nativeEvent.offsetY / NOTEHEIGHT)
+        const noteOctave = Math.floor(noteIndex / octaves.length)
+        const noteKey    = Math.floor(noteIndex % octaves.length)
+
+        console.log('note', `${notes[noteKey]}${octaves[noteOctave] - 1}`)
+
+        /// X
+        const { pattern: { bars } } = this.props
+        const barsize = SCREENWIDTH / this.state.zoom
+        const bar = Math.floor(event.nativeEvent.offsetX / barsize)
+
+        const barOffset = Math.floor(event.nativeEvent.offsetX % barsize) / barsize
+        const beat = Math.floor(barOffset * BEATS)
+
+        const beatOffset = barOffset  * BEATS % BEATS - beat
+        const sixteenths = beatOffset * BEATS
+
+        console.log('bar', bar, 'beat', beat, 'sixteenths', sixteenths)
     }
 
     render() {
@@ -88,8 +107,7 @@ export class Pattern extends React.Component {
         return (
             <div className='pattern' style={style} onWheel={this.onWheel}>
                 <div className='pattern-header'>
-                    <PatternControl tool='select' />
-
+                    <PatternControl />
                     <div className='bars'>
                         <div className='bar-row'>
                             <div className='bar-range' style={rangeStyle} />
@@ -140,17 +158,6 @@ export class Pattern extends React.Component {
 }
 
 // TODO split this out, remove redundancy
-const PatternControl = ({ tool }) =>
-    <div className='pattern-control'>
-        <div className={`draw ${tool === 'draw' ? 'active' : ''}`}>
-            <Icon>create</Icon>
-            Draw
-        </div>
-        <div className={`select ${tool === 'select' ? 'active' : ''}`}>
-            <Icon>select_all</Icon>
-            Select
-        </div>
-    </div>
 const Bar = ({bar}) =>
     <div className='bar'>{`${bar + 1} Bar`}</div>
 const SubBar = ({sub, bar}) =>
@@ -209,7 +216,7 @@ class Grid extends React.PureComponent {
                             barsize={barsize} />)
                 }
                 {
-                    [...Array(bars*bars*BARDIV).keys()].map(bar =>
+                    [...Array(bars*bars*BEATS).keys()].map(bar =>
                         <BarSubLine
                             key={bar}
                             bar={bar}
@@ -239,7 +246,7 @@ const BarLine = ({bar, barsize}) => {
     return <line className='bar-line' x1={x} y1={0} x2={x} y2={MAX_HEIGHT} />
 }
 const BarSubLine = ({bar, barsize}) => {
-    const x = (barsize / TIMESIG / BARDIV) * (bar + 1)
+    const x = (barsize / TIMESIG / BEATS) * (bar + 1)
     return <line className='bar-sub-line' x1={x} y1={0} x2={x} y2={MAX_HEIGHT} />
 }
 const BarHorizontalLine = ({bar, noteheight, width}) => {

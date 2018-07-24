@@ -4,6 +4,8 @@ import { SongView } from './song'
 import { Pattern } from './pattern'
 import { TransportControl } from './transport-control'
 
+// on/off time bar:beat:sixteenths
+// https://tonejs.github.io/docs/r12/Type#barsbeatssixteenths
 const pattern = {
     bars: 4,
     notes: [
@@ -18,9 +20,8 @@ const hide = {
 }
 
 export class SequencerView extends React.Component {
-
     render () {
-        const { song, scenes, tracks, loops, instruments } = this.props
+        const { song, scenes, tracks, loops, instruments, ui } = this.props
 
         return (
             <div className='sequencer'>
@@ -31,12 +32,13 @@ export class SequencerView extends React.Component {
                     tracks={tracks}
                     loops={loops}
                     instruments={instruments}
-                    style={ this.props.ui.songpattern || this.props.ui.instrumentselect ? hide : null } />
+                    style={ ui.songpattern || ui.instrumentselect ? hide : null } />
                 <Pattern
                     pattern={pattern}
-                    style={ this.props.ui.songpattern ? null : hide } />
+                    patternDraw={ui.patternDraw}
+                    style={ ui.songpattern ? null : hide } />
                 <TransportControl
-                    style={ this.props.ui.instrumentselect ? hide : null }
+                    style={ ui.instrumentselect ? hide : null }
                     {...song} />
             </div>
         )
