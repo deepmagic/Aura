@@ -1,12 +1,23 @@
 import React from 'react'
 import { Icon } from 'ui/common/icon'
 import { InstrumentSelector } from 'ui/instruments/selector'
+import { SongLoop } from 'ui/sequencer/song-loop'
 
-const getLoopId = (sceneid, trackid) => {
-    return `${sceneid}:${trackid}`
+const getLoopId = (sceneid, trackid) =>
+    `${sceneid}:${trackid}`
+
+const defaultLoop = {
+    bars: 4,
+    notes: [
+        { n: 'C',  o: 9, v: 0.9, on: '0:0:0.0', off: '0:0:1.0' },
+        { n: 'D#', o: 9, v: 0.9, on: '1:0:0.0', off: '1:0:1.0' },
+        { n: 'E',  o: 4, v: 0.9, on: '1:1:0.0', off: '1:1:1.0' },
+        { n: 'C',  o: 9, v: 0.9, on: '2:0:0.0', off: '2:0:1.0' },
+        { n: 'D#', o: 0, v: 0.5, on: '3:0:0.0', off: '3:0:1.0' },
+    ]
 }
 
-export class Song extends React.Component {
+class SongView extends React.Component {
     constructor () {
         super()
         this.onScroll = this.onScroll.bind(this)
@@ -53,9 +64,8 @@ export class Song extends React.Component {
             tracks
         } = this.props
         const sceneid = scenes.ids.length + 1
-        const newLoop = { notes: [], bars: 1 }
         const loops = tracks.ids.reduce((loopSet, trackid) => {
-            return { ...loopSet, [getLoopId(sceneid, trackid)]: newLoop }
+            return { ...loopSet, [getLoopId(sceneid, trackid)]: {...defaultLoop} }
         }, {})
 
         sceneAdd(sceneid, { name: sceneid })
@@ -74,14 +84,17 @@ export class Song extends React.Component {
 
         uiToggleInstrumentSelect(false)
         const trackid = tracks.ids.length + 1
-        const newLoop = { notes: [], bars: 1 }
         const loops = scenes.ids.reduce((loopSet, sceneid) => {
-            return { ...loopSet, [getLoopId(sceneid, trackid)]: newLoop }
+            return { ...loopSet, [getLoopId(sceneid, trackid)]: {...defaultLoop} }
         }, {})
 
         trackAdd(trackid, { name: trackid })
         instrumentAdd(trackid, instrument)
         loopSetAdd(loops)
+    }
+    editLoop = (loopid) => {
+        this.props.setActiveLoop(loopid)
+        this.props.uiToggleSongPattern()
     }
 
     render = () => {
@@ -125,10 +138,17 @@ export class Song extends React.Component {
                                         {
                                             tracks.ids.map(trackid => {
                                                 const loopid = getLoopId(sceneid, trackid)
-                                                return <SongLoop key={loopid} loopid={loopid} {...loops[loopid]} />
+
+                                                return (
+                                                    <SongLoop
+                                                        key={loopid}
+                                                        loop={loops[loopid]}
+                                                        loopid={loopid}
+                                                        onClick={() => this.editLoop(loopid)} />
+                                                )
                                             })
                                         }
-                                        <SongLoop placeholder />
+                                        <SongLoop />
                                     </SongLoopSet>
                                 )
                             }
@@ -157,73 +177,50 @@ import { sceneAdd } from 'actions/scenes'
 import { trackAdd } from 'actions/tracks'
 import { loopSetAdd } from 'actions/loops'
 import { instrumentAdd } from 'actions/instruments'
-import { uiToggleInstrumentSelect } from 'actions/ui'
-export const SongView = connect(
+import { uiToggleSongPattern, uiToggleInstrumentSelect } from 'actions/ui'
+import { setActiveLoop } from 'actions/loops'
+export const Song = connect(
     state => ({
         instrumentselect: state.ui.instrumentselect
     }), {
     sceneAdd,
     trackAdd,
     loopSetAdd,
+    setActiveLoop,
     instrumentAdd,
-    uiToggleInstrumentSelect
-})(Song);
+    uiToggleSongPattern,
+    uiToggleInstrumentSelect,
+})(SongView)
 
-class SongSceneHead extends React.Component {
-    render () {
-        return (
-            <div className='scene-head'>
-                <Icon>play_arrow</Icon>
-                <div>
-                    {this.props.name}
-                </div>
-            </div>
-        )
-    }
-}
-class SongTrackHead extends React.Component {
-    render () {
-        return (
-            <div className='track-head'>
-                {this.props.name}
-            </div>
-        )
-    }
-}
-class SongLoopSet extends React.Component {
-    render () {
-        return (
-            <div className='loop-set'>
-                {this.props.children}
-            </div>
-        )
-    }
-}
-class SongLoop extends React.Component {
-    render () {
+const SongSceneHead = ({name}) =>
+    <div className='scene-head'>
+        <Icon>play_arrow</Icon>
+        <div>
+            {name}
+        </div>
+    </div>
 
-        return (
-            <div className={`loop ${this.props.placeholder ? 'placeholder' : ''}`}>
-                { this.props.bars } { this.props.bars ? 'Bars' : '' } {this.props.loopid}
-            </div>
-        )
-    }
-}
-class SongInstrument extends React.Component {
-    render () {
-        return (
-            <div className='instrument'>
-                {this.props.name}
-            </div>
-        )
-    }
-}
+const SongTrackHead = ({name}) =>
+    <div className='track-head'>
+        {name}
+    </div>
+
+const SongLoopSet = ({children}) =>
+    <div className='loop-set'>
+        {children}
+    </div>
+
+const SongInstrument = ({name}) =>
+    <div className='instrument'>
+        {name}
+    </div>
 
 const SceneAdd = ({add, copy}) =>
     <div className='scene-add'>
         <Icon onClick={add}>add_circle_outline</Icon>
         <Icon onClick={copy}>filter_none</Icon>
     </div>
+
 const InstrumentAdd = ({add}) =>
     <div className='instrument-add'>
         <div className='outline' onClick={add}>

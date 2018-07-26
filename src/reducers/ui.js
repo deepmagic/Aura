@@ -7,7 +7,7 @@ import {
 
 const initialState = {
     expand: false,
-    songpattern: true,
+    songpattern: false,
     instrumentselect: false,
     patternTool: 'draw',
 }

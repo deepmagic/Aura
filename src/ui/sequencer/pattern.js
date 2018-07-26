@@ -1,5 +1,6 @@
 import React from 'react'
 import { PatternControl } from 'ui/sequencer/pattern-control'
+import { NOTES, OCTAVES } from 'ui/constants'
 
 // bars, max 16
 // barsize = screenWidth / zoom
@@ -10,18 +11,16 @@ import { PatternControl } from 'ui/sequencer/pattern-control'
 
 // 33  = note height + border
 // 101 = note width + border
-const notes = ["A#", "A", "G#", "G", "F#", "F", "E", "D#", "D", "C#", "C"]
-const octaves = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
-const numkeys = octaves.length * notes.length
+const numkeys = OCTAVES.length * NOTES.length
 const NOTEHEIGHT = 33
-const MAX_HEIGHT = notes.length * octaves.length * NOTEHEIGHT
+const MAX_HEIGHT = NOTES.length * OCTAVES.length * NOTEHEIGHT
 const SCREENWIDTH = 1920 - 100
 const ZOOM_MAX = 8
 const ZOOM_MIN = 1
 const BEATS = 4
 const TIMESIG = 4
 
-export class Pattern extends React.Component {
+export class Pattern extends React.PureComponent {
     constructor(props) {
         super(props)
         this.onScroll = this.onScroll.bind(this)
@@ -31,6 +30,17 @@ export class Pattern extends React.Component {
             zoom: Math.min(this.props.pattern.bars, ZOOM_MAX)
         }
     }
+
+    componentDidUpdate (prevProps) {
+        // this likely won't work correctly in the long run
+        if (prevProps.pattern !== this.props.pattern) {
+            this.setState({
+                offsetLeft: 0,
+                zoom: Math.min(this.props.pattern.bars, ZOOM_MAX)
+            })
+        }
+    }
+
     unlockScroll (...args) {
         args.forEach(el => {
             delete el[this.lockscroll]
@@ -76,10 +86,10 @@ export class Pattern extends React.Component {
     gridClick = (event) => {
         /// Y
         const noteIndex  = Math.floor(event.nativeEvent.offsetY / NOTEHEIGHT)
-        const noteOctave = Math.floor(noteIndex / octaves.length)
-        const noteKey    = Math.floor(noteIndex % octaves.length)
+        const noteOctave = Math.floor(noteIndex / OCTAVES.length)
+        const noteKey    = Math.floor(noteIndex % OCTAVES.length)
 
-        console.log('note', `${notes[noteKey]}${octaves[noteOctave] - 1}`)
+        console.log('note', `${NOTES[noteKey]}${OCTAVES[noteOctave] - 1}`)
 
         /// X
         const { pattern: { bars } } = this.props
@@ -164,8 +174,8 @@ const SubBar = ({sub, bar}) =>
     <div className='sub-bar'>{`${bar+1}.${sub+1}`}</div>
 const PatternKeys = () => {
     return (
-        octaves.map((octave, o) =>
-            notes.map((note, n) =>
+        OCTAVES.map((octave, o) =>
+            NOTES.map((note, n) =>
                 <Note key={o+n} note={note} octave={octave - 1} />
             )
         )
@@ -189,7 +199,7 @@ const parseTransportTime = (time) => {
 const getNoteProps = ({ n, o, v, on, off }, barsize) => {
     const x = getNoteOffset(parseTransportTime(on), barsize)
     const w = getNoteOffset(parseTransportTime(off), barsize) - x
-    const y = notes.indexOf(n) * octaves.indexOf(o) * NOTEHEIGHT
+    const y = NOTES.indexOf(n) * OCTAVES.indexOf(o) * NOTEHEIGHT
 
     return { x, y, w, v }
 }

@@ -93,6 +93,8 @@ $keys-height: 50px;
     width: 100%;
 
     .seq-header {
+        display: flex;
+        justify-content: space-between;
         width: 100%;
         text-align:center;
         height: 32px;
@@ -104,6 +106,25 @@ $keys-height: 50px;
         i {
             font-size: 1.5em;
             line-height: 0.8;
+            cursor: pointer;
+        }
+        .button-bar {
+            display: flex;
+            justify-content: flex-start;
+
+            span {
+                font-size: 1em;
+                font-weight: 200;
+                line-height: 1.2;
+                cursor: pointer;
+            }
+
+            &.right {
+                justify-content: flex-end;
+            }
+        }
+        div {
+            flex: 2;
         }
     }
 
@@ -209,6 +230,7 @@ $keys-height: 50px;
                         text-align: center;
                         min-width: $track-block-width;
                         margin-right: $border-size;
+                        height:  $track-block-height;
 
                         &.placeholder {
                             border:none;
