@@ -1,20 +1,11 @@
 import React from 'react'
-import { NOTES, OCTAVES } from 'ui/constants'
+import { NOTES, OCTAVES } from 'ui/sequencer/constants'
+import { parseTransportTime } from 'ui/sequencer/utils'
 
 // matching width/height of css .song-content.loops.loop
 const LOOP_WIDTH = 200
 const LOOP_HEIGHT = 120
-const NOTE_HEIGHT = 3 // TODO fix me
-
-// TODO move to utils
-const parseTransportTime = (time) => {
-    const [bar, n4, n16] = time.split(':')
-    return {
-        bar: parseInt(bar, 10),
-        n4 : parseInt (n4, 10),
-        n16: parseFloat(n16),
-    }
-}
+const NOTE_HEIGHT = 3 // arbitrary
 
 export class SongLoop extends React.Component {
     constructor () {

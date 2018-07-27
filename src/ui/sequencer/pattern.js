@@ -1,24 +1,36 @@
 import React from 'react'
 import { PatternControl } from 'ui/sequencer/pattern-control'
-import { NOTES, OCTAVES } from 'ui/constants'
+import { NOTES, OCTAVES, NOTE_HEIGHT, MAX_HEIGHT } from 'ui/sequencer/constants'
+import { BarLine, BarSubLine, BarHorizontalLine } from 'ui/sequencer/pattern-bars'
+import { getNoteProps, getNoteVelocityProps } from 'ui/sequencer/utils'
+import { PatternGrid } from 'ui/sequencer/pattern-grid'
+import { PatternModulation } from 'ui/sequencer/pattern-modulation'
+import { Note, NoteBox } from 'ui/sequencer/pattern-notes'
 
-// bars, max 16
-// barsize = screenWidth / zoom
-// zoom = min 1 - max 8 bars
-    // scroll horizontally to view more
-// barwidth = pageWidth / zoom
-// svgWidth = bars * barwidth
+// on/off time bar:beat:sixteenths
+// https://tonejs.github.io/docs/r12/Type#barsbeatssixteenths
 
-// 33  = note height + border
-// 101 = note width + border
-const numkeys = OCTAVES.length * NOTES.length
-const NOTEHEIGHT = 33
-const MAX_HEIGHT = NOTES.length * OCTAVES.length * NOTEHEIGHT
-const SCREENWIDTH = 1920 - 100
 const ZOOM_MAX = 8
 const ZOOM_MIN = 1
+
+// input constants
+const SCREEN_WIDTH = 1920 - 100
+// TODO remove one of these
 const BEATS = 4
 const TIMESIG = 4
+
+const Bar = ({bar}) =>
+    <div className='bar'>{`${bar + 1} Bar`}</div>
+
+const SubBar = ({sub, bar}) =>
+    <div className='sub-bar'>{`${bar+1}.${sub+1}`}</div>
+
+const PatternKeys = () =>
+    OCTAVES.map((octave, o) =>
+        NOTES.map((note, n) =>
+            <Note key={o+n} note={note} octave={octave - 1} />
+        )
+    )
 
 export class Pattern extends React.PureComponent {
     constructor(props) {
@@ -85,33 +97,31 @@ export class Pattern extends React.PureComponent {
     // TODO mouseDown, mouseUp - draw notes via drag
     gridClick = (event) => {
         /// Y
-        const noteIndex  = Math.floor(event.nativeEvent.offsetY / NOTEHEIGHT)
+        const noteIndex  = Math.floor(event.nativeEvent.offsetY / NOTE_HEIGHT)
         const noteOctave = Math.floor(noteIndex / OCTAVES.length)
         const noteKey    = Math.floor(noteIndex % OCTAVES.length)
 
-        console.log('note', `${NOTES[noteKey]}${OCTAVES[noteOctave] - 1}`)
-
         /// X
         const { pattern: { bars } } = this.props
-        const barsize = SCREENWIDTH / this.state.zoom
+        const barsize = SCREEN_WIDTH / this.state.zoom
         const bar = Math.floor(event.nativeEvent.offsetX / barsize)
 
         const barOffset = Math.floor(event.nativeEvent.offsetX % barsize) / barsize
         const beat = Math.floor(barOffset * BEATS)
 
         const beatOffset = barOffset  * BEATS % BEATS - beat
-        const sixteenths = beatOffset * BEATS
+        const sixteenths = (beatOffset * BEATS).toPrecision(3)
 
-        console.log('bar', bar, 'beat', beat, 'sixteenths', sixteenths)
+        console.log(`${NOTES[noteKey]}${OCTAVES[noteOctave] - 1} @ ${bar}:${beat}:${sixteenths}`)
     }
 
     render() {
         const { pattern: { bars, notes }, style } = this.props
-        const barsize = SCREENWIDTH / this.state.zoom
+        const barsize = SCREEN_WIDTH / this.state.zoom
         const width = barsize * bars
         const rangeStyle = {
             transform: `translateX(${this.state.offsetLeft * this.state.zoom / bars}px)`,
-            width: SCREENWIDTH / bars * this.state.zoom
+            width: SCREEN_WIDTH / bars * this.state.zoom
         }
 
         return (
@@ -143,161 +153,30 @@ export class Pattern extends React.PureComponent {
                         <PatternKeys />
                     </div>
                     <div className='right dragscroll' ref={r => this.right = r} onScroll={this.onScroll} onClick={this.gridClick}>
-                        <Grid
+                        <PatternGrid
                             width={width}
                             height={MAX_HEIGHT}
                             bars={bars}
                             barsize={barsize}
-                            notes={notes} />
+                            notes={notes}
+                            timesig={TIMESIG}
+                            beats={BEATS} />
                     </div>
                 </div>
                 <div className='pattern-footer'>
                     <div className='foot-switch' />
                     <div className='footer-right dragscroll' ref={m => this.modulation = m} onScroll={this.onScroll}>
-                        <Modulation
+                        <PatternModulation
                             width={width}
                             height={50}
                             bars={bars}
                             barsize={barsize}
-                            notes={notes} />
+                            notes={notes}
+                            timesig={TIMESIG}
+                            beats={BEATS} />
                     </div>
                 </div>
             </div>
         )
     }
-}
-
-// TODO split this out, remove redundancy
-const Bar = ({bar}) =>
-    <div className='bar'>{`${bar + 1} Bar`}</div>
-const SubBar = ({sub, bar}) =>
-    <div className='sub-bar'>{`${bar+1}.${sub+1}`}</div>
-const PatternKeys = () => {
-    return (
-        OCTAVES.map((octave, o) =>
-            NOTES.map((note, n) =>
-                <Note key={o+n} note={note} octave={octave - 1} />
-            )
-        )
-    )
-}
-const Note = ({note, octave}) =>
-    <div className={`note${note.length === 2 ? ' sharp' : ''}`}>
-        {`${note}${octave}`}
-    </div>
-
-const getNoteOffset = (time, barsize) =>
-    time.bar*barsize + time.n4*(barsize/4) + time.n16*(barsize/16)
-const parseTransportTime = (time) => {
-    const [bar, n4, n16] = time.split(':')
-    return {
-        bar: parseInt(bar, 10),
-        n4 : parseInt (n4, 10),
-        n16: parseFloat(n16),
-    }
-}
-const getNoteProps = ({ n, o, v, on, off }, barsize) => {
-    const x = getNoteOffset(parseTransportTime(on), barsize)
-    const w = getNoteOffset(parseTransportTime(off), barsize) - x
-    const y = NOTES.indexOf(n) * OCTAVES.indexOf(o) * NOTEHEIGHT
-
-    return { x, y, w, v }
-}
-const getNoteVelocityProps = ({ n, o, v, on, off }, height, barsize) => {
-    // TODO remove redundancy
-    const x = getNoteOffset(parseTransportTime(on), barsize)
-    const w = getNoteOffset(parseTransportTime(off), barsize) - x
-    const y = height - v * height
-
-    return { x, y, w, v }
-}
-
-class Grid extends React.PureComponent {
-    render() {
-        const { bars, notes, barsize, width, height } = this.props
-
-        return (
-            <svg className='grid' width={width} height={height} shapeRendering='crispEdges'>
-                {
-                    [...Array(bars*TIMESIG).keys()].map(bar =>
-                        <BarLine
-                            key={bar}
-                            bar={bar}
-                            barsize={barsize} />)
-                }
-                {
-                    [...Array(bars*bars*BEATS).keys()].map(bar =>
-                        <BarSubLine
-                            key={bar}
-                            bar={bar}
-                            barsize={barsize} />)
-                }
-                {
-                    [...Array(numkeys).keys()].map(bar =>
-                        <BarHorizontalLine
-                            key={bar}
-                            bar={bar}
-                            noteheight={NOTEHEIGHT}
-                            width={width} />)
-                }
-                {
-                    notes.map((note, index) =>
-                        <NoteBox
-                            key={index}
-                            {...getNoteProps(note, barsize)} />)
-                }
-            </svg>
-        )
-    }
-}
-// bar lines
-const BarLine = ({bar, barsize}) => {
-    const x = barsize / TIMESIG * (bar + 1)
-    return <line className='bar-line' x1={x} y1={0} x2={x} y2={MAX_HEIGHT} />
-}
-const BarSubLine = ({bar, barsize}) => {
-    const x = (barsize / TIMESIG / BEATS) * (bar + 1)
-    return <line className='bar-sub-line' x1={x} y1={0} x2={x} y2={MAX_HEIGHT} />
-}
-const BarHorizontalLine = ({bar, noteheight, width}) => {
-    const y = noteheight * (bar + 1)
-    return <line className='bar-horizontal-line' x1={0} y1={y} x2={width} y2={y} />
-}
-// note boxes
-const NOTEOFFSET = 2
-const BOXHEIGHT = NOTEHEIGHT - 3
-const NoteBox = ({x, y, w, v}) => {
-    return (
-        <React.Fragment>
-            <rect className='midi-note'   x={x} y={y+NOTEOFFSET} width={w} height={BOXHEIGHT} />
-            <rect className='midi-note-v' x={x} y={y+NOTEOFFSET} width={w} height={BOXHEIGHT*(1-v)} />
-        </React.Fragment>
-    )
-}
-
-class Modulation extends React.PureComponent {
-    render() {
-        const { bars, notes, barsize, width, height } = this.props
-
-        return (
-            <svg className='modulation' width={width} height={height} shapeRendering='crispEdges'>
-                {
-                    [...Array(bars*bars*4).keys()].map(bar =>
-                        <BarLine key={bar} bar={bar} bars={bars} barsize={barsize} />)
-                }
-                {
-                    notes.map((note, index) =>
-                        <NoteVelocityBar key={index} height={height} {...getNoteVelocityProps(note, height, barsize)} />)
-                }
-            </svg>
-        )
-    }
-}
-const NoteVelocityBar = ({ x, y, height }) => {
-    return (
-        <React.Fragment>
-            <line className='note-vel-line' x1={x} y1={y} x2={x} y2={height} />
-            <circle className='note-vel-circle' cx={x} cy={y} r={4} shapeRendering='auto' />
-        </React.Fragment>
-    );
 }

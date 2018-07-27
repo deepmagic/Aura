@@ -4,17 +4,6 @@ import { Song } from './song'
 import { Pattern } from './pattern'
 import { TransportControl } from './transport-control'
 
-// on/off time bar:beat:sixteenths
-// https://tonejs.github.io/docs/r12/Type#barsbeatssixteenths
-const pattern = {
-    bars: 4,
-    notes: [
-        { n: 'C',  o: 9, v: 0.9, on: '0:0:0.0', off: '0:0:1.0' },
-        { n: 'D#', o: 9, v: 0.9, on: '1:0:0.0', off: '1:0:1.0' },
-        { n: 'C',  o: 9, v: 0.9, on: '2:0:0.0', off: '2:0:1.0' },
-        { n: 'D#', o: 9, v: 0.5, on: '3:0:0.0', off: '3:0:1.0' },
-    ]
-}
 // TODO fix pattern to accept no pattern and get rid of this
 const placeholderPattern = { bars: 1, notes: [] }
 const hide = {
