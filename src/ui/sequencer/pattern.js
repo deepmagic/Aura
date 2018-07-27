@@ -1,23 +1,20 @@
 import React from 'react'
-import { PatternControl } from 'ui/sequencer/pattern-control'
 import { NOTES, OCTAVES, NOTE_HEIGHT, MAX_HEIGHT } from 'ui/sequencer/constants'
-import { BarLine, BarSubLine, BarHorizontalLine } from 'ui/sequencer/pattern-bars'
 import { getNoteProps, getNoteVelocityProps } from 'ui/sequencer/utils'
+import { BarLine, BarSubLine, BarHorizontalLine } from 'ui/sequencer/pattern-bars'
+import { Note, NoteBox } from 'ui/sequencer/pattern-notes'
+import { PatternControl } from 'ui/sequencer/pattern-control'
 import { PatternGrid } from 'ui/sequencer/pattern-grid'
 import { PatternModulation } from 'ui/sequencer/pattern-modulation'
-import { Note, NoteBox } from 'ui/sequencer/pattern-notes'
 
 // on/off time bar:beat:sixteenths
 // https://tonejs.github.io/docs/r12/Type#barsbeatssixteenths
 
-const ZOOM_MAX = 8
 const ZOOM_MIN = 1
+const ZOOM_MAX = 8
 
 // input constants
-const SCREEN_WIDTH = 1920 - 100
-// TODO remove one of these
-const BEATS = 4
-const TIMESIG = 4
+const SCREEN_WIDTH = 1920 - 100 // 100 = left width of keys css : $left-keys-width
 
 const Bar = ({bar}) =>
     <div className='bar'>{`${bar + 1} Bar`}</div>
@@ -28,11 +25,9 @@ const SubBar = ({sub, bar}) =>
 const PatternKeys = () =>
     OCTAVES.map((octave, o) =>
         NOTES.map((note, n) =>
-            <Note key={o+n} note={note} octave={octave - 1} />
-        )
-    )
+            <Note key={o+n} note={note} octave={octave - 1} />))
 
-export class Pattern extends React.PureComponent {
+class PatternView extends React.PureComponent {
     constructor(props) {
         super(props)
         this.onScroll = this.onScroll.bind(this)
@@ -45,7 +40,7 @@ export class Pattern extends React.PureComponent {
 
     componentDidUpdate (prevProps) {
         // this likely won't work correctly in the long run
-        if (prevProps.pattern !== this.props.pattern) {
+        if (prevProps.loopid !== this.props.loopid) {
             this.setState({
                 offsetLeft: 0,
                 zoom: Math.min(this.props.pattern.bars, ZOOM_MAX)
@@ -94,29 +89,74 @@ export class Pattern extends React.PureComponent {
         event.preventDefault()
     }
 
-    // TODO mouseDown, mouseUp - draw notes via drag
-    gridClick = (event) => {
+    getNoteAtPoint = (x, y) => {
+        const barsize = SCREEN_WIDTH / this.state.zoom
+        const {
+            pattern: { bars },
+            timesig,
+        } = this.props
+
         /// Y
-        const noteIndex  = Math.floor(event.nativeEvent.offsetY / NOTE_HEIGHT)
-        const noteOctave = Math.floor(noteIndex / OCTAVES.length)
-        const noteKey    = Math.floor(noteIndex % OCTAVES.length)
+        const noteIndex  = Math.floor(y / NOTE_HEIGHT)
+        const octave = Math.floor(noteIndex / OCTAVES.length)
+        const note   = Math.floor(noteIndex % OCTAVES.length)
 
         /// X
-        const { pattern: { bars } } = this.props
-        const barsize = SCREEN_WIDTH / this.state.zoom
-        const bar = Math.floor(event.nativeEvent.offsetX / barsize)
+        const bar = Math.floor(x / barsize)
 
-        const barOffset = Math.floor(event.nativeEvent.offsetX % barsize) / barsize
-        const beat = Math.floor(barOffset * BEATS)
+        const barOffset = Math.floor(x % barsize) / barsize
+        const beat = Math.floor(barOffset * timesig)
 
-        const beatOffset = barOffset  * BEATS % BEATS - beat
-        const sixteenths = (beatOffset * BEATS).toPrecision(3)
+        const beatOffset =  barOffset  * timesig % timesig - beat
+        const sixteenths = (beatOffset * timesig)
 
-        console.log(`${NOTES[noteKey]}${OCTAVES[noteOctave] - 1} @ ${bar}:${beat}:${sixteenths}`)
+        return {
+            note: NOTES[note],
+            octave: OCTAVES[octave],
+            bar,
+            beat,
+            sixteenths,
+        }
+    }
+
+    onNoteClick = (event, noteIndex) => {
+        console.log('note clicked', event, noteIndex, this.props.loopActive)
+
+        this.props.loopDelNote(this.props.loopActive, noteIndex)
+        event.stopPropagation()
+    }
+
+    // TODO mouseDown, mouseUp - draw notes via drag
+    gridClick = (event) => {
+        const { offsetX, offsetY } = event.nativeEvent
+        const note = this.getNoteAtPoint(offsetX, offsetY)
+
+        console.log(`${note.note}${note.octave - 1} @ ${note.bar}:${note.beat}:${note.sixteenths}`)
+
+        const {
+            loopAddNote,
+            loopActive,
+        } = this.props
+
+        loopAddNote(loopActive, {
+            n: note.note,
+            o: note.octave,
+            v: 0.8,
+            on:  `${note.bar}:${note.beat}:${note.sixteenths}`,
+            off: `${note.bar}:${note.beat}:${note.sixteenths + 2.0}`
+        })
     }
 
     render() {
-        const { pattern: { bars, notes }, style } = this.props
+        const {
+            pattern: {
+                bars,
+                notes
+            },
+            style,
+            timesig
+        } = this.props
+
         const barsize = SCREEN_WIDTH / this.state.zoom
         const width = barsize * bars
         const rangeStyle = {
@@ -141,7 +181,7 @@ export class Pattern extends React.PureComponent {
                             <div className='sub-bars' style={{ width: width }}>
                                 {
                                     [...Array(bars).keys()].map(bar =>
-                                        [...Array(TIMESIG).keys()].map(sub =>
+                                        [...Array(timesig).keys()].map(sub =>
                                             <SubBar key={sub+bar} sub={sub} bar={bar} />))
                                 }
                             </div>
@@ -154,13 +194,13 @@ export class Pattern extends React.PureComponent {
                     </div>
                     <div className='right dragscroll' ref={r => this.right = r} onScroll={this.onScroll} onClick={this.gridClick}>
                         <PatternGrid
+                            onClickNote={this.onNoteClick}
                             width={width}
                             height={MAX_HEIGHT}
                             bars={bars}
                             barsize={barsize}
                             notes={notes}
-                            timesig={TIMESIG}
-                            beats={BEATS} />
+                            timesig={timesig} />
                     </div>
                 </div>
                 <div className='pattern-footer'>
@@ -172,11 +212,22 @@ export class Pattern extends React.PureComponent {
                             bars={bars}
                             barsize={barsize}
                             notes={notes}
-                            timesig={TIMESIG}
-                            beats={BEATS} />
+                            timesig={timesig} />
                     </div>
                 </div>
             </div>
         )
     }
 }
+
+import { connect } from 'react-redux'
+import { loopAddNote, loopDelNote } from 'actions/loops'
+export const Pattern = connect(
+    (state) => ({
+        loopActive: state.loopActive
+    }),
+    {
+        loopAddNote,
+        loopDelNote,
+    }
+)(PatternView)

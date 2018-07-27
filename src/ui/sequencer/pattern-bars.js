@@ -7,7 +7,7 @@ export const BarLine = ({bar, barsize, timesig}) => {
 }
 
 export const BarSubLine = ({bar, barsize, timesig, beats}) => {
-    const x = (barsize / timesig / beats) * (bar + 1)
+    const x = (barsize / (timesig * 2)) * (bar + 1)
     return <line className='bar-sub-line' x1={x} y1={0} x2={x} y2={MAX_HEIGHT} />
 }
 

@@ -27,8 +27,7 @@ export class PatternModulation extends React.PureComponent {
                             bar={bar}
                             bars={bars}
                             barsize={barsize}
-                            timesig={timesig}
-                            beats={beats} />)
+                            timesig={timesig} />)
                 }
                 {
                     notes.map((note, index) =>

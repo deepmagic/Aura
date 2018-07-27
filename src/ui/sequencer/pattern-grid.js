@@ -8,12 +8,12 @@ import { NoteBox } from 'ui/sequencer/pattern-notes'
 export class PatternGrid extends React.PureComponent {
     render() {
         const {
+            onClickNote,
             bars,
             notes,
             barsize,
             width,
             height,
-            beats,
             timesig
         } = this.props
 
@@ -33,13 +33,12 @@ export class PatternGrid extends React.PureComponent {
                             maxheight={MAX_HEIGHT} />)
                 }
                 {
-                    [...Array(bars*bars*beats).keys()].map(bar =>
+                    [...Array(bars*bars*timesig).keys()].map(bar =>
                         <BarSubLine
                             key={bar}
                             bar={bar}
                             barsize={barsize}
                             timesig={timesig}
-                            beats={beats}
                             maxheight={MAX_HEIGHT} />)
                 }
                 {
@@ -54,6 +53,7 @@ export class PatternGrid extends React.PureComponent {
                     notes.map((note, index) =>
                         <NoteBox
                             key={index}
+                            onClick={(event) => onClickNote(event, index)}
                             {...getNoteProps(note, barsize)} />)
                 }
             </svg>

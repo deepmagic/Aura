@@ -303,7 +303,7 @@ $keys-height: 50px;
     }
 
     .pattern {
-        will-change: all;
+        // will-change: all;
         flex: 1;
         display: flex;
         flex-direction: column;
@@ -397,6 +397,7 @@ $keys-height: 50px;
                 }
             }
         }
+
         .pattern-content {
             display: flex;
             flex: 1;
@@ -430,9 +431,14 @@ $keys-height: 50px;
                 overflow: auto;
 
                 .grid {
-                    .midi-note { fill: $color-midi-note; }
+                    &.edit {
+                        .midi-note, .midi-note-v {
+                            cursor: pointer;
+                        }
+                    }
 
-                    .midi-note-v { fill: $color-midi-note-velocity; }
+                    .midi-note { fill: $color-midi-note }
+                    .midi-note-v { fill: $color-midi-note-velocity }
 
                     .bar-line {
                         stroke-width: 1;
@@ -479,6 +485,7 @@ $keys-height: 50px;
                 }
 
                 .note-vel-circle {
+                    cursor: pointer;
                     stroke-width: 2;
                     stroke: $color-midi-note;
                     fill: $color-midi-note-velocity;

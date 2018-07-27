@@ -7,7 +7,7 @@ const LOOP_WIDTH = 200
 const LOOP_HEIGHT = 120
 const NOTE_HEIGHT = 3 // arbitrary
 
-export class SongLoop extends React.Component {
+export class SongLoop extends React.PureComponent {
     constructor () {
         super()
 

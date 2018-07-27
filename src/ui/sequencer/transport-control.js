@@ -85,6 +85,10 @@ export class TransportControl extends React.Component {
                 <button className='textbtn tempo'>
                     Tempo
                 </button>
+
+                <button className='textbtn quantize'>
+                    Quantize
+                </button>
             </div>
         )
     }

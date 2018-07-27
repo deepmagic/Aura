@@ -4,6 +4,8 @@ import { Song } from './song'
 import { Pattern } from './pattern'
 import { TransportControl } from './transport-control'
 
+const TIMESIG = 4
+
 // TODO fix pattern to accept no pattern and get rid of this
 const placeholderPattern = { bars: 1, notes: [] }
 const hide = {
@@ -36,7 +38,9 @@ export class SequencerView extends React.Component {
                     instruments={instruments}
                     style={ ui.songpattern || ui.instrumentselect ? hide : null } />
                 <Pattern
+                    loopid={loopActive}
                     pattern={loops[loopActive] || placeholderPattern }
+                    timesig={TIMESIG}
                     style={ !ui.songpattern ? hide : null } />
                 <TransportControl
                     style={ ui.instrumentselect ? hide : null }
