@@ -68,8 +68,8 @@ export class SongLoop extends React.PureComponent {
             // Y
             const noteIndex = NOTES.indexOf(n)
             const octaveIndex = OCTAVES.indexOf(o)
-            const y = octaveIndex * octaveDelta +
-                      noteIndex * noteDelta
+            const y = noteIndex   * noteDelta +
+                      octaveIndex * octaveDelta
 
             this.ctx.fillRect(xOn, y, xOff - xOn, NOTE_HEIGHT)
         }

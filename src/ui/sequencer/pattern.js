@@ -98,8 +98,8 @@ class PatternView extends React.PureComponent {
 
         /// Y
         const noteIndex  = Math.floor(y / NOTE_HEIGHT)
-        const octave = Math.floor(noteIndex / OCTAVES.length)
-        const note   = Math.floor(noteIndex % OCTAVES.length)
+        const octave = Math.floor(noteIndex / NOTES.length)
+        const note   = Math.floor(noteIndex % NOTES.length)
 
         /// X
         const bar = Math.floor(x / barsize)
@@ -120,7 +120,7 @@ class PatternView extends React.PureComponent {
     }
 
     onNoteClick = (event, noteIndex) => {
-        console.log('note clicked', event, noteIndex, this.props.loopActive)
+        console.log('note clicked', noteIndex, this.props.loopActive)
 
         this.props.loopDelNote(this.props.loopActive, noteIndex)
         event.stopPropagation()
@@ -134,8 +134,8 @@ class PatternView extends React.PureComponent {
         console.log(`${note.note}${note.octave - 1} @ ${note.bar}:${note.beat}:${note.sixteenths}`)
 
         const {
-            loopAddNote,
             loopActive,
+            loopAddNote,
         } = this.props
 
         loopAddNote(loopActive, {

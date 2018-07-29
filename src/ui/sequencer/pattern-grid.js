@@ -24,29 +24,25 @@ export class PatternGrid extends React.PureComponent {
                 height={height}
                 shapeRendering='crispEdges'>
                 {
-                    [...Array(bars*timesig).keys()].map(bar =>
+                    [...Array(bars - 1).keys()].map(bar =>
                         <BarLine
                             key={bar}
                             bar={bar}
-                            barsize={barsize}
-                            timesig={timesig}
-                            maxheight={MAX_HEIGHT} />)
+                            barsize={barsize} />)
                 }
                 {
-                    [...Array(bars*bars*timesig).keys()].map(bar =>
+                    [...Array(bars * timesig - 1).keys()].map(bar =>
                         <BarSubLine
                             key={bar}
                             bar={bar}
                             barsize={barsize}
-                            timesig={timesig}
-                            maxheight={MAX_HEIGHT} />)
+                            timesig={timesig} />)
                 }
                 {
-                    [...Array(NUM_KEYS).keys()].map(bar =>
+                    [...Array(NUM_KEYS - 1).keys()].map(bar =>
                         <BarHorizontalLine
                             key={bar}
                             bar={bar}
-                            noteheight={NOTE_HEIGHT}
                             width={width} />)
                 }
                 {

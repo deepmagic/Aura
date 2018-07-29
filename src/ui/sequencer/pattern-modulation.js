@@ -22,12 +22,10 @@ export class PatternModulation extends React.PureComponent {
                 height={height}
                 shapeRendering='crispEdges'>
                 {
-                    [...Array(bars*bars*4).keys()].map(bar =>
+                    [...Array(bars - 1).keys()].map(bar =>
                         <BarLine key={bar}
                             bar={bar}
-                            bars={bars}
-                            barsize={barsize}
-                            timesig={timesig} />)
+                            barsize={barsize} />)
                 }
                 {
                     notes.map((note, index) =>
