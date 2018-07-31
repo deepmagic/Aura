@@ -4,10 +4,10 @@ import React from "react"
 import ReactDOM from "react-dom"
 import { Provider } from 'react-redux'
 
+import { Midi } from 'midi/midi'
 import { AuraKeys } from 'ui/input/keys'
 import { Panel } from 'ui/common/panel'
-import { Midi } from 'midi/midi'
-import { Sequencer } from 'ui/sequencer/sequencer'
+import { Sequencer } from 'ui/sequencer'
 
 import { configureStore } from 'store/configure'
 import { initialState } from 'store/initial-state'

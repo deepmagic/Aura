@@ -1,0 +1,1 @@
+export { toneMiddleware } from './middleware'

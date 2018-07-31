@@ -23,7 +23,8 @@ export class PatternModulation extends React.PureComponent {
                 shapeRendering='crispEdges'>
                 {
                     [...Array(bars - 1).keys()].map(bar =>
-                        <BarLine key={bar}
+                        <BarLine
+                            key={bar}
                             bar={bar}
                             barsize={barsize} />)
                 }
