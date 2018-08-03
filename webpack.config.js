@@ -12,6 +12,7 @@ module.exports = {
   resolve: {
        modules: [path.resolve(__dirname, 'src/'), 'node_modules'],
   },
+  devtool:'eval-source-map', // remove me in prod
   module: {
     rules: [
       {

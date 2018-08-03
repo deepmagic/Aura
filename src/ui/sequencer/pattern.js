@@ -27,6 +27,11 @@ const PatternKeys = () =>
         NOTES.map((note, n) =>
             <Note key={o+n} note={note} octave={octave - 1} />))
 
+const PatternPlayhead = ({x, active}) =>
+    <div
+        className={`playhead ${active ? 'active' : ''}`}
+        style={{ transform: `translateX(${x}px)`, height: MAX_HEIGHT }} />
+
 class PatternView extends React.PureComponent {
     constructor(props) {
         super(props)
@@ -193,6 +198,7 @@ class PatternView extends React.PureComponent {
                         <PatternKeys />
                     </div>
                     <div className='right dragscroll' ref={r => this.right = r} onScroll={this.onScroll} onClick={this.gridClick}>
+                        <PatternPlayhead x={546} active />
                         <PatternGrid
                             onClickNote={this.onNoteClick}
                             width={width}

@@ -203,12 +203,14 @@ export const Song = connect(
     uiToggleInstrumentSelect,
 })(SongView)
 
+const SongScenePlayhead = ({x}) =>
+    <div className='playhead' style={{ transform: `translateX(${x}%)` }} />
+
 const SongSceneHead = ({name}) =>
     <div className='scene-head'>
+        <SongScenePlayhead x={30} />
         <Icon>play_arrow</Icon>
-        <div>
-            {name}
-        </div>
+        <div>{name}</div>
     </div>
 
 const SongTrackHead = ({name}) =>

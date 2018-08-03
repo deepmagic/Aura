@@ -7,6 +7,9 @@ const LOOP_WIDTH = 200
 const LOOP_HEIGHT = 120
 const NOTE_HEIGHT = 3 // arbitrary
 
+const SongLoopPlayhead = ({x}) =>
+    <div className='playhead' style={{ transform: `translateX(${x}%)` }}></div>
+
 export class SongLoop extends React.PureComponent {
     constructor () {
         super()
@@ -86,7 +89,13 @@ export class SongLoop extends React.PureComponent {
 
         return (
             <div className={`loop ${!loop ? 'placeholder' : ''}`} {...props}>
-                { loop && <img src={this.imageDataUrl} width={LOOP_WIDTH} height={LOOP_HEIGHT} /> }
+                {
+                    loop &&
+                    <React.Fragment>
+                        <SongLoopPlayhead x={30} />
+                        <img src={this.imageDataUrl} width={LOOP_WIDTH} height={LOOP_HEIGHT} />
+                    </React.Fragment>
+                }
             </div>
         )
     }

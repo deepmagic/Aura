@@ -2,67 +2,39 @@ import React from 'react'
 import { Icon } from 'ui/common/icon'
 import Tone from 'tone'
 
-export class TransportControl extends React.Component {
-    constructor() {
-        super()
-
-        this.state = {
-            recording: false,
-            playing: false,
-            paused: false
-        }
+export class TransportControlView extends React.Component {
+    record = (flag = true) => {
+        const { recording } = this.props.transport
+        this.props.transportRecord(!flag || recording ? false : true)
     }
-    record = (toggle = true) => {
-        let recording = this.state.recording
 
-        if (!toggle || this.state.recording) {
-            recording = false
-        } else {
-            recording = true
-        }
-
-        this.setState({recording})
-    }
     stop = () => {
-        Tone.Transport.stop()
-        this.record(false)
-        this.setState({playing: false, paused: false})
+        this.props.transportStop()
     }
+
     playpause = () => {
-        let paused = this.state.paused
-        let playing = this.state.playing
-
-        if (!this.state.paused && Tone.Transport.ticks) {
-            Tone.Transport.pause()
-            paused = true
-            playing = false
+        const { playing, paused } = this.props.transport
+        if (!paused && playing) {
+            this.props.transportPause()
         } else {
-            Tone.Transport.start()
-            paused = false
-            playing = true
+            this.props.transportPlay()
         }
-
-        this.setState({
-            paused,
-            playing
-        })
     }
+
     render() {
-        const { style } = this.props
-        const playClass = this.state.playing
-            ? 'active'
-            : this.state.paused
-            ? 'paused'
-            : ''
+        const { playing, paused, recording } = this.props.transport
+        const playClass = playing
+            ? 'active' : paused
+            ? 'paused' : ''
 
         return (
-            <div className='transport-control' style={style}>
+            <div className='transport-control' style={this.props.style}>
                 <button className='textbtn function'>
                     Function
                 </button>
 
                 <button
-                    className={`record${this.state.recording ? ' active' : ''}`}
+                    className={`record ${recording ? 'active' : ''}`}
                     onClick={this.record}>
                     <Icon>fiber_manual_record</Icon>
                 </button>
@@ -92,3 +64,23 @@ export class TransportControl extends React.Component {
         )
     }
 }
+
+import { connect } from 'react-redux'
+import {
+    transportPlay,
+    transportPause,
+    transportStop,
+    transportRecord,
+} from 'actions/transport'
+
+export const TransportControl = connect(
+    (state) => ({
+        transport: state.transport,
+    }),
+    {
+        transportPlay,
+        transportPause,
+        transportStop,
+        transportRecord,
+    }
+)(TransportControlView)

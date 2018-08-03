@@ -1,4 +1,5 @@
 import Tone from 'tone'
+import { Transport } from './transport'
 
 // per loop
 const fmSynth = new Tone.PolySynth(6, Tone.AMSynth).toMaster()
@@ -93,5 +94,6 @@ export const Controller = () => {
         loopAdd,
         loopAddNote,
         loopDelNote,
+        ...Transport(),
     }
 }

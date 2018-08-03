@@ -4,12 +4,14 @@ class Keys extends React.Component {
     constructor() {
         super()
         this.bindings = {
-            'tab': this.toggleExpand,
+            'tab': this.toggleSongPattern,
             ' ': this.toggleTemp,
         }
     }
-    toggleExpand = () => {
-        this.props.uiToggleSongPattern()
+    toggleSongPattern = () => {
+        if (this.props.loopActive) {
+            this.props.uiToggleSongPattern()
+        }
     }
     toggleTemp = () => {
         console.log('todo')
@@ -47,6 +49,11 @@ class Keys extends React.Component {
 import { connect } from 'react-redux'
 import { uiToggleSongPattern } from 'actions/ui'
 
-export const AuraKeys = connect(null, {
-    uiToggleSongPattern
-})(Keys)
+export const AuraKeys = connect(
+    (state) => ({
+        loopActive: state.loopActive
+    }),
+    {
+        uiToggleSongPattern
+    }
+)(Keys)
