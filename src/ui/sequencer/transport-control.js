@@ -3,6 +3,10 @@ import { Icon } from 'ui/common/icon'
 import Tone from 'tone'
 
 export class TransportControlView extends React.Component {
+    componentDidMount () {
+        this.props.transportInit()
+    }
+
     record = (flag = true) => {
         const { recording } = this.props.transport
         this.props.transportRecord(!flag || recording ? false : true)
@@ -67,6 +71,7 @@ export class TransportControlView extends React.Component {
 
 import { connect } from 'react-redux'
 import {
+    transportInit,
     transportPlay,
     transportPause,
     transportStop,
@@ -78,6 +83,7 @@ export const TransportControl = connect(
         transport: state.transport,
     }),
     {
+        transportInit,
         transportPlay,
         transportPause,
         transportStop,

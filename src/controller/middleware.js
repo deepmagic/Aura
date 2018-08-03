@@ -8,6 +8,7 @@ import {
 } from 'actions/instruments'
 
 import {
+    TRANSPORT_INIT,
     TRANSPORT_PLAY,
     TRANSPORT_PAUSE,
     TRANSPORT_STOP,
@@ -34,6 +35,9 @@ export const toneMiddleware = store => next => action => {
             ToneController.loopDelNote(action)
             break
     // TRANSPORT
+        case TRANSPORT_INIT:
+            ToneController.transportInit(store.dispatch)
+            break
         case TRANSPORT_PLAY:
             ToneController.transportPlay()
             break
@@ -41,7 +45,7 @@ export const toneMiddleware = store => next => action => {
             ToneController.transportPause()
             break
         case TRANSPORT_STOP:
-            ToneController.transportStop()
+            ToneController.transportStop(store.dispatch)
             break
     }
 

@@ -84,6 +84,7 @@ export class SongLoop extends React.PureComponent {
         const {
             loop,
             loopid,
+            x,
             ...props
         } = this.props;
 
@@ -92,7 +93,7 @@ export class SongLoop extends React.PureComponent {
                 {
                     loop &&
                     <React.Fragment>
-                        <SongLoopPlayhead x={30} />
+                        <SongLoopPlayhead x={x} />
                         <img src={this.imageDataUrl} width={LOOP_WIDTH} height={LOOP_HEIGHT} />
                     </React.Fragment>
                 }

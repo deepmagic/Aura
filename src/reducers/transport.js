@@ -3,6 +3,7 @@ import {
     TRANSPORT_PAUSE,
     TRANSPORT_STOP,
     TRANSPORT_RECORD,
+    TRANSPORT_TIME,
 } from 'actions/transport'
 
 export const transport = (state = {}, action) => {
@@ -15,6 +16,15 @@ export const transport = (state = {}, action) => {
             return { ...state, playing: false, paused: false, recording: false }
         case TRANSPORT_RECORD:
             return { ...state, recording: action.flag }
+        default:
+            return state
+    }
+}
+
+export const transportTime = (state = 0, action) => {
+    switch(action.type) {
+        case TRANSPORT_TIME:
+            return action.time
         default:
             return state
     }

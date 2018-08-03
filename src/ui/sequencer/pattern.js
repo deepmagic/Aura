@@ -32,7 +32,7 @@ const PatternPlayhead = ({x, active}) =>
         className={`playhead ${active ? 'active' : ''}`}
         style={{ transform: `translateX(${x}px)`, height: MAX_HEIGHT }} />
 
-class PatternView extends React.PureComponent {
+class PatternView extends React.Component {
     constructor(props) {
         super(props)
         this.onScroll = this.onScroll.bind(this)
@@ -51,6 +51,9 @@ class PatternView extends React.PureComponent {
                 zoom: Math.min(this.props.pattern.bars, ZOOM_MAX)
             })
         }
+    }
+    shouldComponentUpdate (nextProps) {
+        return nextProps.ui.songpattern || this.props.ui.songpattern
     }
 
     unlockScroll (...args) {
@@ -159,7 +162,9 @@ class PatternView extends React.PureComponent {
                 notes
             },
             style,
-            timesig
+            timesig,
+            transport,
+            transportTime,
         } = this.props
 
         const barsize = SCREEN_WIDTH / this.state.zoom
@@ -198,7 +203,9 @@ class PatternView extends React.PureComponent {
                         <PatternKeys />
                     </div>
                     <div className='right dragscroll' ref={r => this.right = r} onScroll={this.onScroll} onClick={this.gridClick}>
-                        <PatternPlayhead x={546} active />
+                        <PatternPlayhead
+                            x={width*transportTime}
+                            active={transport.playing} />
                         <PatternGrid
                             onClickNote={this.onNoteClick}
                             width={width}
@@ -230,7 +237,10 @@ import { connect } from 'react-redux'
 import { loopAddNote, loopDelNote } from 'actions/loops'
 export const Pattern = connect(
     (state) => ({
-        loopActive: state.loopActive
+        loopActive: state.loopActive,
+        transport: state.transport,
+        transportTime: state.transportTime,
+        ui: state.ui,
     }),
     {
         loopAddNote,

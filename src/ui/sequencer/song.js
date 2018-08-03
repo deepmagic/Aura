@@ -115,7 +115,8 @@ class SongView extends React.Component {
             tracks,
             loops,
             instruments,
-            style
+            style,
+            transportTime,
         } = this.props
 
         return (
@@ -138,7 +139,7 @@ class SongView extends React.Component {
                     <div className='song-content'>
                         <div className='scene-heads dragscroll' ref={sh => this.sceneheads = sh} onScroll={this.onScroll}>
                             {
-                                scenes.ids.map((sceneid) => <SongSceneHead key={sceneid} {...scenes[sceneid]} />)
+                                scenes.ids.map((sceneid) => <SongSceneHead key={sceneid} x={transportTime*100} {...scenes[sceneid]} />)
                             }
                             <SceneAdd add={this.addScene} copy={this.addScene.bind(this, true)} />
                         </div>
@@ -155,6 +156,7 @@ class SongView extends React.Component {
                                                         key={loopid}
                                                         loop={loops[loopid]}
                                                         loopid={loopid}
+                                                        x={transportTime*100}
                                                         onClick={() => this.editLoop(loopid)} />
                                                 )
                                             })
@@ -192,7 +194,8 @@ import { uiToggleSongPattern, uiToggleInstrumentSelect } from 'actions/ui'
 import { setActiveLoop } from 'actions/loops'
 export const Song = connect(
     state => ({
-        instrumentselect: state.ui.instrumentselect
+        transportTime: state.transportTime,
+        instrumentselect: state.ui.instrumentselect,
     }), {
     sceneAdd,
     trackAdd,
@@ -206,9 +209,9 @@ export const Song = connect(
 const SongScenePlayhead = ({x}) =>
     <div className='playhead' style={{ transform: `translateX(${x}%)` }} />
 
-const SongSceneHead = ({name}) =>
+const SongSceneHead = ({name, x}) =>
     <div className='scene-head'>
-        <SongScenePlayhead x={30} />
+        <SongScenePlayhead x={x} />
         <Icon>play_arrow</Icon>
         <div>{name}</div>
     </div>
