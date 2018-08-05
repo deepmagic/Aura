@@ -1,0 +1,18 @@
+{
+  "parser": "babel-eslint",
+  "plugins": ["react"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "react/jsx-uses-vars": 1,
+    "prefer-const": 1,
+    "prefer-template": 1,
+    "no-duplicate-imports": ["error", { "includeExports": true }],
+    "semi": ["error", "never"],
+    "indent": ["error", 4, { "SwitchCase": 1, "ignoreComments": true, "flatTernaryExpressions": true }],
+    "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false, "varsIgnorePattern": "deleted|React|dragscroll" }]
+  }
+}
