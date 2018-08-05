@@ -16,7 +16,7 @@ export const instruments = (state = initialState, action) => {
                 ids: [ ...state.ids, action.instrumentid ]
             }
         case INSTRUMENT_DEL:
-            const { [action.instrumentid]: removed, ...newInstruments } = state
+            const { [action.instrumentid]: deleted, ...newInstruments } = state
             newInstruments.ids = newInstruments.ids.filter(id => id !== action.instrumentid)
             return newInstruments
         default:

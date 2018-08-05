@@ -83,17 +83,18 @@ export class SongLoop extends React.PureComponent {
     render () {
         const {
             loop,
-            loopid,
-            x,
+            // loopid,
+            playTime,
+            active,
             ...props
-        } = this.props;
+        } = this.props
 
         return (
             <div className={`loop ${!loop ? 'placeholder' : ''}`} {...props}>
                 {
                     loop &&
                     <React.Fragment>
-                        <SongLoopPlayhead x={x} />
+                        {active && <SongLoopPlayhead x={playTime} />}
                         <img src={this.imageDataUrl} width={LOOP_WIDTH} height={LOOP_HEIGHT} />
                     </React.Fragment>
                 }

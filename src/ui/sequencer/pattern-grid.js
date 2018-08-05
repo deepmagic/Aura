@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { NOTE_HEIGHT, NUM_KEYS, MAX_HEIGHT } from 'ui/sequencer/constants'
+import { NUM_KEYS } from 'ui/sequencer/constants'
 import { getNoteProps } from 'ui/sequencer/utils'
 import { BarLine, BarSubLine, BarHorizontalLine } from 'ui/sequencer/pattern-bars'
 import { NoteBox } from 'ui/sequencer/pattern-notes'

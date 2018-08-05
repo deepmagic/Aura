@@ -11,9 +11,7 @@ export class PatternModulation extends React.PureComponent {
             barsize,
             width,
             height,
-            timesig,
-            beats
-         } = this.props
+        } = this.props
 
         return (
             <svg

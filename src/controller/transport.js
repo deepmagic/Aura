@@ -1,6 +1,10 @@
 import Tone from 'tone'
 import { transportTime } from 'actions/transport'
 
+Tone.Transport.bpm.value = 120
+Tone.Transport.setLoopPoints(0, '1m')
+Tone.Transport.loop = true
+
 export const Transport = () => {
     let timeLoop, cancelLoop
 

@@ -16,7 +16,7 @@ export const tracks = (state = initialState, action) => {
                 ids: [ ...state.ids, action.trackid ]
             }
         case TRACK_DEL:
-            const { [action.trackid]: removed, ...newTracks } = state
+            const { [action.trackid]: deleted, ...newTracks } = state
             newTracks.ids = newTracks.ids.filter(id => id !== action.trackid)
             return newTracks
         default:

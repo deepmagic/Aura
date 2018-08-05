@@ -14,7 +14,7 @@ export class Panel extends React.Component {
         }
     }
 
-    close = (event) => {
+    close = () => {
         this.setState({open: false})
     }
 
@@ -26,6 +26,6 @@ export class Panel extends React.Component {
                 </div>
                 {this.props.children}
             </div>
-        );
+        )
     }
 }

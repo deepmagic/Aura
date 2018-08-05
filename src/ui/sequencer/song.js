@@ -1,10 +1,7 @@
 import React from 'react'
 import { Icon } from 'ui/common/icon'
-import { InstrumentSelector } from 'ui/instruments/selector'
 import { SongLoop } from 'ui/sequencer/song-loop'
-
-const getLoopId = (sceneid, trackid) =>
-    `${sceneid}:${trackid}`
+import { getLoopId } from 'ui/sequencer/utils'
 
 const defaultLoop = {
     bars: 1,
@@ -67,7 +64,7 @@ class SongView extends React.Component {
         }
     }
 
-    addScene = (copy = false) => {
+    addScene = (/*copy = false*/) => {
         const {
             sceneAdd,
             loopSetAdd,
@@ -82,136 +79,126 @@ class SongView extends React.Component {
         sceneAdd(sceneid, { name: sceneid })
         loopSetAdd(loops)
     }
-    addInstrument = (instrument = {}) => {
-        const {
-            trackAdd,
-            loopSetAdd,
-            instrumentAdd,
-            scenes,
-            tracks,
-            instruments,
-            uiToggleInstrumentSelect
-        }  = this.props
-
-        uiToggleInstrumentSelect(false)
-        const trackid = tracks.ids.length + 1
-        const loops = scenes.ids.reduce((loopSet, sceneid) => {
-            return { ...loopSet, [getLoopId(sceneid, trackid)]: {...defaultLoop} }
-        }, {})
-
-        trackAdd(trackid, { name: trackid })
-        instrumentAdd(trackid, instrument)
-        loopSetAdd(loops)
-    }
     editLoop = (loopid) => {
         this.props.setActiveLoop(loopid)
         this.props.uiToggleSongPattern()
     }
+    setScene = (sceneid) => {
+        // TODO sync change end of this scene
+        this.props.setActiveScene(sceneid)
+    }
 
     render = () => {
         const {
-            song,
+            // song,
             scenes,
+            sceneActive,
             tracks,
             loops,
             instruments,
             style,
             transportTime,
         } = this.props
+        const playTime = transportTime * 100
 
         return (
-            <React.Fragment>
-                <InstrumentSelector
-                    style={this.props.instrumentselect ? null : {display: 'none'}}
-                    select={this.addInstrument} />
-                <div className='song' style={style}>
-                    <div className='song-header dragscroll'>
-                        <div className='track-head fixed'>
-                            Scene
-                        </div>
-                        <div className='track-heads dragscroll' ref={th => this.trackheads = th} onScroll={this.onScroll}>
-                            {
-                                tracks.ids.map((trackid) => <SongTrackHead key={trackid} {...tracks[trackid]} />)
-                            }
-                            <SongTrackHead />
-                        </div>
+            <div className='song' style={style}>
+                <div className='song-header dragscroll'>
+                    <div className='track-head fixed'>
+                        Scene
                     </div>
-                    <div className='song-content'>
-                        <div className='scene-heads dragscroll' ref={sh => this.sceneheads = sh} onScroll={this.onScroll}>
-                            {
-                                scenes.ids.map((sceneid) => <SongSceneHead key={sceneid} x={transportTime*100} {...scenes[sceneid]} />)
-                            }
-                            <SceneAdd add={this.addScene} copy={this.addScene.bind(this, true)} />
-                        </div>
-                        <div className='loops dragscroll' ref={ls => this.loops = ls} onScroll={this.onScroll}>
-                            {
-                                scenes.ids.map(sceneid =>
-                                    <SongLoopSet key={sceneid}>
-                                        {
-                                            tracks.ids.map(trackid => {
-                                                const loopid = getLoopId(sceneid, trackid)
-
-                                                return (
-                                                    <SongLoop
-                                                        key={loopid}
-                                                        loop={loops[loopid]}
-                                                        loopid={loopid}
-                                                        x={transportTime*100}
-                                                        onClick={() => this.editLoop(loopid)} />
-                                                )
-                                            })
-                                        }
-                                        <SongLoop />
-                                    </SongLoopSet>
-                                )
-                            }
-                            <SongLoopSet />
-                        </div>
-                    </div>
-                    <div className='song-footer'>
-                        <div className='instrument fixed'>
-                            Master
-                        </div>
-                        <div className='instruments dragscroll' ref={ns => this.instruments = ns} onScroll={this.onScroll}>
-                            {
-                                instruments.ids.map((instid) => <SongInstrument key={instid} {...instruments[instid]} />)
-                            }
-                            <InstrumentAdd num='add' add={this.props.uiToggleInstrumentSelect.bind(null, true)} />
-                        </div>
+                    <div className='track-heads dragscroll' ref={th => this.trackheads = th} onScroll={this.onScroll}>
+                        {
+                            tracks.ids.map((trackid) => <SongTrackHead key={trackid} {...tracks[trackid]} />)
+                        }
+                        <SongTrackHead />
                     </div>
                 </div>
-            </React.Fragment>
+                <div className='song-content'>
+                    <div className='scene-heads dragscroll' ref={sh => this.sceneheads = sh} onScroll={this.onScroll}>
+                        {
+                            scenes.ids.map((sceneid) =>
+                                <SongSceneHead
+                                    key={sceneid}
+                                    active={sceneActive === sceneid}
+                                    playTime={playTime}
+                                    onClick={this.setScene.bind(this, sceneid)}
+                                    {...scenes[sceneid]} />)
+                        }
+                        <SceneAdd add={this.addScene} copy={this.addScene.bind(this, true)} />
+                    </div>
+                    <div className='loops dragscroll' ref={ls => this.loops = ls} onScroll={this.onScroll}>
+                        {
+                            scenes.ids.map(sceneid =>
+                                <SongLoopSet key={sceneid}>
+                                    {
+                                        tracks.ids.map(trackid => {
+                                            const loopid = getLoopId(sceneid, trackid)
+
+                                            return (
+                                                <SongLoop
+                                                    key={loopid}
+                                                    loop={loops[loopid]}
+                                                    loopid={loopid}
+                                                    active={sceneActive === sceneid}
+                                                    playTime={playTime}
+                                                    onClick={() => this.editLoop(loopid)} />
+                                            )
+                                        })
+                                    }
+                                    <SongLoop />
+                                </SongLoopSet>
+                            )
+                        }
+                        <SongLoopSet />
+                    </div>
+                </div>
+                <div className='song-footer'>
+                    <div className='instrument fixed'>
+                        Master
+                    </div>
+                    <div className='instruments dragscroll' ref={ns => this.instruments = ns} onScroll={this.onScroll}>
+                        {
+                            instruments.ids.map((instid) =>
+                                <SongInstrument
+                                    key={instid}
+                                    {...instruments[instid]} />)
+                        }
+                        <InstrumentAdd add={this.props.uiToggleInstrumentSelect.bind(null, true)} />
+                    </div>
+                </div>
+            </div>
         )
     }
 }
 
 import { connect } from 'react-redux'
-import { sceneAdd } from 'actions/scenes'
+import { sceneAdd, setActiveScene } from 'actions/scenes'
 import { trackAdd } from 'actions/tracks'
-import { loopSetAdd } from 'actions/loops'
-import { instrumentAdd } from 'actions/instruments'
+import { loopSetAdd, setActiveLoop } from 'actions/loops'
 import { uiToggleSongPattern, uiToggleInstrumentSelect } from 'actions/ui'
-import { setActiveLoop } from 'actions/loops'
 export const Song = connect(
     state => ({
+        sceneActive: state.sceneActive,
         transportTime: state.transportTime,
-        instrumentselect: state.ui.instrumentselect,
-    }), {
-    sceneAdd,
-    trackAdd,
-    loopSetAdd,
-    setActiveLoop,
-    instrumentAdd,
-    uiToggleSongPattern,
-    uiToggleInstrumentSelect,
-})(SongView)
+    }),
+    {
+        sceneAdd,
+        setActiveScene,
+        trackAdd,
+        loopSetAdd,
+        setActiveLoop,
+        uiToggleSongPattern,
+        uiToggleInstrumentSelect,
+    }
+)(SongView)
 
 const SongScenePlayhead = ({x}) =>
     <div className='playhead' style={{ transform: `translateX(${x}%)` }} />
 
-const SongSceneHead = ({name, x}) =>
-    <div className='scene-head'>
-        <SongScenePlayhead x={x} />
+const SongSceneHead = ({name, active, playTime, onClick}) =>
+    <div className={`scene-head`} onClick={onClick}>
+        {active && <SongScenePlayhead x={playTime} />}
         <Icon>play_arrow</Icon>
         <div>{name}</div>
     </div>

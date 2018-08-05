@@ -1,5 +1,6 @@
 import React from 'react'
 import { SeqHeader } from './header'
+import { InstrumentSelector } from 'ui/instruments/selector'
 import { Song } from './song'
 import { Pattern } from './pattern'
 import { TransportControl } from './transport-control'
@@ -8,9 +9,7 @@ const TIMESIG = 4
 
 // TODO fix pattern to accept no pattern and get rid of this
 const placeholderPattern = { bars: 1, notes: [] }
-const hide = {
-    display: 'none'
-}
+const hide = { display: 'none' }
 
 export class SequencerView extends React.Component {
     render () {
@@ -37,6 +36,7 @@ export class SequencerView extends React.Component {
                     loops={loops}
                     instruments={instruments}
                     style={ ui.songpattern || ui.instrumentselect ? hide : null } />
+                { ui.instrumentselect && <InstrumentSelector /> }
                 <Pattern
                     loopid={loopActive}
                     pattern={loops[loopActive] || placeholderPattern }
@@ -62,5 +62,7 @@ export const Sequencer = connect(
         loops: state.loops,
         loopActive: state.loopActive,
     }),
-    { uiToggleSongPattern }
+    {
+        uiToggleSongPattern,
+    }
 )(SequencerView)

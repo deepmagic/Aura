@@ -4,6 +4,7 @@ import {
     LOOP_DEL,
     LOOP_ADD_NOTE,
     LOOP_DEL_NOTE,
+    LOOP_SET_ACTIVE,
 } from 'actions/loops'
 
 export const loops = (state = {}, action) => {
@@ -36,6 +37,15 @@ export const loops = (state = {}, action) => {
                 }
             }
         }
+        default:
+            return state
+    }
+}
+
+export const loopActive = (state = '', action) => {
+    switch(action.type) {
+        case LOOP_SET_ACTIVE:
+            return action.loopid
         default:
             return state
     }

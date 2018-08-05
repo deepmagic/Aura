@@ -8,6 +8,9 @@ import {
 const getNoteOffset = (time, barsize) =>
     time.bar*barsize + time.n4*(barsize/4) + time.n16*(barsize/16)
 
+export const getLoopId = (sceneid, trackid) =>
+    `${sceneid}:${trackid}`
+
 export const parseTransportTime = (time) => {
     const [bar, n4, n16] = time.split(':')
     return {
@@ -25,7 +28,7 @@ export const getNoteProps = ({ n, o, v, on, off }, barsize) => {
     return { x, y, w, v }
 }
 
-export const getNoteVelocityProps = ({ n, o, v, on, off }, height, barsize) => {
+export const getNoteVelocityProps = ({ v, on, off }, height, barsize) => {
     // TODO remove redundancy
     const x = getNoteOffset(parseTransportTime(on),  barsize)
     const w = getNoteOffset(parseTransportTime(off), barsize) - x

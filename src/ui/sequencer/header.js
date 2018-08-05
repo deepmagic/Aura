@@ -5,21 +5,21 @@ const version = '[AIV]{version}[/AIV]'
 
 export class SeqHeader extends React.PureComponent {
     render() {
-        const { songpattern, onBack } = this.props;
+        const { songpattern, onBack } = this.props
 
         return (
             <div className='seq-header'>
                 {
                     songpattern
-                    ?
-                    <div className='button-bar' onClick={onBack}>
-                        <Icon>keyboard_arrow_left</Icon>
-                        <span>Back</span>
-                    </div>
-                    :
-                    <div className='button-bar'>
-                        <Icon>menu</Icon>
-                    </div>
+                        ?
+                        <div className='button-bar' onClick={onBack}>
+                            <Icon>keyboard_arrow_left</Icon>
+                            <span>Back</span>
+                        </div>
+                        :
+                        <div className='button-bar'>
+                            <Icon>menu</Icon>
+                        </div>
                 }
                 Aura - v{version}
                 <div className='button-bar right'>

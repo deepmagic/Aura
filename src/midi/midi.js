@@ -21,8 +21,8 @@ const MidiDevice = ({ device, onClick, selected }) => {
 const clampFloat = (low, high, value) =>
     Math.max(high * (value/127), low)
 
-const clampInt = (low, high, value) =>
-    Math.round(clampFloat(low, high, value))
+// const clampInt = (low, high, value) =>
+//    Math.round(clampFloat(low, high, value))
 
 export class Midi extends React.Component {
     constructor() {
@@ -37,7 +37,7 @@ export class Midi extends React.Component {
     }
 
     componentDidMount() {
-        this.getMidi();
+        this.getMidi()
     }
 
     getMidi () {
@@ -53,12 +53,14 @@ export class Midi extends React.Component {
 
     noteon (msg) {
         console.log('noteon', msg.note.name, msg.note.octave, Tone.Transport.position)
-        fmSynth.triggerAttack(`${msg.note.name}${msg.note.octave}`, undefined, msg.velocity);
+        fmSynth.triggerAttack(`${msg.note.name}${msg.note.octave}`, undefined, msg.velocity)
     }
+
     noteoff (msg) {
         console.log('noteoff', msg)
-        fmSynth.triggerRelease(`${msg.note.name}${msg.note.octave}`);
+        fmSynth.triggerRelease(`${msg.note.name}${msg.note.octave}`)
     }
+
     controlchange (msg) {
         //console.log('controlchange', msg)
         if (msg.controller.number === 20) {
@@ -69,6 +71,7 @@ export class Midi extends React.Component {
             filter.frequency.value = clampFloat(20, 12000, msg.value)
             // console.log('filter', filter.frequency.value, msg.value)
         }
+
         if (msg.controller.number === 22) {
             filter.Q.value = clampFloat(0, 120, msg.value)
         }
@@ -83,6 +86,7 @@ export class Midi extends React.Component {
         this.setState({input})
         window.localStorage['lastMidi'] = input.id
     }
+
     renderInputs() {
         return this.state.midi.inputs.map((input, index) =>
             <MidiDevice

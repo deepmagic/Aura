@@ -1,6 +1,5 @@
 import React from 'react'
 import { Icon } from 'ui/common/icon'
-import Tone from 'tone'
 
 export class TransportControlView extends React.Component {
     componentDidMount () {
@@ -27,9 +26,9 @@ export class TransportControlView extends React.Component {
 
     render() {
         const { playing, paused, recording } = this.props.transport
-        const playClass = playing
-            ? 'active' : paused
-            ? 'paused' : ''
+        const playClass =
+            playing ? 'active' :
+            paused  ? 'paused' : ''
 
         return (
             <div className='transport-control' style={this.props.style}>

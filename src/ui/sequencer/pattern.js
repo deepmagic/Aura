@@ -1,8 +1,6 @@
 import React from 'react'
 import { NOTES, OCTAVES, NOTE_HEIGHT, MAX_HEIGHT } from 'ui/sequencer/constants'
-import { getNoteProps, getNoteVelocityProps } from 'ui/sequencer/utils'
-import { BarLine, BarSubLine, BarHorizontalLine } from 'ui/sequencer/pattern-bars'
-import { Note, NoteBox } from 'ui/sequencer/pattern-notes'
+import { Note } from 'ui/sequencer/pattern-notes'
 import { PatternControl } from 'ui/sequencer/pattern-control'
 import { PatternGrid } from 'ui/sequencer/pattern-grid'
 import { PatternModulation } from 'ui/sequencer/pattern-modulation'
@@ -100,7 +98,6 @@ class PatternView extends React.Component {
     getNoteAtPoint = (x, y) => {
         const barsize = SCREEN_WIDTH / this.state.zoom
         const {
-            pattern: { bars },
             timesig,
         } = this.props
 
