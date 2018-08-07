@@ -1,7 +1,6 @@
 import React from 'react'
 import { getLoopId } from 'ui/sequencer/utils'
-
-const defaultLoop = { bars: 1, notes: [] }
+import { defaultLoop } from 'ui/sequencer/constants'
 
 const availableInstruments = [
     {name: 'drum'},

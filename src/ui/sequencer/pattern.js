@@ -14,16 +14,29 @@ const ZOOM_MAX = 8
 // input constants
 const SCREEN_WIDTH = 1920 - 100 // 100 = left width of keys css : $left-keys-width
 
-const Bar = ({bar}) =>
-    <div className='bar'>{`${bar + 1} Bar`}</div>
+class Bar extends React.PureComponent {
+    render () {
+        const { bar } = this.props
+        return <div className='bar'>{`${bar + 1} Bar`}</div>
+    }
+}
 
-const SubBar = ({sub, bar}) =>
-    <div className='sub-bar'>{`${bar+1}.${sub+1}`}</div>
+class SubBar extends React.PureComponent {
+    render () {
+        const {sub, bar} = this.props
+        return <div className='sub-bar'>{`${bar+1}.${sub+1}`}</div>
+    }
+}
 
-const PatternKeys = () =>
-    OCTAVES.map((octave, o) =>
-        NOTES.map((note, n) =>
-            <Note key={o+n} note={note} octave={octave - 1} />))
+class PatternKeys extends React.PureComponent {
+    render () {
+        return (
+            OCTAVES.map((octave, o) =>
+                NOTES.map((note, n) =>
+                    <Note key={o+n} note={note} octave={octave - 1} />))
+        )
+    }
+}
 
 const PatternPlayhead = ({x, active}) =>
     <div
