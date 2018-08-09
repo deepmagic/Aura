@@ -138,10 +138,10 @@ class SongView extends React.Component {
                     </div>
                     <div className='instruments dragscroll' ref={ns => this.instruments = ns} onScroll={this.onScroll}>
                         {
-                            instruments.ids.map((instid) =>
+                            instruments.ids.map((trackid) =>
                                 <SongInstrument
-                                    key={instid}
-                                    {...instruments[instid]} />)
+                                    key={trackid}
+                                    {...instruments[trackid]} />)
                         }
                         <InstrumentAdd add={this.props.uiToggleInstrumentSelect.bind(null, true)} />
                     </div>

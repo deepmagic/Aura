@@ -10,6 +10,7 @@
     "react/jsx-uses-vars": 1,
     "prefer-const": 1,
     "prefer-template": 1,
+    "no-redeclare": "error",
     "no-duplicate-imports": ["error", { "includeExports": true }],
     "semi": ["error", "never"],
     "indent": ["error", 4, { "SwitchCase": 1, "ignoreComments": true, "flatTernaryExpressions": true }],

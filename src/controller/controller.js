@@ -1,4 +1,5 @@
 import Tone from 'tone'
+import { getInstrument } from 'instruments'
 import { Transport } from './transport'
 
 const readNotes = (notes) => notes.map((note) => ({ ...note, time: note.on }))
@@ -9,34 +10,21 @@ export const Controller = () => {
     const loops = {}        // references to Tone.Part
     const loopNotes = {}    // maintain refernce to note values in loops, required for Part.remove
 
-    // window.__debug_instruments = instruments
-    window.__debug_loopnotes = loopNotes
+    window.__debug_instruments = instruments
+    // window.__debug_loopnotes = loopNotes
 
     const addInstrument = (action) => {
-        console.log('add instrument', action)
-        // TODO look up instrument and get right class
-        instruments[action.instrumentid] = new Tone.PolySynth(6, Tone.AMSynth).toMaster()
-        instruments[action.instrumentid].set({oscillator: {type: 'sawtooth'}})
+        instruments[action.trackid] = getInstrument(action.instrument.id)
     }
 
     const loopAdd = (action) => {
-        console.log('add loopset', action.loops)
-
         const loopIds = Object.keys(action.loops)
         for (let i = 0; i < loopIds.length; i++) {
             const loopId = loopIds[i]
             const trackId = getTrackId(loopIds[i])
 
             loopNotes[loopId] = readNotes(action.loops[loopId].notes)
-            loops[loopId] = new Tone.Part((time, note) => {
-
-                // console.log('part note', note, 'time', time, Tone.Transport.position, Tone.Transport.progress)
-
-                const duration = Tone.TimeBase(note.off) - Tone.TimeBase(note.on)
-                instruments[trackId].triggerAttackRelease(note.n+note.o, duration, time, note.v)
-
-            }, loopNotes[loopId])
-
+            loops[loopId] = new Tone.Part(instruments[trackId].play, loopNotes[loopId])
             loops[loopId].start(0)
         }
     }

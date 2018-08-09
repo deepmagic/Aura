@@ -3,8 +3,8 @@ import { getLoopId } from 'ui/sequencer/utils'
 import { defaultLoop } from 'ui/sequencer/constants'
 
 const availableInstruments = [
-    {name: 'drum'},
-    {name: 'am'},
+    {id: 1, name: 'drum'},
+    {id: 2, name: 'polysynth'},
     {name: 'fm'},
     {name: 'metal'},
 
