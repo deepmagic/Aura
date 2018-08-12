@@ -6,6 +6,5 @@ const instrumentsMap = {
     '2': PolySynth,
 }
 
-export const getInstrument = (instid) => {
-    return new instrumentsMap[instid]()
-}
+export const getInstrument = (instid) =>
+    new instrumentsMap[instid]()

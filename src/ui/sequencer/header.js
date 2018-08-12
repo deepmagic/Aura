@@ -3,9 +3,10 @@ import { Icon } from 'ui/common/icon'
 
 const version = '[AIV]{version}[/AIV]'
 
-export class SeqHeader extends React.PureComponent {
+export class SeqHeaderView extends React.PureComponent {
     render() {
-        const { songpattern, onBack } = this.props
+        const { songpattern, expand, uiToggleExpand, onBack } = this.props
+        const expandIcon = expand ? 'unfold_less' : 'unfold_more'
 
         return (
             <div className='seq-header'>
@@ -23,10 +24,19 @@ export class SeqHeader extends React.PureComponent {
                 }
                 Aura - v{version}
                 <div className='button-bar right'>
-                    <Icon>swap_vert</Icon>
+                    <Icon onClick={uiToggleExpand}>{expandIcon}</Icon>
                     <Icon style={{ fontSize: '1.2em', lineHeight: 1 }}>settings</Icon>
                 </div>
             </div>
         )
     }
 }
+
+import { connect } from 'react-redux'
+import { uiToggleExpand } from 'actions/ui'
+export const SeqHeader = connect(
+    state => ({
+        expand: state.ui.expand,
+    }),
+    { uiToggleExpand }
+)(SeqHeaderView)

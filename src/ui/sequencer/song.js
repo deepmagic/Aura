@@ -1,6 +1,7 @@
 import React from 'react'
 import { Icon } from 'ui/common/icon'
 import { SongLoop } from 'ui/sequencer/song-loop'
+import { TrackControls } from 'ui/sequencer/track-controls'
 import { getLoopId } from 'ui/sequencer/utils'
 import { defaultLoop } from 'ui/sequencer/constants'
 
@@ -39,6 +40,7 @@ class SongView extends React.Component {
         } else if (event.target === this.instruments && !this.instruments[this.lockscroll]) {
             this.trackheads.scrollLeft  = event.target.scrollLeft
             this.loops.scrollLeft       = event.target.scrollLeft
+            this.instruments.scrollTop  = 0 // keep top locked at zero
             this.lockScroll(this.trackheads, this.loops)
         }
     }
@@ -70,6 +72,7 @@ class SongView extends React.Component {
     render = () => {
         const {
             // song,
+            expand,
             scenes,
             sceneActive,
             tracks,
@@ -132,7 +135,7 @@ class SongView extends React.Component {
                         <SongLoopSet />
                     </div>
                 </div>
-                <div className='song-footer'>
+                <div className={`song-footer ${expand ? 'expand' : ''}`}>
                     <div className='instrument fixed'>
                         Master
                     </div>
@@ -141,6 +144,7 @@ class SongView extends React.Component {
                             instruments.ids.map((trackid) =>
                                 <SongInstrument
                                     key={trackid}
+                                    track={tracks[trackid]}
                                     {...instruments[trackid]} />)
                         }
                         <InstrumentAdd add={this.props.uiToggleInstrumentSelect.bind(null, true)} />
@@ -158,6 +162,7 @@ import { loopSetAdd, setActiveLoop } from 'actions/loops'
 import { uiToggleSongPattern, uiToggleInstrumentSelect } from 'actions/ui'
 export const Song = connect(
     state => ({
+        expand: state.ui.expand,
         sceneActive: state.sceneActive,
         transportTime: state.transportTime,
     }),
@@ -192,9 +197,15 @@ const SongLoopSet = ({children}) =>
         {children}
     </div>
 
-const SongInstrument = ({name}) =>
+const SongInstrument = ({name, image, track}) =>
     <div className='instrument'>
-        {name}
+        <div className='title'>
+            {name}
+        </div>
+        <div className='image'>
+            <img src={image} />
+        </div>
+        <TrackControls track={track} />
     </div>
 
 const SceneAdd = ({add, copy}) =>

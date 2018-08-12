@@ -2,6 +2,7 @@ export const LOOP_ADD = 'LOOP_ADD'
 export const LOOP_SET_ADD = 'LOOP_SET_ADD'
 export const LOOP_DEL = 'LOOP_DEL'
 export const LOOP_SET_ACTIVE = 'LOOP_SET_ACTIVE'
+export const LOOP_SET_BARS = 'LOOP_SET_BARS'
 export const LOOP_ADD_NOTE = 'LOOP_ADD_NOTE'
 export const LOOP_DEL_NOTE = 'LOOP_DEL_NOTE'
 
@@ -24,6 +25,12 @@ export const loopDel = (loopid) => ({
 export const setActiveLoop = (loopid) => ({
     type: LOOP_SET_ACTIVE,
     loopid,
+})
+
+export const loopSetBars = (loopid, bars) => ({
+    type: LOOP_ADD_NOTE,
+    loopid,
+    bars,
 })
 
 export const loopAddNote = (loopid, note) => ({

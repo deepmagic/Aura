@@ -2,6 +2,7 @@ import {
     LOOP_ADD,
     LOOP_SET_ADD,
     LOOP_DEL,
+    LOOP_SET_BARS,
     LOOP_ADD_NOTE,
     LOOP_DEL_NOTE,
     LOOP_SET_ACTIVE,
@@ -16,6 +17,16 @@ export const loops = (state = {}, action) => {
         case LOOP_DEL: {
             const { [action.loopid]: deleted, ...newLoops } = state
             return newLoops
+        }
+        case LOOP_SET_BARS:{
+            const loop = state[action.loopid]
+            return {
+                ...state,
+                [action.loopid]: {
+                    ...loop,
+                    bars: action.bars,                    
+                }
+            }
         }
         case LOOP_ADD_NOTE: {
             const loop = state[action.loopid]

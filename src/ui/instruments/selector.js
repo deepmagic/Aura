@@ -1,10 +1,11 @@
 import React from 'react'
 import { getLoopId } from 'ui/sequencer/utils'
-import { defaultLoop } from 'ui/sequencer/constants'
+import { defaultLoop, defaultTrack } from 'ui/sequencer/constants'
+
 
 const availableInstruments = [
-    {id: 1, name: 'drum'},
-    {id: 2, name: 'polysynth'},
+    {id: 1, name: 'Linndrum', image: 'images/instruments/linndrum.png'},
+    {id: 2, name: 'polysynth', image: 'images/instruments/polysix.png'},
     {name: 'fm'},
     {name: 'metal'},
 
@@ -24,8 +25,8 @@ const availableInstruments = [
     {name: 'dummy'},
 ]
 
-const InstView = ({name, ...props}) =>
-    <div className='instrument' {...props}>
+const InstView = ({name, image, ...props}) =>
+    <div className='instrument' {...props} style={{ backgroundImage: `url(${image})` }}>
         {name}
     </div>
 
@@ -46,7 +47,7 @@ export class InstrumentSelectorView extends React.Component {
             return { ...loopSet, [getLoopId(sceneid, trackid)]: {...defaultLoop} }
         }, {})
 
-        trackAdd(trackid, { name: trackid })
+        trackAdd(trackid, { ...defaultTrack, name: trackid })
         instrumentAdd(trackid, instrument)
         loopSetAdd(loops)
         uiToggleInstrumentSelect(false)

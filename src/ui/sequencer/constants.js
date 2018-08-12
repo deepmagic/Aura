@@ -14,7 +14,7 @@ export const OCTAVE_HEIGHT = NOTES.length * NOTE_HEIGHT
 export const NUM_KEYS = OCTAVES.length * NOTES.length
 export const MAX_HEIGHT =  NUM_KEYS * NOTE_HEIGHT
 export const defaultLoop = {
-    bars: 1,
+    bars: 2,
     notes: [
         /*
         { n: 'C',  o: 9, v: 0.9, on: '0:0:0.0', off: '0:0:1.0' },
@@ -33,4 +33,14 @@ export const defaultLoop = {
         { n: 'E',  o: 3, v: 0.9, on: '0:0:14.0', off: '0:0:15.0' },
         */
     ]
+}
+export const defaultTrack = {
+    volume: 80,
+    pan: 0,
+    send: 0,
+    levels: { left: 80, right: 50 },
+    solo: false,
+    mute: false,
+    // midi: 0,
+    // iFX: 0,
 }

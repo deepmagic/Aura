@@ -6,7 +6,7 @@ import {
 } from 'actions/ui'
 
 const initialState = {
-    expand: false,
+    expand: true,
     songpattern: false,
     instrumentselect: false,
     patternTool: 'draw',
