@@ -2,6 +2,8 @@ import Tone from 'tone'
 import { getInstrument } from 'instruments'
 import { Transport } from './transport'
 
+window.__debug_tone = Tone
+
 const readNotes = (notes) => notes.map((note) => ({ ...note, time: note.on }))
 const getTrackId = (id) => id.split(':')[1]
 

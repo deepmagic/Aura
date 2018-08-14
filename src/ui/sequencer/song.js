@@ -1,7 +1,7 @@
 import React from 'react'
 import { Icon } from 'ui/common/icon'
 import { SongLoop } from 'ui/sequencer/song-loop'
-import { TrackControls } from 'ui/sequencer/track-controls'
+import { TrackControls, TrackLevels } from 'ui/sequencer/track-controls'
 import { getLoopId } from 'ui/sequencer/utils'
 import { defaultLoop } from 'ui/sequencer/constants'
 
@@ -78,6 +78,7 @@ class SongView extends React.Component {
             tracks,
             loops,
             instruments,
+            masterLevel,
             style,
             transportTime,
         } = this.props
@@ -136,9 +137,7 @@ class SongView extends React.Component {
                     </div>
                 </div>
                 <div className={`song-footer ${expand ? 'expand' : ''}`}>
-                    <div className='instrument fixed'>
-                        Master
-                    </div>
+                    <TrackMaster level={masterLevel} />
                     <div className='instruments dragscroll' ref={ns => this.instruments = ns} onScroll={this.onScroll}>
                         {
                             instruments.ids.map((trackid) =>
@@ -163,6 +162,7 @@ import { uiToggleSongPattern, uiToggleInstrumentSelect } from 'actions/ui'
 export const Song = connect(
     state => ({
         expand: state.ui.expand,
+        masterLevel: state.masterLevel,
         sceneActive: state.sceneActive,
         transportTime: state.transportTime,
     }),
@@ -212,6 +212,16 @@ const SceneAdd = ({add, copy}) =>
     <div className='scene-add'>
         <Icon onClick={add}>add_circle_outline</Icon>
         <Icon onClick={copy}>filter_none</Icon>
+    </div>
+
+const TrackMaster = ({level}) =>
+    <div className='instrument fixed'>
+        <div className='title'>
+            Master
+        </div>
+        <div className='master-track'>
+            <TrackLevels levels={{ left: level, right: level}} />
+        </div>
     </div>
 
 const InstrumentAdd = ({add}) =>

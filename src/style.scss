@@ -40,6 +40,7 @@ button {
         box-shadow: inset 0 1px 1px #000, 0 0 0;
     }
 }
+
 .fader {
     @extend .inset-bar;
     position: relative;
@@ -267,6 +268,10 @@ $keys-height: 50px;
     }
 }
 
+.master-track {
+    height: calc(100% - 24px);
+}
+
 .sequencer {
     user-select: none;
     flex:1;
@@ -331,7 +336,7 @@ $keys-height: 50px;
             }
             .track-head {
                 text-align: center;
-                min-width: $track-block-width;
+                min-width: $track-block-width + $border-size;
                 border-right: $border;
                 font-weight: bold;
                 line-height: 1.9;
@@ -456,8 +461,7 @@ $keys-height: 50px;
             display: flex;
             border-top: $border;
             background-color: #181818;
-            // linear-gradient(#181818 30%, #000);
-            background: url('/images/egg-shell.png'), linear-gradient(#181818 30%, #000 150%);
+            background-image: url('/images/egg-shell.png');
             color: #999;
             text-shadow: 1px 1px 1px #000;
 
@@ -478,6 +482,7 @@ $keys-height: 50px;
                 border-right: 1px transparent solid;
                 border-left: 1px #000 solid;
                 border-top: 1px #555 solid;
+                border-bottom: 1px #000 solid;
                 box-shadow: inset 0 0 8px rgba(#333, 0.5), inset 0 1px 1px #555;
 
                 .title {
@@ -499,6 +504,7 @@ $keys-height: 50px;
             .instrument-add {
                 @extend .instrument;
                 cursor: pointer;
+                border-bottom: none;
                 border-top: none;
                 border-left: 1px rgba(#000, 0.5) solid;
                 border-right: none;

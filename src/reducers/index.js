@@ -5,6 +5,7 @@ import { tracks } from 'reducers/tracks'
 import { instruments } from 'reducers/instruments'
 import { loops, loopActive } from 'reducers/loops'
 import { transport, transportTime } from 'reducers/transport'
+import { masterLevel } from 'reducers/master'
 
 import { combineReducers } from 'redux'
 export const rootReducer = combineReducers({
@@ -16,6 +17,7 @@ export const rootReducer = combineReducers({
     instruments,
     loops,
     loopActive,
+    masterLevel,
     transport,
     transportTime,
 })

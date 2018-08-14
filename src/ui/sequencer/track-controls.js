@@ -38,7 +38,7 @@ const TrackSend = ({send, levels}) =>
         </div>
     </div>
 
-const TrackLevels = ({levels}) =>
+export const TrackLevels = ({levels}) =>
     <div className='levels'>
         <div className='left'>
             <LevelIndicator level={levels.left} />
@@ -63,7 +63,7 @@ const Fader = ({level}) =>
 
 const LevelIndicator = ({level}) =>
     <div className='level-indicator'>
-        <div className='indicator' style={{ transform: `translateY(${100 - level}%)` }} />
+        <div className='indicator' style={{ transform: `translateY(${100 - level*100}%)` }} />
     </div>
 
 const Knob = ({rotation}) =>

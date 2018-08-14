@@ -38,7 +38,7 @@ export const defaultTrack = {
     volume: 80,
     pan: 0,
     send: 0,
-    levels: { left: 80, right: 50 },
+    levels: { left: 0.8, right: 0.5 },
     solo: false,
     mute: false,
     // midi: 0,
