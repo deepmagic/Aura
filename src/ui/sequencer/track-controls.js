@@ -1,4 +1,7 @@
 import React from 'react'
+import { Fader } from 'ui/common/fader'
+import { Knob } from 'ui/common/knob'
+import { Level } from 'ui/common/level'
 
 export const TrackControls = ({track}) =>
     <div className='track-controls'>
@@ -34,43 +37,16 @@ const TrackSend = ({send, levels}) =>
         </div>
         <div className='buttons'>
             <button>MIDI</button>
-            <button>iFX</button>
+            <button>IFX</button>
         </div>
     </div>
 
 export const TrackLevels = ({levels}) =>
     <div className='levels'>
         <div className='left'>
-            <LevelIndicator level={levels.left} />
+            <Level level={levels.left} />
         </div>
         <div className='right'>
-            <LevelIndicator level={levels.right} />
-        </div>
-    </div>
-
-// common
-
-const Fader = ({level}) =>
-    <div className='fader'>
-        <div
-            className='slider-wrap'
-            style={{ transform: `translateY(${100 - level}%)` }}>
-            <div className='slider'>
-                <div className='bar' />
-            </div>
-        </div>
-    </div>
-
-const LevelIndicator = ({level}) =>
-    <div className='level-indicator'>
-        <div className='indicator' style={{ transform: `translateY(${100 - level*100}%)` }} />
-    </div>
-
-const Knob = ({rotation}) =>
-    <div className='knob'>
-        <div className='handle'>
-            <div
-                className='dot'
-                style={{ transform: `rotateZ(${rotation}deg)` }} />
+            <Level level={levels.right} />
         </div>
     </div>

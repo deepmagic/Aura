@@ -1,0 +1,221 @@
+.pattern {
+    // will-change: all;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow:hidden;
+
+    .pattern-header {
+        display:flex;
+        height: 64px;
+        border-bottom: $border;
+
+        .pattern-control {
+            display: flex;
+            width: $left-keys-width;
+            border-right: $border;
+            background: $color-light2;
+            font-weight: bold;
+
+            .draw, .select {
+                cursor: pointer;
+                color: $color-bg1;
+                flex: 1;
+                margin: 4px;
+                font-size: 0.7rem;
+                text-align: center;
+                padding-top: 8px;
+                border-radius: 1px;
+
+                i { font-size: 1.8rem }
+
+                &.active {
+                    background-color: $color-highlight;
+                }
+            }
+        }
+
+        .bars {
+            flex:1;
+            display:flex;
+            overflow: auto;
+            flex-direction: column;
+            position: relative;
+
+            .bar-row {
+                display:flex;
+                flex: 1;
+                border-bottom: $border;
+                height: 22px;
+                line-height: 1.8;
+                background: rgba($color-midi-note, 0.7);
+
+                .bar-range {
+                    z-index: 1;
+                    position: absolute;
+                    background: rgba($color-highlight, 0.7);
+                    height: 20px;
+                }
+
+                .bar {
+                    z-index: 2;
+                    flex: 1;
+                    font-size: 0.8em;
+                    border-right: $border;
+                    text-align: center;
+                    color: $color-bg1;
+                    line-height: 1.6;
+                }
+            }
+            .spacer {
+                height: 20px;
+                background: rgba(119, 158, 204, 0.5);
+            }
+            .sub-bars-con {
+                width: 100%;
+                overflow: auto;
+                flex: 1;
+            }
+            .sub-bars {
+                display:flex;
+
+                .sub-bar {
+                    flex: 1;
+                    font-size: 0.7em;
+                    line-height: 1.6;
+                    border-right: 2px #fff solid;
+                    padding-left: 4px;
+                }
+
+                .sub-bar:last-child {
+                    border-right: none;
+                }
+            }
+        }
+    }
+    .pattern-content {
+        display: flex;
+        flex: 1;
+
+        .left {
+            overflow: auto;
+            border-right: $border-trans;
+            min-width: $track-block-width;
+
+            &.keys {
+                min-width: $left-keys-width;
+
+                .note {
+                    text-align: center;
+                    font-size: 0.8em;
+                    border-right: 22px solid rgba(255,255,255, 0.6);
+                    margin-top: 1px;
+                    background: rgba($color-bg2, 0.3);
+                    height: 32px;
+                    line-height: 2.6;
+                    box-shadow: inset 0 1px 1px $color-light;
+
+                    &.sharp {
+                        border-right: 22px solid rgba(0, 0, 0, 0.6);
+                    }
+                }
+            }
+        }
+
+        .right {
+            overflow: auto;
+            position: relative;
+
+            .playhead {
+                pointer-events: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 1px;
+                background: $color-highlight;
+
+                &:after {
+                    content: '';
+                    position:absolute;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    width: 0;
+                    transition: width 0.5s ease, left 0.5s ease;
+                }
+
+                &.active:after {
+                    left: -64px;
+                    width: 64px;
+                    background: linear-gradient(-90deg, rgba($color-highlight, 0.3), transparent);
+                }
+
+            }
+
+            .grid {
+                &.edit {
+                    .midi-note, .midi-note-v {
+                        cursor: pointer;
+                    }
+                }
+
+                .midi-note { fill: $color-midi-note }
+                .midi-note-v { fill: $color-midi-note-velocity }
+
+                .bar-line {
+                    stroke-width: 1;
+                    stroke: rgba(255,255,255,0.3);
+                }
+
+                .bar-sub-line {
+                    stroke-width: 1;
+                    stroke: rgba(255,255,255,0.1);
+                }
+
+                .bar-horizontal-line {
+                    stroke-width: 1;
+                    stroke: rgba(255,255,255,0.15);
+                }
+            }
+        }
+    }
+    .pattern-footer {
+        display: flex;
+        height: 50px;
+
+        .foot-switch {
+            border-top: $border;
+            border-right: $border;
+            min-width: $left-keys-width;
+            background: $color-mid;
+        }
+
+        .footer-right {
+            overflow-y: auto;
+            // min modulation height + 5px
+            height: 55px;
+        }
+
+        .modulation {
+            background: #295282; // darken($color-mid, 10%);
+            border-top: 3px $color-bg2 solid;
+            border-bottom: 3px $color-bg2 solid;
+
+            .bar-line {
+                stroke-width: 3;
+                stroke: $color-bg2;
+            }
+
+            .note-vel-circle {
+                cursor: pointer;
+                stroke-width: 2;
+                stroke: $color-midi-note;
+                fill: $color-midi-note-velocity;
+            }
+            .note-vel-line {
+                stroke-width: 1;
+                stroke: $color-midi-note;
+            }
+        }
+    }
+}

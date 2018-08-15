@@ -1,0 +1,32 @@
+::-webkit-scrollbar { display:none; }
+
+* {
+    box-sizing: border-box;
+}
+
+#app, html, body {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background: linear-gradient($color-bg1, $color-bg2);
+    color: $color-text;
+    font-size: 16px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.aura {
+    display: flex;
+    height: 100%;
+}
+
+.midi {
+    .inputs {
+        display: flex;
+        flex-direction: column;
+        .midi-device {
+            flex: 1;
+            cursor: pointer;
+        }
+    }
+}

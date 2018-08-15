@@ -1,0 +1,38 @@
+.transport-control {
+    display: flex;
+    color: $color-text;
+    background-image: url('/images/egg-shell.png');
+    background-color: #181818;
+    padding: 4px;
+    height: 42px;
+    border-top: 1px #333 solid;
+
+    button {
+        margin-right: $padding / 2;
+
+        &.record {
+            &.active { color: #ce1d49 }
+        }
+        &.play {
+            &.paused { color: #066 }
+            &.active { color: #0ff }
+        }
+
+        &.textbtn {
+            font-weight: bold;
+            padding: 4px 2px;
+        }
+
+        &.tempo {
+            margin-left: 8px;
+            padding: 4px;
+        }
+
+        &.function {
+            margin-right: 12px;
+            &.active {
+                color: #fa0;
+            }
+        }
+    }
+}

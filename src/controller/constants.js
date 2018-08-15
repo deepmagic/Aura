@@ -1,0 +1,2 @@
+export const TRANSPORT_DEFAULT_BPM = 120
+export const TRANSPORT_DEFAULT_LOOPLENGTH = '4m'

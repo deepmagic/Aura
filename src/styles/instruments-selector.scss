@@ -1,0 +1,19 @@
+.instruments-selector {
+    display: flex;
+    height: 100%;
+    flex-wrap: wrap;
+    overflow: auto;
+
+    .instrument {
+        flex: 1;
+        min-width: 25%;
+        height: 33.33%;
+        border: $border;
+        text-transform: capitalize;
+        position: relative;
+
+        background-size: 80%;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+}

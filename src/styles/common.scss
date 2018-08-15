@@ -1,0 +1,177 @@
+
+.inset-bar {
+    background: rgba(#333, 0.3);
+    border-top: 2px #000 solid;
+    border-bottom: 1px #333 solid;
+    box-shadow: inset 0 0 3px #000;
+}
+
+button {
+    padding:4px 16px;
+    color:#999;
+    background: #121212;
+    border: 2px #000 solid;
+    box-shadow: inset 0 1px 1px #333, 1px 1px 3px rgba(0,0,0,0.7);
+    border-radius: 3px;
+    outline: none;
+    text-shadow: 0 0 2px #000;
+    height: 32px;
+    i { line-height: 0.9 !important }
+
+    &:active {
+        box-shadow: inset 0 1px 1px #000, 0 0 0;
+    }
+}
+
+.fader {
+    @extend .inset-bar;
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    $slider-height: 26px;
+    .slider-wrap {
+        height: calc(100% - #{$slider-height});
+    }
+    .slider {
+        position: absolute;
+        width: 100%;
+        height: $slider-height;
+        box-shadow: 0 1px 1px #000, 0 0px 1px #000;
+
+        .bar {
+            position: absolute;
+            top: 8px;
+            left: 2px;
+            height: 6px;
+            width: calc(100% - 4px);
+            background: #6c6c6c;
+            border-radius: 1px;
+
+            &:before {
+                content: '';
+                position: absolute;
+                top: -7px;
+                left: 0;
+                height: 6px;
+                width: 100%;
+                background: linear-gradient(0, #515151, transparent);
+            }
+
+            &:after {
+                content: '';
+                position: absolute;
+                top: 7px;
+                left: 0;
+                height: 10px;
+                width: 100%;
+                background: #131313;
+                border-top: 1px #333 solid;
+            }
+        }
+
+        &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: -4px 0 8px rgba(#000, 0.25);
+        }
+
+        &:after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: 8px 0 8px rgba(#000, 0.3);
+        }
+    }
+}
+
+.knob {
+    position: relative;
+    height: 64px;
+    width: 64px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 8px #000, inset -2px -4px 8px #000, 0 1px 1px #333;
+
+    .handle {
+        position: absolute;
+        height: 52px;
+        width: 52px;
+        background: #8484841f;
+        top: 6px;
+        left: 6px;
+        border-radius: 50%;
+        box-shadow: inset 0 -8px 8px #000, inset 0 1px 10px #666;
+
+        .dot {
+            position: absolute;
+            border-radius: 50%;
+            height: 8px;
+            width: 8px;
+            background: #d2d2d2;
+            top: 4px;
+            left: calc(50% - 4px);
+            transform-origin: 50% 16px;
+        }
+    }
+}
+
+.levels {
+    display: flex;
+    height: 100%;
+
+    .left, .right {
+        flex: 1;
+        height: 100%;
+    }
+    .left  { padding-right: $padding/2 }
+    .right { padding-left:  $padding/2 }
+
+    .level-indicator {
+        @extend .inset-bar;
+        height: 100%;
+        overflow: hidden;
+        background: linear-gradient(180deg, rgba(22, 68, 138, 0.15), #000);
+
+        .indicator {
+            height: 100%;
+            background: linear-gradient(180deg, rgba(22, 68, 138, 0.5), #000);
+            border-top: 1px #285ea5 solid;
+        }
+    }
+}
+
+.panel {
+    $panel-width: 350px;
+
+    z-index: 100;
+    position: fixed;
+    height: 100%;
+    width: $panel-width;
+    right: 0;
+    background-image: url('/images/egg-shell.png');
+    background-color: #181818;
+    box-shadow: inset 1px 0 4px #333;
+
+    transform: translateX($panel-width);
+    transition: transform 0.5s ease;
+    padding: $padding;
+
+    &.open {
+        transform: translateX(0px);
+    }
+    .close {
+        cursor: pointer;
+        position: absolute;
+        width:32px;
+        height:32px;
+        top: $padding;
+        right: $padding;
+        i { font-size: 2em; font-weight: bold }
+    }
+}

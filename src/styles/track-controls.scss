@@ -1,0 +1,43 @@
+
+.track-controls {
+    display: flex;
+    height: calc(100% - 110px);
+
+    .lhs, .rhs {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: $padding;
+    }
+    .lhs { padding-right: 0 }
+    .rhs { padding-left: 0 }
+
+    .track-volume, .track-send {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        align-items: center;
+    }
+    .volume, .send {
+        flex: 1;
+        width: 100%;
+        padding: $padding $padding * 2;
+    }
+
+    .buttons {
+        display: flex;
+        flex-direction: column;
+        padding: 0px 12px;
+        align-items: center;
+
+        button {
+            margin-bottom: $padding/2;
+            font-weight: bold;
+            width: 62px; // TODO fix me, 100% isn't working
+        }
+    }
+}
+
+.master-track {
+    height: calc(100% - 24px);
+}

@@ -1,0 +1,214 @@
+.song {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow:hidden;
+
+    .track-head.fixed, .instrument.fixed {
+        width: $track-block-width;
+    }
+
+    .song-header {
+        display:flex;
+        height: 32px;
+        // border-bottom: $border;
+
+        .track-heads {
+            display:flex;
+            overflow: auto;
+        }
+        .track-head {
+            text-align: center;
+            min-width: $track-block-width + $border-size;
+            border-right: $border;
+            font-weight: bold;
+            line-height: 1.9;
+        }
+    }
+
+    .song-content {
+        display: flex;
+        flex: 1;
+
+        .scene-heads {
+            // border-right: $border;
+            min-width: $track-block-width;
+            overflow: auto;
+            margin-right: $border-size;
+
+            .scene-head {
+                height: $track-block-height;
+                // border-bottom: $border;
+                display: flex;
+                position: relative;
+
+                .playhead {
+                    pointer-events: none;
+                    z-index: 0;
+                    position: absolute;
+                    top: 0;
+                    left: -100%;
+                    width: 100%;
+                    height: 100%;
+                    background: $color-highlight;
+                }
+
+                &:nth-child(odd) {
+                    background-color: rgba($color-bg2, 0.5);
+                }
+
+                div {
+                    flex: 1;
+                    z-index: 1;
+                    justify-content: center;
+                    align-items: center;
+                    display: flex;
+                    font-size: 2.5em;
+                    font-weight: bold;
+                    color: rgba(#fff, 0.8);
+                }
+
+                i {
+                    flex: 1;
+                    z-index: 1;
+                    display: flex;
+                    cursor: pointer;
+                    font-size: 4em;
+                    color: rgba($color-play, 0.8);
+                    justify-content: center;
+                    align-items: center;
+                }
+            }
+
+            .scene-add {
+                @extend .scene-head;
+                border:none;
+                display: flex;
+                align-items: center;
+                background-color: transparent !important;
+
+                i {
+                    cursor: pointer;
+                    flex: 1;
+                    text-align: center;
+                    font-size: 1.8rem;
+                    color: rgba(#fff, 0.8);
+                }
+            }
+        }
+
+        .loops {
+            display: flex;
+            overflow: auto;
+            flex-direction: column;
+
+
+            .loop-set {
+                display:flex;
+                min-height: $track-block-height;
+
+                &:nth-child(odd) {
+                    .loop {
+                        background-color: rgba($color-bg2, 0.5);
+                    }
+                }
+
+                .loop {
+                    overflow: hidden;
+                    position: relative;
+                    height: $track-block-height;
+                    min-width: $track-block-width;
+                    margin-right: $border-size;
+                    text-align: center;
+
+                    .playhead {
+                        pointer-events: none;
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        height: 100%;
+                        width: 100%;
+                        border-left: 1px $color-highlight solid;
+                    }
+
+                    &.placeholder {
+                        border:none;
+                        background-color: transparent;
+                    }
+                }
+            }
+        }
+    }
+
+    .song-footer {
+        display: flex;
+        border-top: $border;
+        background-color: #181818;
+        background-image: url('/images/egg-shell.png');
+        color: #999;
+        text-shadow: 1px 1px 1px #000;
+
+        height: 120px;
+        transition: height 0.125s ease; // TODO do not animate height
+        &.expand { height: 550px }
+
+        .instruments {
+            display: flex;
+            overflow: auto;
+        }
+
+        .instrument {
+            text-align: center;
+            min-width: $track-block-width + $border-size;
+            text-transform: capitalize;
+            border-radius: 2px;
+            border-right: 1px transparent solid;
+            border-left: 1px #000 solid;
+            border-top: 1px #555 solid;
+            border-bottom: 1px #000 solid;
+            box-shadow: inset 0 0 8px rgba(#333, 0.5), inset 0 1px 1px #555;
+
+            .title {
+
+            }
+
+            .image {
+                background: linear-gradient(0deg, rgba(#000,0.3), rgba(#333,0.8));
+                margin: 0 8px;
+                width: calc(100% - 16px);
+                height: 88px;
+                border: 1px #333 solid;
+                border-top: 2px #000 solid;
+                box-shadow: inset 0 0 3px #000;
+                img { height: 100% }
+            }
+        }
+
+        .instrument-add {
+            @extend .instrument;
+            cursor: pointer;
+            border-bottom: none;
+            border-top: none;
+            border-left: 1px rgba(#000, 0.5) solid;
+            border-right: none;
+            box-shadow: none;
+
+            .outline {
+                margin: 12px;
+                height: calc(100% - 24px);
+                width: calc(100% - 24px);
+                border: 6px dashed rgba(#999, 0.3);
+                border-radius: 22px;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+
+                i {
+                    line-height: 2.2;
+                    font-size: 1.8em;
+                    color: rgba(#fff, 0.8);
+                }
+            }
+        }
+    }
+}
