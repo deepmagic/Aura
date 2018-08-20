@@ -143,6 +143,7 @@ class SongView extends React.Component {
                             instruments.ids.map((trackid) =>
                                 <SongInstrument
                                     key={trackid}
+                                    trackid={trackid}
                                     track={tracks[trackid]}
                                     {...instruments[trackid]} />)
                         }
@@ -197,7 +198,7 @@ const SongLoopSet = ({children}) =>
         {children}
     </div>
 
-const SongInstrument = ({name, image, track}) =>
+const SongInstrument = ({name, image, track, trackid}) =>
     <div className='instrument'>
         <div className='title'>
             {name}
@@ -205,7 +206,7 @@ const SongInstrument = ({name, image, track}) =>
         <div className='image'>
             <img src={image} />
         </div>
-        <TrackControls track={track} />
+        <TrackControls trackid={trackid} track={track} />
     </div>
 
 const SceneAdd = ({add, copy}) =>

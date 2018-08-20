@@ -16,11 +16,9 @@ button {
     outline: none;
     text-shadow: 0 0 2px #000;
     height: 32px;
+    
     i { line-height: 0.9 !important }
-
-    &:active {
-        box-shadow: inset 0 1px 1px #000, 0 0 0;
-    }
+    &:active { box-shadow: inset 0 1px 1px #000, 0 0 0 }
 }
 
 .fader {

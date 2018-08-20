@@ -4,9 +4,13 @@ import {
     TRANSPORT_STOP,
     TRANSPORT_RECORD,
     TRANSPORT_TIME,
+    TRANSPORT_BPM,
 } from 'actions/transport'
 
-export const transport = (state = {}, action) => {
+import { TRANSPORT_DEFAULT_BPM } from 'controller/constants'
+const initialState = { bpm: TRANSPORT_DEFAULT_BPM }
+
+export const transport = (state = initialState, action) => {
     switch(action.type) {
         case TRANSPORT_PLAY:
             return { ...state, playing: true, paused: false }
@@ -16,6 +20,8 @@ export const transport = (state = {}, action) => {
             return { ...state, playing: false, paused: false, recording: false }
         case TRANSPORT_RECORD:
             return { ...state, recording: action.flag }
+        case TRANSPORT_BPM:
+            return { ...state, bpm: action.bpm }
         default:
             return state
     }

@@ -1,1 +1,1 @@
-export { toneMiddleware } from './middleware'
+export { toneMiddleware as controllerMiddleware } from './toneMiddleware'

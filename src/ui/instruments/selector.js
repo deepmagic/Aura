@@ -42,7 +42,7 @@ export class InstrumentSelectorView extends React.Component {
             uiToggleInstrumentSelect
         }  = this.props
 
-        const trackid = tracks.ids.length + 1
+        const trackid = tracks.ids.length + 1 // TODO use shortid to sync over network
         const loops = scenes.ids.reduce((loopSet, sceneid) => {
             return { ...loopSet, [getLoopId(sceneid, trackid)]: {...defaultLoop} }
         }, {})

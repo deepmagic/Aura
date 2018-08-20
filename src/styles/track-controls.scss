@@ -33,11 +33,14 @@
         button {
             margin-bottom: $padding/2;
             font-weight: bold;
-            width: 62px; // TODO fix me, 100% isn't working
+            width: 55px; // TODO fix me, 100% isn't working
+            padding: 0;
+            &.active { color: #0ff; }
         }
     }
 }
 
 .master-track {
-    height: calc(100% - 24px);
+    height: calc(100% - 20px);
+    padding: 0px 8px 8px 8px;
 }

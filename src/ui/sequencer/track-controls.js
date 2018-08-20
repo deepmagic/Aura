@@ -3,17 +3,50 @@ import { Fader } from 'ui/common/fader'
 import { Knob } from 'ui/common/knob'
 import { Level } from 'ui/common/level'
 
-export const TrackControls = ({track}) =>
-    <div className='track-controls'>
-        <div className='lhs'>
-            <TrackVolume volume={track.volume} pan={track.pan} />
-        </div>
-        <div className='rhs'>
-            <TrackSend send={track.send} levels={track.levels} />
-        </div>
-    </div>
+export class TrackControlsView extends React.Component {
+    onTrackMute = () => {
+        const { trackMute, track, trackid } = this.props
+        trackMute(trackid, !track.mute)
+    }
 
-const TrackVolume = ({volume, pan}) =>
+    onTrackSolo = () => {
+        const { trackSolo, track, trackid } = this.props
+        trackSolo(trackid, !track.solo)
+    }
+
+    render () {
+        const {track} = this.props
+
+        return (
+            <div className='track-controls'>
+                <div className='lhs'>
+                    <TrackVolume
+                        onMute={this.onTrackMute}
+                        onSolo={this.onTrackSolo}
+                        mute={track.mute}
+                        solo={track.solo}
+                        pan={track.pan}
+                        volume={track.volume} />
+                </div>
+                <div className='rhs'>
+                    <TrackSend send={track.send} levels={track.level} />
+                </div>
+            </div>
+        )
+    }
+}
+
+import { connect } from 'react-redux'
+import { trackMute, trackSolo } from 'actions/tracks'
+export const TrackControls = connect(
+    null,
+    {
+        trackMute,
+        trackSolo,
+    }
+)(TrackControlsView)
+
+const TrackVolume = ({volume, pan, onMute, mute, onSolo, solo}) =>
     <div className='track-volume'>
         <div className='pan-knob'>
             <Knob rotation={pan} />
@@ -22,8 +55,8 @@ const TrackVolume = ({volume, pan}) =>
             <Fader level={volume} />
         </div>
         <div className='buttons'>
-            <button>Solo</button>
-            <button>Mute</button>
+            <button onClick={onSolo} className={solo ? 'active' : ''}>Solo</button>
+            <button onClick={onMute} className={mute ? 'active' : ''}>Mute</button>
         </div>
     </div>
 

@@ -1,7 +1,7 @@
 import Tone from 'tone'
 
 export const PolySynth = () => {
-    const instrument = new Tone.PolySynth(6, Tone.AMSynth).toMaster()
+    const instrument = new Tone.PolySynth(6, Tone.AMSynth)
     instrument.set({oscillator: {type: 'sawtooth'}})
 
     const play = (time, note) => {

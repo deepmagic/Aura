@@ -14,9 +14,9 @@ export const Player = () => {
         'D9': 'samples/808/808-Snare10.wav',
     }
     */
-    const instrument = new Tone.Players(samples).toMaster()
-    const keyMap = Object.keys(samples)
+    const instrument = new Tone.Players(samples)
 
+    const keyMap = Object.keys(samples)
     const keys = () => {
         return keyMap
     }
@@ -27,8 +27,8 @@ export const Player = () => {
     }
 
     return {
+        instrument,
         keys,
         play,
-        instrument,
     }
 }

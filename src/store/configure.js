@@ -1,7 +1,7 @@
 // import thunk from 'redux-thunk'
 import { rootReducer } from 'reducers/'
 import { applyMiddleware, createStore, compose } from 'redux'
-import { toneMiddleware } from 'controller'
+import { controllerMiddleware } from 'controller'
 
 export const configureStore = (initialState) => {
     return createStore(
@@ -9,7 +9,7 @@ export const configureStore = (initialState) => {
         initialState,
         compose(
             // applyMiddleware(thunk),
-            applyMiddleware(toneMiddleware),
+            applyMiddleware(controllerMiddleware),
             window.__REDUX_DEVTOOLS_EXTENSION__
                 ? window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
                 : undefined,

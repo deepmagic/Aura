@@ -75,6 +75,7 @@ import {
     transportPause,
     transportStop,
     transportRecord,
+    transportBpm,
 } from 'actions/transport'
 
 export const TransportControl = connect(
@@ -87,5 +88,6 @@ export const TransportControl = connect(
         transportPause,
         transportStop,
         transportRecord,
+        transportBpm,
     }
 )(TransportControlView)

@@ -1,9 +1,10 @@
 import Tone from 'tone'
 import { TRANSPORT_DEFAULT_BPM, TRANSPORT_DEFAULT_LOOPLENGTH } from 'controller/constants'
 import { masterLevel } from 'actions/master'
+import { trackLevel } from 'actions/tracks'
 import { transportTime } from 'actions/transport'
 
-export const Transport = () => {
+export const Transport = (tracks) => {
     const masterMeter = new Tone.Meter()
     Tone.Master.connect(masterMeter)
 
@@ -14,9 +15,16 @@ export const Transport = () => {
         Tone.Transport.setLoopPoints(0, TRANSPORT_DEFAULT_LOOPLENGTH)
         Tone.Transport.loop = true
 
+        // TODO cancel if ui isn't visible
         levelLoop = () => {
             const level = Tone.dbToGain(masterMeter.getLevel())
             dispatch(masterLevel(level))
+
+            for(const trackid in tracks.tracks) {
+                const level = Tone.dbToGain(tracks.tracks[trackid].meter.getLevel())
+                dispatch(trackLevel(trackid, {left: level, right: level}))
+            }
+
             cancelLevel = requestAnimationFrame(levelLoop)
         }
 
@@ -47,7 +55,7 @@ export const Transport = () => {
     }
 
     const transportBpm = (bpm) => {
-        Tone.transport.bpm = bpm
+        Tone.Transport.bpm.value = bpm
     }
 
     const transportLoopLength = (loopLength) => {
