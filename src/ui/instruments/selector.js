@@ -6,7 +6,7 @@ import { defaultLoop, defaultTrack } from 'ui/sequencer/constants'
 const availableInstruments = [
     {id: 1, name: 'Linndrum', image: 'images/instruments/linndrum.png'},
     {id: 2, name: 'polysynth', image: 'images/instruments/polysix.png'},
-    {name: 'fm'},
+    {id: 3, name: 'Roland 808', image: 'images/instruments/808.png'},
     {name: 'metal'},
 
     {name: 'dummy'},

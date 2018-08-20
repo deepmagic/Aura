@@ -4,6 +4,7 @@ import { Player } from './player'
 const instrumentsMap = {
     '1': Player,
     '2': PolySynth,
+    '3': Player,
 }
 
 export const getInstrument = (instid) =>

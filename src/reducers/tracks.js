@@ -2,6 +2,7 @@ import {
     TRACK_ADD,
     TRACK_DEL,
     TRACK_LEVEL,
+    TRACK_LEVELS,
     TRACK_MUTE,
     TRACK_NAME,
     TRACK_PAN,
@@ -33,6 +34,17 @@ export const tracks = (state = initialState, action) => {
             const { [action.trackid]: deleted, ...newTracks } = state
             newTracks.ids = newTracks.ids.filter(id => id !== action.trackid)
             return newTracks
+        case TRACK_LEVELS: {
+            const newTracks = {}
+
+            for (let i = 0; i < action.tracks.length; i++) {
+                const trackid = action.tracks[i]
+                const level = action.levels[i]
+                newTracks[trackid] = { ...state[trackid], level }
+            }
+
+            return { ...state, ...newTracks }
+        }
         case TRACK_LEVEL:
             return updateTrack(state, action, 'level')
         case TRACK_MUTE:
