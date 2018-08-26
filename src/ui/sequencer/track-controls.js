@@ -14,22 +14,31 @@ export class TrackControlsView extends React.Component {
         trackSolo(trackid, !track.solo)
     }
 
+    onMidi = () => {
+        const { midi, midiSetTrack, trackid } = this.props
+        midiSetTrack(trackid === midi.trackid ? null : trackid)
+    }
+
     render () {
-        const {track} = this.props
+        const { midi, track, trackid } = this.props
 
         return (
             <div className='track-controls'>
                 <div className='lhs'>
                     <TrackVolume
-                        onMute={this.onTrackMute}
+                        onMidi={this.onMidi}
+                        midiActive={midi.trackid === trackid}
                         onSolo={this.onTrackSolo}
-                        mute={track.mute}
                         solo={track.solo}
                         pan={track.pan}
                         volume={track.volume} />
                 </div>
                 <div className='rhs'>
-                    <TrackSend send={track.send} levels={track.level} />
+                    <TrackSend
+                        onMute={this.onTrackMute}
+                        mute={track.mute}
+                        send={track.send}
+                        levels={track.level} />
                 </div>
             </div>
         )
@@ -38,15 +47,19 @@ export class TrackControlsView extends React.Component {
 
 import { connect } from 'react-redux'
 import { trackMute, trackSolo } from 'actions/tracks'
+import { midiSetTrack } from 'actions/midi'
 export const TrackControls = connect(
-    null,
+    (state) => ({
+        midi: state.midi
+    }),
     {
         trackMute,
         trackSolo,
+        midiSetTrack,
     }
 )(TrackControlsView)
 
-const TrackVolume = ({volume, pan, onMute, mute, onSolo, solo}) =>
+const TrackVolume = ({volume, pan, onMidi, midiActive, onSolo, solo}) =>
     <div className='track-volume'>
         <div className='pan-knob'>
             <Knob rotation={pan} />
@@ -56,11 +69,11 @@ const TrackVolume = ({volume, pan, onMute, mute, onSolo, solo}) =>
         </div>
         <div className='buttons'>
             <button onClick={onSolo} className={solo ? 'active' : ''}>Solo</button>
-            <button onClick={onMute} className={mute ? 'active' : ''}>Mute</button>
+            <button onClick={onMidi} className={midiActive ? 'active' : ''}>MIDI</button>
         </div>
     </div>
 
-const TrackSend = ({send, levels}) =>
+const TrackSend = ({send, levels, onMute, mute}) =>
     <div className='track-send'>
         <div className='send-knob'>
             <Knob rotation={send} />
@@ -69,7 +82,7 @@ const TrackSend = ({send, levels}) =>
             <TrackLevels levels={levels} />
         </div>
         <div className='buttons'>
-            <button>MIDI</button>
+            <button onClick={onMute} className={mute ? 'active' : ''}>Mute</button>
             <button>IFX</button>
         </div>
     </div>

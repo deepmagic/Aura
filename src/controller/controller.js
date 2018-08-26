@@ -1,5 +1,6 @@
 import Tone from 'tone'
 import { getInstrument } from 'instruments'
+import { Midi } from './midi'
 import { Tracks } from './tracks'
 import { Transport } from './transport'
 
@@ -36,14 +37,12 @@ export const Controller = () => {
     }
 
     const loopAddNote = (action) => {
-        console.log('loopAddNote', action)
         const noteValue = { ...action.note, time: action.note.on }
         loopNotes[action.loopid].push(noteValue)
         loops[action.loopid].add(action.note.on, noteValue)
     }
 
     const loopDelNote = (action) => {
-        console.log('loopDelNote', action)
         const noteValue = loopNotes[action.loopid].splice(action.index, 1)[0]
         loops[action.loopid].remove(noteValue.on, noteValue)
     }
@@ -63,7 +62,8 @@ export const Controller = () => {
         loopDelNote,
         trackAdd,
         trackDel,
+        ...Midi(instruments),
         ...tracks.actions,
-        ...Transport(tracks), // not sure this is a good idea, used for track levels loop 
+        ...Transport(tracks), // not sure this is a good idea, used for track levels loop
     }
 }

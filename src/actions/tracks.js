@@ -12,7 +12,6 @@ export const trackDel = (trackid) => ({
 })
 
 export const TRACK_LEVELS = 'TRACK_LEVELS'
-export const TRACK_LEVEL = 'TRACK_LEVEL'
 export const TRACK_MUTE = 'TRACK_MUTE'
 export const TRACK_NAME = 'TRACK_NAME'
 export const TRACK_PAN = 'TRACK_PAN'
@@ -24,12 +23,6 @@ export const trackLevels = (tracks, levels) => ({
     type: TRACK_LEVELS,
     tracks,
     levels,
-})
-
-export const trackLevel = (trackid, level) => ({
-    type: TRACK_LEVEL,
-    trackid,
-    level,
 })
 export const trackMute = (trackid, mute) => ({
     type: TRACK_MUTE,

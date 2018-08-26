@@ -102,7 +102,6 @@
             overflow: auto;
             flex-direction: column;
 
-
             .loop-set {
                 display:flex;
                 min-height: $track-block-height;
@@ -121,19 +120,37 @@
                     margin-right: $border-size;
                     text-align: center;
 
+                    img {
+                        position: absolute;
+                        top: 8px;
+                        left: 0;
+                    }
+
                     .playhead {
                         pointer-events: none;
                         position: absolute;
-                        top: 0;
+                        top: 8px;
                         left: 0;
-                        height: 100%;
+                        height: calc(100% - 8px);
                         width: 100%;
                         border-left: 1px $color-highlight solid;
+                    }
+
+                    &:before {
+                        content: '';
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        height: 8px;
+                        width: 100%;
+                        background: $color-midi-note;
                     }
 
                     &.placeholder {
                         border:none;
                         background-color: transparent;
+
+                        &:before { background: transparent }
                     }
                 }
             }
@@ -169,7 +186,7 @@
             box-shadow: inset 0 0 8px rgba(#333, 0.5), inset 0 1px 1px #555;
 
             .title {
-
+                height: 22px;
             }
 
             .image {

@@ -1,8 +1,7 @@
 import {
     TRACK_ADD,
     TRACK_DEL,
-    TRACK_LEVEL,
-    TRACK_LEVELS,
+    TRACK_LEVELS, // TODO refactor master as track 0 
     TRACK_MUTE,
     TRACK_NAME,
     TRACK_PAN,
@@ -45,8 +44,6 @@ export const tracks = (state = initialState, action) => {
 
             return { ...state, ...newTracks }
         }
-        case TRACK_LEVEL:
-            return updateTrack(state, action, 'level')
         case TRACK_MUTE:
             return updateTrack(state, action, 'mute')
         case TRACK_NAME:

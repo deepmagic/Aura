@@ -24,6 +24,11 @@
         padding: $padding $padding * 2;
     }
 
+    .track-volume .buttons button.active:nth-child(1) { color: #fa0 } // solo
+    .track-volume .buttons button.active:nth-child(2) { color: #ff0 } // midi
+    .track-send .buttons button.active:nth-child(1) { color: #0ff } // mute
+    .track-send .buttons button.active:nth-child(2) { color: #fa0 } // ifx
+
     .buttons {
         display: flex;
         flex-direction: column;
@@ -35,7 +40,6 @@
             font-weight: bold;
             width: 55px; // TODO fix me, 100% isn't working
             padding: 0;
-            &.active { color: #0ff; }
         }
     }
 }

@@ -4,7 +4,7 @@ import { parseTransportTime } from 'ui/sequencer/utils'
 
 // matching width/height of css .song-content.loops.loop
 const LOOP_WIDTH = 190 // $track-block-width
-const LOOP_HEIGHT = 120
+const LOOP_HEIGHT = 120 - 8 // $track-block-height - header bar
 const NOTE_HEIGHT = 3 // arbitrary
 
 const SongLoopPlayhead = ({x}) =>

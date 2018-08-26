@@ -9,6 +9,13 @@ import {
 } from 'actions/instruments'
 
 import {
+    MIDI_SET_TRACK,
+    MIDI_NOTE_ON,
+    MIDI_NOTE_OFF,
+    MIDI_CTRL_CHANGE,
+} from 'actions/midi'
+
+import {
     TRACK_ADD,
     TRACK_DEL,
     TRACK_MUTE,
@@ -43,6 +50,19 @@ export const toneMiddleware = store => next => action => {
             break
         case LOOP_DEL_NOTE:
             ToneController.loopDelNote(action)
+            break
+    // MIDI - TODO move to separate middleware
+        case MIDI_SET_TRACK:
+            ToneController.midiSetTrack(action.trackid)
+            break
+        case MIDI_NOTE_ON:
+            ToneController.midiNoteOn(action.data)
+            break
+        case MIDI_NOTE_OFF:
+            ToneController.midiNoteOff(action.data)
+            break
+        case MIDI_CTRL_CHANGE:
+            ToneController.midiCtrlChange(action.data)
             break
     // TRACKS
         case TRACK_ADD:

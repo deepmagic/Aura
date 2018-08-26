@@ -1,16 +1,9 @@
 import Tone from 'tone'
+import { Keyboard } from './keyboard'
 
 export const PolySynth = () => {
     const instrument = new Tone.PolySynth(6, Tone.AMSynth)
-    instrument.set({oscillator: {type: 'sawtooth'}})
+    instrument.set({oscillator: {partials : [0, 2, 3, 4]}})
 
-    const play = (time, note) => {
-        const duration = Tone.TimeBase(note.off) - Tone.TimeBase(note.on)
-        instrument.triggerAttackRelease(note.n + note.o, duration, time, note.v)
-    }
-
-    return {
-        play,
-        instrument,
-    }
+    return Keyboard(instrument)
 }
