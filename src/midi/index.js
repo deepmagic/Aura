@@ -1,2 +1,2 @@
 export { Midi } from './midi'
-export { midiMiddleware } from './midiMiddleware'
+// export { midiMiddleware } from './midiMiddleware'

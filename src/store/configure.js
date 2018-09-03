@@ -8,11 +8,8 @@ export const configureStore = (initialState) => {
         rootReducer,
         initialState,
         compose(
-            // applyMiddleware(thunk),
             applyMiddleware(controllerMiddleware),
-            window.__REDUX_DEVTOOLS_EXTENSION__
-                ? window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-                : undefined,
+            window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : compose,
         )
     )
 }

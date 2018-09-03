@@ -4,6 +4,8 @@ import { Note } from 'ui/sequencer/pattern-notes'
 import { PatternControl } from 'ui/sequencer/pattern-control'
 import { PatternGrid } from 'ui/sequencer/pattern-grid'
 import { PatternModulation } from 'ui/sequencer/pattern-modulation'
+// import cssColors from 'styles/colors.scss'
+import cssConstants from 'styles/constants.scss'
 
 // on/off time bar:beat:sixteenths
 // https://tonejs.github.io/docs/r12/Type#barsbeatssixteenths
@@ -11,8 +13,8 @@ import { PatternModulation } from 'ui/sequencer/pattern-modulation'
 const ZOOM_MIN = 1
 const ZOOM_MAX = 8
 
-// input constants
-const SCREEN_WIDTH = 1920 - 100 // 100 = left width of keys css : $left-keys-width
+// input constants TODO get 1920 screen width on browswer resize event
+const SCREEN_WIDTH = 1920 - cssConstants.leftkeyswidth
 
 class Bar extends React.PureComponent {
     render () {

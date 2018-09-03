@@ -6,6 +6,10 @@ $color-light2: #5e9cc2;
 $color-mid: #2f5d94;
 $color-50white: rgba(255,255,255,0.5);
 $color-midi-note-velocity: #6ba2af;
-$color-midi-note: #8fd8ea;
 $color-highlight: #fdcd32;
+$color-midi-note: #8fd8ea;
 $color-play: #30a7ff;
+
+:export {
+    colormidinote: $color-midi-note;
+}

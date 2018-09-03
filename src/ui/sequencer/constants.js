@@ -14,7 +14,7 @@ export const OCTAVE_HEIGHT = NOTES.length * NOTE_HEIGHT
 export const NUM_KEYS = OCTAVES.length * NOTES.length
 export const MAX_HEIGHT =  NUM_KEYS * NOTE_HEIGHT
 export const defaultLoop = {
-    bars: 1,
+    bars: 4,
     notes: [
         /*
         { n: 'C',  o: 9, v: 0.9, on: '0:0:0.0', off: '0:0:1.0' },

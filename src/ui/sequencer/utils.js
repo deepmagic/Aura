@@ -3,7 +3,7 @@ import {
     OCTAVES,
     NOTE_HEIGHT,
     OCTAVE_HEIGHT,
- } from 'ui/sequencer/constants'
+} from 'ui/sequencer/constants'
 
 const getNoteOffset = (time, barsize) =>
     time.bar*barsize + time.n4*(barsize/4) + time.n16*(barsize/16)

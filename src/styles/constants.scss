@@ -1,3 +1,5 @@
+@import './colors';
+
 $padding: 8px;
 $border-size: 2px;
 $border: $border-size $color-bg1 solid;
@@ -7,6 +9,13 @@ $border-dark: $border-size #333 solid;
 $track-block-height: 120px;
 $track-block-width: 190px;
 $track-instrument-height: 100px;
-
+$loop-header-height: 8px;
 $left-keys-width: 100px;
 $keys-height: 50px;
+
+:export {
+    trackblockheight: $track-block-height / 1px;
+    trackblockwidth:  $track-block-width  / 1px;
+    loopheaderheight: $loop-header-height / 1px;
+    leftkeyswidth:    $left-keys-width    / 1px;
+}

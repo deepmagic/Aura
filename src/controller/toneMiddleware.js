@@ -56,13 +56,13 @@ export const toneMiddleware = store => next => action => {
             ToneController.midiSetTrack(action.trackid)
             break
         case MIDI_NOTE_ON:
-            ToneController.midiNoteOn(action.data)
+            ToneController.midiNoteOn(action.data, store)
             break
         case MIDI_NOTE_OFF:
-            ToneController.midiNoteOff(action.data)
+            ToneController.midiNoteOff(action.data, store)
             break
         case MIDI_CTRL_CHANGE:
-            ToneController.midiCtrlChange(action.data)
+            ToneController.midiCtrlChange(action.data, store)
             break
     // TRACKS
         case TRACK_ADD:

@@ -1,6 +1,5 @@
 /dist
 /node_modules
 /concept
-package-lock.json
 aura.txt
 stats.json

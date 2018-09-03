@@ -122,16 +122,16 @@
 
                     img {
                         position: absolute;
-                        top: 8px;
+                        top: $loop-header-height;
                         left: 0;
                     }
 
                     .playhead {
                         pointer-events: none;
                         position: absolute;
-                        top: 8px;
+                        top: $loop-header-height;
                         left: 0;
-                        height: calc(100% - 8px);
+                        height: calc(100% - #{$loop-header-height});
                         width: 100%;
                         border-left: 1px $color-highlight solid;
                     }
@@ -141,7 +141,7 @@
                         position: absolute;
                         top: 0;
                         left: 0;
-                        height: 8px;
+                        height: $loop-header-height;
                         width: 100%;
                         background: $color-midi-note;
                     }

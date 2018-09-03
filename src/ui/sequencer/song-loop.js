@@ -1,10 +1,11 @@
 import React from 'react'
 import { NOTES, OCTAVES } from 'ui/sequencer/constants'
 import { parseTransportTime } from 'ui/sequencer/utils'
+import cssColors from 'styles/colors.scss'
+import cssConstants from 'styles/constants.scss'
 
-// matching width/height of css .song-content.loops.loop
-const LOOP_WIDTH = 190 // $track-block-width
-const LOOP_HEIGHT = 120 - 8 // $track-block-height - header bar
+const LOOP_WIDTH = cssConstants.trackblockwidth
+const LOOP_HEIGHT = cssConstants.trackblockheight - cssConstants.loopheaderheight
 const NOTE_HEIGHT = 3 // arbitrary
 
 const SongLoopPlayhead = ({x}) =>
@@ -18,7 +19,7 @@ export class SongLoop extends React.PureComponent {
         this.canvas.width = LOOP_WIDTH
         this.canvas.height = LOOP_HEIGHT
         this.ctx = this.canvas.getContext('2d')
-        this.ctx.fillStyle = '#8fd8ea'
+        this.ctx.fillStyle = cssColors.colormidinote
         this.ctx.strokeStyle = '#ffffff66'
         // this.ctx.lineWidth = 1
     }
