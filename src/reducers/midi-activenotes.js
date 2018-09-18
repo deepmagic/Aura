@@ -9,16 +9,13 @@ const initialState = {}
 
 export const midiActivenotes = (state = initialState, action) => {
     switch(action.type) {
-        case MIDI_ACTIVENOTES_ADD: {
+        case MIDI_ACTIVENOTES_ADD:
+        case MIDI_ACTIVENOTES_UPDATE: {
             const { type: deleted, ...newNote } = action
             return { ...state, [action.n + action.o]: newNote } // notes can be overwritten here
         }
-        case MIDI_ACTIVENOTES_UPDATE: {
-            const { type: deleted, ...newNote } = action
-            return { ...state, [action.n + action.o]: newNote }
-        }
         case MIDI_ACTIVENOTES_DEL: {
-            const { [action.n + action.o]: deleted, ...activeNotes } = state
+            const { [action.note]: deleted, ...activeNotes } = state
             return { ...activeNotes }
         }
         case MIDI_ACTIVENOTES_CLEAR:

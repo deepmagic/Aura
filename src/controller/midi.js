@@ -1,29 +1,56 @@
 import Tone from 'tone'
 
+import { loopAddNote } from 'actions/loops'
+import {
+    midiActivenotesAdd,
+    midiActivenotesDel
+} from 'actions/midi-activenotes'
+
 export const Midi = (instruments) => {
     let midiInstrument = null
 
-    window.__debug_transport = Tone.Transport
+    // window.__debug_transport = Tone.Transport
 
     // update active notes loop
         // update off of all active notes to current position - to show note stretching while being input
         // if active note isn't finished by loop end,
-            // end it on the loop end, and start another active for this note
+            // end it on the loop end
+
     const recordNoteOn = (data, store) => {
         const { transport } = store.getState()
-        if (!(transport.recording && transport.playing)) return
+
+        if (!transport.recording && !transport.playing) return
 
         console.log('record note on', data, Tone.Transport.position)
         // add note to active notes, with on/off at position
+        const note = {
+            n: data.note.name,
+            o: data.note.octave,
+            v: data.velocity,
+            on: Tone.Transport.position,
+            off: Tone.Transport.position
+        }
 
+        store.dispatch(midiActivenotesAdd(note))
     }
     const recordNoteOff = (data, store) => {
-        const { transport } = store.getState()
-        if (!(transport.recording && transport.playing)) return
+        const {
+            transport,
+            midi,
+            midiActivenotes,
+            sceneActive
+        } = store.getState()
 
-        console.log('record note off', data, Tone.Transport.position)
-        // move active note to real notes dispatch(noteAdd())
-        // del from active notes dispatch(midiActivenotesDel())
+        if (!transport.recording && !transport.playing) return
+
+        console.log('record note off', data, Tone.Transport.position, 'midi track', midi.trackid)
+
+        const noteKey = data.note.name + data.note.octave
+        const midiNote = { ...midiActivenotes[noteKey], off: Tone.Transport.position }
+        const loopid = `${sceneActive}:${midi.trackid}`
+
+        store.dispatch(midiActivenotesDel(noteKey))   // delete note from active midi notes
+        store.dispatch(loopAddNote(loopid, midiNote)) // add note to current scene:track loop
     }
 
 // public

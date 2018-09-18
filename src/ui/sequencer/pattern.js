@@ -214,7 +214,7 @@ class PatternView extends React.Component {
                     <div className='left keys dragscroll' ref={l => this.left = l} onScroll={this.onScroll}>
                         <PatternKeys />
                     </div>
-                    <div className='right dragscroll' ref={r => this.right = r} onScroll={this.onScroll} onClick={this.gridClick}>
+                    <div className='right' ref={r => this.right = r} onScroll={this.onScroll} onClick={this.gridClick}>
                         <PatternPlayhead
                             x={width*transportTime}
                             active={transport.playing} />

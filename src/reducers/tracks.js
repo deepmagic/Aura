@@ -1,7 +1,7 @@
 import {
     TRACK_ADD,
     TRACK_DEL,
-    TRACK_LEVELS, // TODO refactor master as track 0 
+    TRACK_LEVELS, // TODO refactor master as track 0
     TRACK_MUTE,
     TRACK_NAME,
     TRACK_PAN,

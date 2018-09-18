@@ -3,15 +3,15 @@ export const MIDI_ACTIVENOTES_DEL = 'MIDI_ACTIVENOTES_DEL'
 export const MIDI_ACTIVENOTES_UPDATE = 'MIDI_ACTIVENOTES_UPDATE'
 export const MIDI_ACTIVENOTES_CLEAR = 'MIDI_ACTIVENOTES_CLEAR'
 
-export const midiActivenotesAdd = (n, o, on, off, v) => ({
+export const midiActivenotesAdd = ({n, o, on, off, v}) => ({
     type: MIDI_ACTIVENOTES_ADD,
     n, o, on, off, v,
 })
-export const midiActivenotesDel = (n, o) => ({
+export const midiActivenotesDel = (note) => ({
     type: MIDI_ACTIVENOTES_DEL,
-    n, o,
+    note
 })
-export const midiActivenotesUpdate = (n, o, on, off, v) => ({
+export const midiActivenotesUpdate = ({n, o, on, off, v}) => ({
     type: MIDI_ACTIVENOTES_UPDATE,
     n, o, on, off, v,
 })
