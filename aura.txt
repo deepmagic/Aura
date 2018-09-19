@@ -1,0 +1,67 @@
+TODO:
+    record midi into pattern
+        -input notes into midi active notes, push to loop on note off
+        input loop / active notes renderer to show notes while being input
+
+    only play active scene
+    update transport looping to highest measure and sequence lesser loops
+
+    quantized draw note
+    drag draw
+
+    move note
+    resize note
+    group move note
+    group resize note
+
+    select note
+    box select notes
+
+    code split instruments/ui
+
+    consolidate midi playback/input ?
+    write dragscroll react alternative
+
+bugs:
+
+Aura
+
+data format for patterns : display, midi, sequencer
+
+info/docs:
+    https://tonejs.github.io/docs/
+    http://cotejp.github.io/webmidi/latest/classes/WebMidi.html
+
+    https://github.com/cwilso/MIDIDrums
+    https://www.html5rocks.com/en/tutorials/audio/scheduling/
+
+    http://www.songstuff.com/recording/article/midi_message_format/
+
+drum samples:
+    https://github.com/cwilso/MIDIDrums/tree/master/sounds/drum-samples
+    https://soundpacks.com/category/free-sound-packs/page/5/
+
+midi mapper - cc messsages
+
+midi sequencer - svg scalable
+    tempo - timing internal/external clock
+    song [tracks, ...]
+        track = [loop, ...]
+            loop = [notes, ...]
+
+    x = time
+    y = note / sample
+
+    record/play/pause/stop
+
+instrument ui
+    knob - linear, radial
+    slider - x or y
+    adsr - x/y
+
+window system
+
+eslint maybes:
+    sort-imports
+    prefer-rest-params
+    prefer-spread
