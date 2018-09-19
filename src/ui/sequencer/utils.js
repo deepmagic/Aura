@@ -1,10 +1,4 @@
-import {
-    NOTES,
-    OCTAVES,
-    NOTE_HEIGHT,
-    OCTAVE_HEIGHT,
-} from 'ui/sequencer/constants'
-
+// TODO move below to general utils
 const getNoteOffset = (time, barsize) =>
     time.bar*barsize + time.n4*(barsize/4) + time.n16*(barsize/16)
 
@@ -19,6 +13,14 @@ export const parseTransportTime = (time) => {
         n16: parseFloat(n16),
     }
 }
+
+// UI stuff
+import {
+    NOTES,
+    OCTAVES,
+    NOTE_HEIGHT,
+    OCTAVE_HEIGHT,
+} from 'ui/sequencer/constants'
 
 export const getNoteProps = ({ n, o, v, on, off }, barsize) => {
     const x = getNoteOffset(parseTransportTime(on),  barsize)

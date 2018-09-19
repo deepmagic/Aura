@@ -15,7 +15,7 @@ export const Transport = (tracks) => {
         Tone.Transport.setLoopPoints(0, TRANSPORT_DEFAULT_LOOPLENGTH)
         Tone.Transport.loop = true
 
-        // TODO cancel if ui isn't visible
+        // TODO cancel if ui isn't visible, start/stop based on visible ui
         levelLoop = () => {
             const trackids = []
             const levels = []
@@ -27,6 +27,7 @@ export const Transport = (tracks) => {
                 // dispatch(trackLevels(trackid, {left: level, right: level}))
             }
 
+            // TODO do not dispatch level changes if they are all at zero and keep levelLoop running when ui is visible
             const level = Tone.dbToGain(masterMeter.getLevel())
             dispatch(masterLevel(level))
             dispatch(trackLevels(trackids, levels))
@@ -50,6 +51,7 @@ export const Transport = (tracks) => {
     const transportPause = () => {
         Tone.Transport.pause()
         cancelAnimationFrame(cancelLoop)
+        // TODO remove me
         setTimeout(() => cancelAnimationFrame(cancelLevel), 2000)
     }
 
@@ -57,6 +59,7 @@ export const Transport = (tracks) => {
         Tone.Transport.stop()
         dispatch(transportTime(0))
         cancelAnimationFrame(cancelLoop)
+        // TODO remove me
         setTimeout(() => cancelAnimationFrame(cancelLevel), 2000)
     }
 

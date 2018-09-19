@@ -6,6 +6,9 @@ import {
     midiActivenotesDel
 } from 'actions/midi-activenotes'
 
+// TODO move this fn out of ui utils
+import { getLoopId } from 'ui/sequencer/utils'
+
 export const Midi = (instruments) => {
     let midiInstrument = null
 
@@ -47,7 +50,7 @@ export const Midi = (instruments) => {
 
         const noteKey = data.note.name + data.note.octave
         const midiNote = { ...midiActivenotes[noteKey], off: Tone.Transport.position }
-        const loopid = `${sceneActive}:${midi.trackid}`
+        const loopid = getLoopId(sceneActive, midi.trackid)
 
         store.dispatch(midiActivenotesDel(noteKey))   // delete note from active midi notes
         store.dispatch(loopAddNote(loopid, midiNote)) // add note to current scene:track loop
