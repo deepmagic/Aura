@@ -42,9 +42,10 @@ export class InstrumentSelectorView extends React.Component {
 
         const trackid = tracks.ids.length + 1 // TODO use shortid to sync over network
         const loops = scenes.ids.reduce((loopSet, sceneid) => {
-            return { ...loopSet, [getLoopId(sceneid, trackid)]: {...defaultLoop} }
+            return { ...loopSet, [getLoopId(sceneid, trackid)]: {...defaultLoop } }
         }, {})
 
+        // temp
         trackAdd(trackid, { ...defaultTrack, name: trackid })
         instrumentAdd(trackid, instrument)
         loopSetAdd(loops)

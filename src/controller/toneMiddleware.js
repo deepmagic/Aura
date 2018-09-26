@@ -2,6 +2,7 @@ import {
     LOOP_SET_ADD,
     LOOP_ADD_NOTE,
     LOOP_DEL_NOTE,
+    LOOP_SET_BARS,
 } from 'actions/loops'
 
 import {
@@ -21,6 +22,10 @@ import {
     TRACK_MUTE,
     TRACK_SOLO,
 } from 'actions/tracks'
+
+import {
+    SCENE_SET_ACTIVE,
+} from 'actions/scenes'
 
 import {
     TRANSPORT_INIT,
@@ -43,13 +48,16 @@ export const toneMiddleware = store => next => action => {
             break
     // LOOPS
         case LOOP_SET_ADD:
-            ToneController.loopAdd(action)
+            ToneController.loopAdd(action, store)
             break
         case LOOP_ADD_NOTE:
             ToneController.loopAddNote(action)
             break
         case LOOP_DEL_NOTE:
             ToneController.loopDelNote(action)
+            break
+        case LOOP_SET_BARS:
+            ToneController.loopSetBars(action)
             break
     // MIDI - TODO move to separate middleware
         case MIDI_SET_TRACK:
@@ -63,6 +71,10 @@ export const toneMiddleware = store => next => action => {
             break
         case MIDI_CTRL_CHANGE:
             ToneController.midiCtrlChange(action.data, store)
+            break
+    // SCENES
+        case SCENE_SET_ACTIVE:
+            ToneController.sceneSetActive(action.sceneid, store)
             break
     // TRACKS
         case TRACK_ADD:

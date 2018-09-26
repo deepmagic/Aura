@@ -1,11 +1,8 @@
-import Tone from 'tone'
 import { getInstrument } from 'instruments'
 import { Loops } from './loops'
 import { Midi } from './midi'
 import { Tracks } from './tracks'
 import { Transport } from './transport'
-
-window.__debug_tone = Tone
 
 export const Controller = () => {
     const instruments = {}      // references to Tone.Synth, Tone.Sampler, etc
@@ -31,9 +28,9 @@ export const Controller = () => {
         instrumentAdd,
         trackAdd,
         trackDel,
-        ...Loops(instruments).actions,
         ...Midi(instruments),
-        ...tracks.actions,
         ...Transport(tracks), // not sure this is a good idea, used for track levels loop
+        ...Loops(instruments).actions,
+        ...tracks.actions,
     }
 }
