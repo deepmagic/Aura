@@ -3,6 +3,7 @@ import {
     TRANSPORT_PAUSE,
     TRANSPORT_STOP,
     TRANSPORT_RECORD,
+    TRANSPORT_REPEAT,
     TRANSPORT_TIME,
     TRANSPORT_BPM,
 } from 'actions/transport'
@@ -20,6 +21,8 @@ export const transport = (state = initialState, action) => {
             return { ...state, playing: false, paused: false, recording: false }
         case TRANSPORT_RECORD:
             return { ...state, recording: action.flag }
+        case TRANSPORT_REPEAT:
+            return { ...state, repeat: !state.repeat }
         case TRANSPORT_BPM:
             return { ...state, bpm: action.bpm }
         default:

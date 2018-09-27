@@ -1,8 +1,9 @@
 import Tone from 'tone'
 import { TRANSPORT_DEFAULT_BPM, TRANSPORT_DEFAULT_LOOPLENGTH } from 'controller/constants'
 import { masterLevel } from 'actions/master'
+import { sceneSetActive } from 'actions/scenes'
 import { trackLevels } from 'actions/tracks'
-import { transportTime } from 'actions/transport'
+import { transportStop as transportStopAction, transportTime } from 'actions/transport'
 
 export const Transport = (tracks) => {
     const masterMeter = new Tone.Meter()
@@ -10,10 +11,15 @@ export const Transport = (tracks) => {
 
     let levelLoop, cancelLevel, timeLoop, cancelLoop
 
-    const transportInit = (dispatch) => {
+    const transportInit = (store) => {
+        const { dispatch } = store
         Tone.Transport.bpm.value = TRANSPORT_DEFAULT_BPM
         Tone.Transport.setLoopPoints(0, TRANSPORT_DEFAULT_LOOPLENGTH)
         Tone.Transport.loop = true
+
+        Tone.Transport.on('loopEnd', () => {
+            Tone.Transport.scheduleOnce(playOrRepeat(store), 0)
+        })
 
         // TODO cancel if ui isn't visible, start/stop based on visible ui
         levelLoop = () => {
@@ -42,6 +48,25 @@ export const Transport = (tracks) => {
         }
     }
 
+    const playOrRepeat = (store) => {
+        const {
+            scenes,
+            sceneActive,
+            transport: { repeat }
+        } = store.getState()
+
+        if (!repeat) {
+            const nextSceneId = sceneActive + 1
+
+            if (scenes[nextSceneId]) {
+                store.dispatch(sceneSetActive(nextSceneId))
+            } else {
+                Tone.Transport.stop() // must stop immediately or Tone will play the first note 
+                store.dispatch(transportStopAction())
+            }
+        }
+    }
+
     const transportPlay = () => {
         Tone.Transport.start()
         timeLoop()
@@ -55,9 +80,9 @@ export const Transport = (tracks) => {
         setTimeout(() => cancelAnimationFrame(cancelLevel), 2000)
     }
 
-    const transportStop = (dispatch) => {
+    const transportStop = (store) => {
         Tone.Transport.stop()
-        dispatch(transportTime(0))
+        store.dispatch(transportTime(0))
         cancelAnimationFrame(cancelLoop)
         // TODO remove me
         setTimeout(() => cancelAnimationFrame(cancelLevel), 2000)

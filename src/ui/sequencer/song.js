@@ -65,8 +65,7 @@ class SongView extends React.Component {
         this.props.uiToggleSongPattern()
     }
     setScene = (sceneid) => {
-        // TODO sync change end of this scene
-        this.props.setActiveScene(sceneid)
+        this.props.sceneSetActive(sceneid)
     }
 
     render = () => {
@@ -156,7 +155,7 @@ class SongView extends React.Component {
 }
 
 import { connect } from 'react-redux'
-import { sceneAdd, setActiveScene } from 'actions/scenes'
+import { sceneAdd, sceneSetActive } from 'actions/scenes'
 import { trackAdd } from 'actions/tracks'
 import { loopSetAdd, setActiveLoop } from 'actions/loops'
 import { uiToggleSongPattern, uiToggleInstrumentSelect } from 'actions/ui'
@@ -169,10 +168,10 @@ export const Song = connect(
     }),
     {
         sceneAdd,
-        setActiveScene,
+        sceneSetActive,
         trackAdd,
         loopSetAdd,
-        setActiveLoop,
+        setActiveLoop, // rename me
         uiToggleSongPattern,
         uiToggleInstrumentSelect,
     }

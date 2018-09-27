@@ -91,7 +91,7 @@ export const toneMiddleware = store => next => action => {
             break
     // TRANSPORT
         case TRANSPORT_INIT:
-            ToneController.transportInit(store.dispatch)
+            ToneController.transportInit(store)
             break
         case TRANSPORT_PLAY:
             ToneController.transportPlay()
@@ -100,7 +100,7 @@ export const toneMiddleware = store => next => action => {
             ToneController.transportPause()
             break
         case TRANSPORT_STOP:
-            ToneController.transportStop(store.dispatch)
+            ToneController.transportStop(store)
             break
         case TRANSPORT_BPM:
             ToneController.transportBpm(action.bpm)

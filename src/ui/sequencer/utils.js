@@ -5,8 +5,8 @@ const getNoteOffset = (time, barsize) =>
 export const getLoopId = (sceneid, trackid) =>
     `${sceneid}:${trackid}`
 
-export const getSceneId = (loopId) =>
-    loopId.split(':')[0]
+export const getSceneId = (id) =>
+    id.split(':')[0]
 
 export const getTrackId = (id) =>
     id.split(':')[1]

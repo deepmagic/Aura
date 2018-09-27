@@ -24,8 +24,12 @@ export class TransportControlView extends React.Component {
         }
     }
 
+    repeat = () => {
+        this.props.transportRepeatToggle()
+    }
+
     render() {
-        const { playing, paused, recording } = this.props.transport
+        const { playing, paused, recording, repeat } = this.props.transport
         const playClass =
             playing ? 'active' :
             paused  ? 'paused' : ''
@@ -52,7 +56,9 @@ export class TransportControlView extends React.Component {
                     <Icon>play_arrow</Icon>
                 </button>
 
-                <button>
+                <button
+                    className={`repeat ${repeat ? 'active' : ''}`}
+                    onClick={this.repeat}>
                     <Icon>loop</Icon>
                 </button>
 
@@ -75,6 +81,7 @@ import {
     transportPause,
     transportStop,
     transportRecord,
+    transportRepeatToggle,
     transportBpm,
 } from 'actions/transport'
 
@@ -88,6 +95,7 @@ export const TransportControl = connect(
         transportPause,
         transportStop,
         transportRecord,
+        transportRepeatToggle,
         transportBpm,
     }
 )(TransportControlView)

@@ -13,7 +13,7 @@ export const sceneDel = (sceneid) => ({
     sceneid
 })
 
-export const setActiveScene = (sceneid) => ({
+export const sceneSetActive = (sceneid) => ({
     type: SCENE_SET_ACTIVE,
     sceneid
 })
