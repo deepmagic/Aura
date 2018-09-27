@@ -80,6 +80,7 @@ class SongView extends React.Component {
             masterLevel,
             style,
             transportTime,
+            transportLoopLength,
         } = this.props
         const playTime = transportTime * 100
 
@@ -124,6 +125,7 @@ class SongView extends React.Component {
                                                     loopid={loopid}
                                                     active={sceneActive === sceneid}
                                                     playTime={playTime}
+                                                    transportLoopLength={transportLoopLength}
                                                     onClick={() => this.editLoop(loopid)} />
                                             )
                                         })
@@ -165,6 +167,7 @@ export const Song = connect(
         masterLevel: state.masterLevel,
         sceneActive: state.sceneActive,
         transportTime: state.transportTime,
+        transportLoopLength: state.transport.loopLength
     }),
     {
         sceneAdd,

@@ -6,7 +6,7 @@ import {
 } from 'actions/loops'
 
 import {
-    INSTRUMENT_ADD
+    INSTRUMENT_ADD,
 } from 'actions/instruments'
 
 import {
@@ -57,7 +57,7 @@ export const toneMiddleware = store => next => action => {
             ToneController.loopDelNote(action)
             break
         case LOOP_SET_BARS:
-            ToneController.loopSetBars(action)
+            ToneController.loopSetBars(action, store)
             break
     // MIDI - TODO move to separate middleware
         case MIDI_SET_TRACK:

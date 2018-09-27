@@ -61,7 +61,7 @@ export const Transport = (tracks) => {
             if (scenes[nextSceneId]) {
                 store.dispatch(sceneSetActive(nextSceneId))
             } else {
-                Tone.Transport.stop() // must stop immediately or Tone will play the first note 
+                Tone.Transport.stop() // must stop immediately or Tone will play the first note
                 store.dispatch(transportStopAction())
             }
         }
@@ -93,7 +93,8 @@ export const Transport = (tracks) => {
     }
 
     const transportLoopLength = (loopLength) => {
-        Tone.Transport.setLoopPoints(0, loopLength)
+        // loop length always in bars
+        Tone.Transport.setLoopPoints(0, `${loopLength}m`)
     }
 
     return {

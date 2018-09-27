@@ -8,8 +8,8 @@ const LOOP_WIDTH = cssConstants.trackblockwidth
 const LOOP_HEIGHT = cssConstants.trackblockheight - cssConstants.loopheaderheight
 const NOTE_HEIGHT = 3 // arbitrary
 
-const SongLoopPlayhead = ({x}) =>
-    <div className='playhead' style={{ transform: `translateX(${x}%)` }}></div>
+const SongLoopPlayhead = ({percent}) =>
+    <div className='playhead' style={{ transform: `translateX(${percent}%)` }}></div>
 
 export class SongLoop extends React.PureComponent {
     constructor () {
@@ -84,18 +84,24 @@ export class SongLoop extends React.PureComponent {
     render () {
         const {
             loop,
-            // loopid,
             playTime,
             active,
-            ...props
+            transportLoopLength,
+            ...restProps
         } = this.props
 
+        const relativePlayTime = loop
+            ? playTime / (loop.bars / transportLoopLength) % 100
+            : playTime
+
+        // console.log('relativePlayTime, playTime', relativePlayTime, playTime)
+
         return (
-            <div className={`loop ${!loop ? 'placeholder' : ''}`} {...props}>
+            <div className={`loop ${!loop ? 'placeholder' : ''}`} {...restProps}>
                 {
                     loop &&
                     <React.Fragment>
-                        {active && <SongLoopPlayhead x={playTime} />}
+                        {active && <SongLoopPlayhead percent={relativePlayTime} />}
                         <img src={this.imageDataUrl} width={LOOP_WIDTH} height={LOOP_HEIGHT} />
                     </React.Fragment>
                 }

@@ -1,12 +1,25 @@
 import Tone from 'tone'
-import {getSceneId, getTrackId } from 'ui/sequencer/utils'
+import {
+    getLoopsMaxBars,
+    getSceneId,
+    getTrackId,
+} from 'ui/sequencer/utils'
+import { transportLoopLength } from 'actions/transport'
 
 window.Tone = Tone
+
 const readNotes = (notes) => notes.map((note) => ({ ...note, time: note.on }))
 
 export const Loops = (instruments) => {
     const loops = {}      // references to Tone.Part
     const loopNotes = {}  // maintain refernce to note values in loops, required for Part.remove
+
+    const updateTransportLoopEnd = (store) => {
+        const { loops: stateLoops } = store.getState()
+        const maxBars = getLoopsMaxBars(stateLoops)
+
+        store.dispatch(transportLoopLength(maxBars))
+    }
 
     const loopAdd = (action, store) => {
         const { sceneActive } = store.getState()
@@ -26,6 +39,9 @@ export const Loops = (instruments) => {
                 loops[loopId].start(0)
             }
         }
+
+        // loop is added to store after middleware fn completes
+        setTimeout(() => { updateTransportLoopEnd(store) })
     }
 
     const loopAddNote = (action) => {
@@ -39,8 +55,11 @@ export const Loops = (instruments) => {
         loops[action.loopid].remove(noteValue.on, noteValue)
     }
 
-    const loopSetBars = (action) => {
+    const loopSetBars = (action, store) => {
         loops[action.loopid].loopEnd = `${action.bars}m`
+
+        // loop is updated after middleware completes
+        setTimeout(() => { updateTransportLoopEnd(store) })
     }
 
     const sceneSetActive = (sceneId, store) => {
@@ -50,11 +69,19 @@ export const Loops = (instruments) => {
             } else {
                 loops[loopId].stop(0)
             }
+        }
 
-            const { transport } = store.getState()
-            if (transport.playing) {
-                Tone.Transport.position = 0
-            }
+        const {
+            sceneActive,
+            transport,
+        } = store.getState()
+
+        if (transport.playing) {
+            Tone.Transport.position = 0
+        }
+
+        if (sceneActive !== sceneId) {
+            updateTransportLoopEnd(store)
         }
     }
 

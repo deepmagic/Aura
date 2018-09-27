@@ -6,10 +6,18 @@ import {
     TRANSPORT_REPEAT,
     TRANSPORT_TIME,
     TRANSPORT_BPM,
+    TRANSPORT_LOOP_LENGTH,
 } from 'actions/transport'
 
-import { TRANSPORT_DEFAULT_BPM } from 'controller/constants'
-const initialState = { bpm: TRANSPORT_DEFAULT_BPM }
+import {
+    TRANSPORT_DEFAULT_BPM,
+    TRANSPORT_DEFAULT_LOOPLENGTH,
+} from 'controller/constants'
+
+const initialState = {
+    bpm: TRANSPORT_DEFAULT_BPM,
+    loopLength: TRANSPORT_DEFAULT_LOOPLENGTH,
+}
 
 export const transport = (state = initialState, action) => {
     switch(action.type) {
@@ -25,6 +33,8 @@ export const transport = (state = initialState, action) => {
             return { ...state, repeat: !state.repeat }
         case TRANSPORT_BPM:
             return { ...state, bpm: action.bpm }
+        case TRANSPORT_LOOP_LENGTH:
+            return { ...state, loopLength: action.loopLength }
         default:
             return state
     }

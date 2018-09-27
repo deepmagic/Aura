@@ -16,7 +16,7 @@ export const Controller = () => {
         tracks.add(action.trackid, instruments[action.trackid].instrument)
     }
 
-    // added above in instrumentAdd
+    // track is added above in instrumentAdd
     const trackAdd = () => {}
 
     // unused

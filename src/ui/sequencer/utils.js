@@ -20,6 +20,11 @@ export const parseTransportTime = (time) => {
     }
 }
 
+export const getLoopsMaxBars = (loops) => {
+    const loopsBars = Object.keys(loops).map(loopId => loops[loopId].bars)
+    return Math.max(...loopsBars)
+}
+
 // UI stuff
 import {
     NOTES,

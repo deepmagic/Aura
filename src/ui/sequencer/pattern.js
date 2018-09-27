@@ -177,6 +177,7 @@ class PatternView extends React.Component {
             timesig,
             transport,
             transportTime,
+            transportLoopLength,
         } = this.props
 
         const barsize = SCREEN_WIDTH / this.state.zoom
@@ -185,6 +186,9 @@ class PatternView extends React.Component {
             transform: `translateX(${this.state.offsetLeft * this.state.zoom / bars}px)`,
             width: SCREEN_WIDTH / bars * this.state.zoom
         }
+
+        const playTime = width * transportTime
+        const relativePlayTime = playTime / (bars / transportLoopLength) % width
 
         return (
             <div className='pattern' style={style} onWheel={this.onWheel}>
@@ -216,7 +220,7 @@ class PatternView extends React.Component {
                     </div>
                     <div className='right' ref={r => this.right = r} onScroll={this.onScroll} onClick={this.gridClick}>
                         <PatternPlayhead
-                            x={width*transportTime}
+                            x={relativePlayTime}
                             active={transport.playing} />
                         <PatternGrid
                             onClickNote={this.onNoteClick}
@@ -252,6 +256,7 @@ export const Pattern = connect(
         loopActive: state.loopActive,
         transport: state.transport,
         transportTime: state.transportTime,
+        transportLoopLength: state.transport.loopLength,
         ui: state.ui,
     }),
     {
