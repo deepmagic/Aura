@@ -3,10 +3,9 @@ TODO:
         -input notes into midi active notes, push to loop on note off
         input loop / active notes renderer to show notes while being input
 
-    -only play active scene
-    -enable repeat or play to next scene until done
-    -update transport looping to highest measure on track add/update/etc
-    -update play heads to play at relative speed of transport time
+    function overlay ui
+
+    implement copy scene
 
     quantized draw note
     drag draw

@@ -11,6 +11,14 @@ const NOTE_HEIGHT = 3 // arbitrary
 const SongLoopPlayhead = ({percent}) =>
     <div className='playhead' style={{ transform: `translateX(${percent}%)` }}></div>
 
+const SongLoopOverlay = ({bars}) =>
+    <div className='loop-overlay'>
+        <div className='quad'>{bars} Bar</div>
+        <div className='quad warn'>Clear</div>
+        <div className='quad'>Mute</div>
+        <div className='quad'>Copy</div>
+    </div>
+
 export class SongLoop extends React.PureComponent {
     constructor () {
         super()
@@ -87,6 +95,7 @@ export class SongLoop extends React.PureComponent {
             playTime,
             active,
             transportLoopLength,
+            showOverlay,
             ...restProps
         } = this.props
 
@@ -104,6 +113,10 @@ export class SongLoop extends React.PureComponent {
                         {active && <SongLoopPlayhead percent={relativePlayTime} />}
                         <img src={this.imageDataUrl} width={LOOP_WIDTH} height={LOOP_HEIGHT} />
                     </React.Fragment>
+                }
+                {
+                    showOverlay &&
+                    <SongLoopOverlay bars={loop && loop.bars} />
                 }
             </div>
         )

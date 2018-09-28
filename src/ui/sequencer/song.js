@@ -1,5 +1,6 @@
 import React from 'react'
 import { Icon } from 'ui/common/icon'
+import { SongSceneHead } from 'ui/sequencer/song-scene-head'
 import { SongLoop } from 'ui/sequencer/song-loop'
 import { TrackControls, TrackLevels } from 'ui/sequencer/track-controls'
 import { getLoopId } from 'ui/sequencer/utils'
@@ -72,6 +73,7 @@ class SongView extends React.Component {
         const {
             // song,
             expand,
+            functionActive,
             scenes,
             sceneActive,
             tracks,
@@ -105,6 +107,7 @@ class SongView extends React.Component {
                                     key={sceneid}
                                     active={sceneActive === sceneid}
                                     playTime={playTime}
+                                    showOverlay={functionActive}
                                     onClick={this.setScene.bind(this, sceneid)}
                                     {...scenes[sceneid]} />)
                         }
@@ -125,6 +128,7 @@ class SongView extends React.Component {
                                                     loopid={loopid}
                                                     active={sceneActive === sceneid}
                                                     playTime={playTime}
+                                                    showOverlay={functionActive}
                                                     transportLoopLength={transportLoopLength}
                                                     onClick={() => this.editLoop(loopid)} />
                                             )
@@ -164,6 +168,7 @@ import { uiToggleSongPattern, uiToggleInstrumentSelect } from 'actions/ui'
 export const Song = connect(
     state => ({
         expand: state.ui.expand,
+        functionActive: state.ui.functionActive,
         masterLevel: state.masterLevel,
         sceneActive: state.sceneActive,
         transportTime: state.transportTime,
@@ -179,16 +184,6 @@ export const Song = connect(
         uiToggleInstrumentSelect,
     }
 )(SongView)
-
-const SongScenePlayhead = ({x}) =>
-    <div className='playhead' style={{ transform: `translateX(${x}%)` }} />
-
-const SongSceneHead = ({name, active, playTime, onClick}) =>
-    <div className={`scene-head`} onClick={onClick}>
-        {active && <SongScenePlayhead x={playTime} />}
-        <Icon>play_arrow</Icon>
-        <div>{name}</div>
-    </div>
 
 const SongTrackHead = ({name}) =>
     <div className='track-head'>

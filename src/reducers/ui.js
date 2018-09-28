@@ -1,5 +1,6 @@
 import {
     UI_TOGGLE_EXPAND,
+    UI_FUNCTION,
     UI_TOGGLE_SONGPATTERN,
     UI_TOGGLE_INSTRUMENT_SELECT,
     UI_PATTERN_TOOL,
@@ -7,6 +8,7 @@ import {
 
 const initialState = {
     expand: false,
+    functionActive: false,
     songpattern: false,
     instrumentselect: false,
     patternTool: 'draw',
@@ -16,6 +18,8 @@ export const ui = (state = initialState, action) => {
     switch(action.type) {
         case UI_TOGGLE_EXPAND:
             return { ...state, expand: !state.expand }
+        case UI_FUNCTION:
+            return { ...state, functionActive: !state.functionActive }
         case UI_TOGGLE_SONGPATTERN:
             return { ...state, songpattern: !state.songpattern }
         case UI_TOGGLE_INSTRUMENT_SELECT:

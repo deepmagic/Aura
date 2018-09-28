@@ -15,8 +15,8 @@ export const Loops = (instruments) => {
     const loopNotes = {}  // maintain refernce to note values in loops, required for Part.remove
 
     const updateTransportLoopEnd = (store) => {
-        const { loops: stateLoops } = store.getState()
-        const maxBars = getLoopsMaxBars(stateLoops)
+        const { sceneActive, loops: stateLoops } = store.getState()
+        const maxBars = getLoopsMaxBars(sceneActive, stateLoops)
 
         store.dispatch(transportLoopLength(maxBars))
     }
@@ -35,7 +35,7 @@ export const Loops = (instruments) => {
             loops[loopId].loopStart = 0
             loops[loopId].loopEnd = `${action.loops[loopId].bars}m`
 
-            if (getSceneId(loopId) == sceneActive) {
+            if (getSceneId(loopId) === sceneActive) {
                 loops[loopId].start(0)
             }
         }
@@ -64,7 +64,7 @@ export const Loops = (instruments) => {
 
     const sceneSetActive = (sceneId, store) => {
         for(const loopId in loops) {
-            if (sceneId == getSceneId(loopId)) {
+            if (sceneId === getSceneId(loopId)) {
                 loops[loopId].start(0)
             } else {
                 loops[loopId].stop(0)
@@ -80,8 +80,10 @@ export const Loops = (instruments) => {
             Tone.Transport.position = 0
         }
 
+        console.log('sceneActive', sceneActive, sceneId)
+
         if (sceneActive !== sceneId) {
-            updateTransportLoopEnd(store)
+            setTimeout(() => { updateTransportLoopEnd(store) })
         }
     }
 

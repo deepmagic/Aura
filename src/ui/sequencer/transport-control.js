@@ -29,6 +29,7 @@ export class TransportControlView extends React.Component {
     }
 
     render() {
+        const { functionActive } = this.props.ui
         const { playing, paused, recording, repeat } = this.props.transport
         const playClass =
             playing ? 'active' :
@@ -36,7 +37,9 @@ export class TransportControlView extends React.Component {
 
         return (
             <div className='transport-control' style={this.props.style}>
-                <button className='textbtn function'>
+                <button
+                    className={`textbtn function ${functionActive ? 'active' : ''}`}
+                    onClick={this.props.uiToggleFunction}>
                     Function
                 </button>
 
@@ -84,10 +87,14 @@ import {
     transportRepeatToggle,
     transportBpm,
 } from 'actions/transport'
+import {
+    uiToggleFunction
+} from 'actions/ui'
 
 export const TransportControl = connect(
     (state) => ({
         transport: state.transport,
+        ui: state.ui,
     }),
     {
         transportInit,
@@ -97,5 +104,6 @@ export const TransportControl = connect(
         transportRecord,
         transportRepeatToggle,
         transportBpm,
+        uiToggleFunction,
     }
 )(TransportControlView)

@@ -6,10 +6,10 @@ export const getLoopId = (sceneid, trackid) =>
     `${sceneid}:${trackid}`
 
 export const getSceneId = (id) =>
-    id.split(':')[0]
+    parseInt(id.split(':')[0], 10)
 
 export const getTrackId = (id) =>
-    id.split(':')[1]
+    parseInt(id.split(':')[1], 10)
 
 export const parseTransportTime = (time) => {
     const [bar, n4, n16] = time.split(':')
@@ -20,8 +20,12 @@ export const parseTransportTime = (time) => {
     }
 }
 
-export const getLoopsMaxBars = (loops) => {
-    const loopsBars = Object.keys(loops).map(loopId => loops[loopId].bars)
+export const getLoopsMaxBars = (sceneId, loops) => {
+    console.log('sceneId', sceneId)
+    const loopsBars = Object.keys(loops).map(loopId =>
+        getSceneId(loopId) === sceneId
+            ? loops[loopId].bars
+            : 0)
     return Math.max(...loopsBars)
 }
 
