@@ -174,3 +174,42 @@ button {
         i { font-size: 2em; font-weight: bold }
     }
 }
+
+.popup {
+    position: absolute;
+    background: #fff;
+    box-shadow: 2px 2px 8px rgba(#000, 0.3);
+    padding: 16px;
+    border-radius: 5px;
+    color: #000;
+    z-index: 20; // TODO fix me
+
+    $caret-size: 16px;
+
+    .caret {
+        position: absolute;
+        background: #fff;
+        width: $caret-size;
+        height: $caret-size;
+
+        &.hide {
+            display: none;
+        }
+        &.top {
+            top: -$caret-size / 2;
+            border-radius: 3px 0 0 0;
+        }
+        &.right {
+            right: -$caret-size / 2;
+            border-radius: 0 3px 0 0;
+        }
+        &.bottom {
+            bottom: -$caret-size / 2;
+            border-radius: 0 0 3px 0;
+        }
+        &.left {
+            left: -$caret-size / 2;
+            border-radius: 0 0 0 3px;
+        }
+    }
+}

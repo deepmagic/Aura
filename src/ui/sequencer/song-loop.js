@@ -14,7 +14,7 @@ const SongLoopPlayhead = ({percent}) =>
 const SongLoopOverlay = ({bars}) =>
     <div className='loop-overlay'>
         <div className='quad'>{bars} Bar</div>
-        <div className='quad warn'>Clear</div>
+        <div className='quad warn' onClick={(event) => event.stopPropagation()}>Clear</div>
         <div className='quad'>Mute</div>
         <div className='quad'>Copy</div>
     </div>
@@ -100,7 +100,7 @@ export class SongLoop extends React.PureComponent {
         } = this.props
 
         const relativePlayTime = loop
-            ? playTime / (loop.bars / transportLoopLength) % 100
+            ? playTime * transportLoopLength / loop.bars % 100
             : playTime
 
         // console.log('relativePlayTime, playTime', relativePlayTime, playTime)

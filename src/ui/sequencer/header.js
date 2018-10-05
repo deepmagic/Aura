@@ -38,5 +38,7 @@ export const SeqHeader = connect(
     state => ({
         expand: state.ui.expand,
     }),
-    { uiToggleExpand }
+    {
+        uiToggleExpand
+    }
 )(SeqHeaderView)

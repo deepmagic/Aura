@@ -179,7 +179,7 @@ export const Song = connect(
         sceneSetActive,
         trackAdd,
         loopSetAdd,
-        setActiveLoop, // rename me
+        setActiveLoop, // TODO rename me
         uiToggleSongPattern,
         uiToggleInstrumentSelect,
     }

@@ -7,7 +7,7 @@ const SongScenePlayhead = ({percent}) =>
 const SongSceneHeadOverlay = () =>
     <div className='scene-head-overlay'>
         <div className='quad'>4/4 x 1</div>
-        <div className='quad'>Delete</div>
+        <div className='quad warn'>Delete</div>
         <div className='quad'>Insert</div>
         <div className='quad'>Duplicate</div>
     </div>

@@ -21,7 +21,6 @@ export const parseTransportTime = (time) => {
 }
 
 export const getLoopsMaxBars = (sceneId, loops) => {
-    console.log('sceneId', sceneId)
     const loopsBars = Object.keys(loops).map(loopId =>
         getSceneId(loopId) === sceneId
             ? loops[loopId].bars

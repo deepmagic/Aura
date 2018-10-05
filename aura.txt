@@ -4,30 +4,67 @@ TODO:
         input loop / active notes renderer to show notes while being input
 
     function overlay ui
+        -loop
+            clear notes
+            change bars - UI
+            mute loop
+            copy / paste loop
+        -scene
+            name / timesig / repeats - UI
+            delete
+            insert
+            duplicate
+        instrument
+            change
+            delete
+            duplicate
+            +freeze
+
+    -popup ui
 
     implement copy scene
 
-    quantized draw note
-    drag draw
+    get width from window size on resize, stop using 1920 constant
 
-    move note
-    resize note
-    group move note
-    group resize note
+    pattern
+        quantized draw note
+        drag draw
 
-    select note
-    box select notes
+        move note
+        resize note
+        group move note
+        group resize note
+
+        select note
+        box select notes
+
+        bar header click to bar zoom
+
+        keys based on instrument
+
+    modulation
+        change velocity
 
     code split instruments/ui
 
     consolidate midi playback/input ?
     write dragscroll react alternative
 
-bugs:
+    network collab
+        convert ids to shortuuid
+        getNextId, getId, ensure by id iteration to support sorts
 
-Aura
+        network fns
+            loopUpdate
+            trackLock/Unlock
+        ui
+            highlight active
+            show users
 
-data format for patterns : display, midi, sequencer
+    midi mapper - cc messsages
+
+BUGS:
+    grid implementation is not quite right
 
 info/docs:
     https://tonejs.github.io/docs/
@@ -41,26 +78,6 @@ info/docs:
 drum samples:
     https://github.com/cwilso/MIDIDrums/tree/master/sounds/drum-samples
     https://soundpacks.com/category/free-sound-packs/page/5/
-
-midi mapper - cc messsages
-
-midi sequencer - svg scalable
-    tempo - timing internal/external clock
-    song [tracks, ...]
-        track = [loop, ...]
-            loop = [notes, ...]
-
-    x = time
-    y = note / sample
-
-    record/play/pause/stop
-
-instrument ui
-    knob - linear, radial
-    slider - x or y
-    adsr - x/y
-
-window system
 
 eslint maybes:
     sort-imports

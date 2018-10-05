@@ -7,6 +7,7 @@ import { Provider } from 'react-redux'
 import { Midi } from 'midi/midi'
 import { AuraKeys } from 'ui/input/keys'
 import { Panel } from 'ui/common/panel'
+import { Popup } from 'ui/common/popup'
 import { Sequencer } from 'ui/sequencer'
 
 import { configureStore } from 'store/configure'
@@ -21,6 +22,12 @@ const Aura = () => {
                 <Panel>
                     <Midi />
                 </Panel>
+                <Popup
+                    caret={{ pos: 'top', x:'285px' }}
+                    x={1920-350}
+                    y={45}>
+                    <div style={{ width: 300, height: 200 }}>Hello</div>
+                </Popup>
                 <Sequencer />
             </div>
         </Provider>

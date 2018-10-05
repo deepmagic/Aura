@@ -80,8 +80,6 @@ export const Loops = (instruments) => {
             Tone.Transport.position = 0
         }
 
-        console.log('sceneActive', sceneActive, sceneId)
-
         if (sceneActive !== sceneId) {
             setTimeout(() => { updateTransportLoopEnd(store) })
         }
