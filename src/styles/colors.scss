@@ -1,6 +1,7 @@
 $color-text: #fff;
 $color-bg1: #0e387e;
 $color-bg2: #3b78c0;
+$color-bg3: #0e387f;
 $color-light: #4880c4;
 $color-light2: #5e9cc2;
 $color-mid: #2f5d94;
@@ -9,6 +10,9 @@ $color-midi-note-velocity: #6ba2af;
 $color-highlight: #fdcd32;
 $color-midi-note: #8fd8ea;
 $color-play: #30a7ff;
+$color-white: #fff;
+$color-black: #000;
+$color-black-alpha: rgba($color-black, 0.5);
 
 :export {
     colormidinote: $color-midi-note;

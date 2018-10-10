@@ -14,6 +14,9 @@ import { configureStore } from 'store/configure'
 import { initialState } from 'store/initial-state'
 const store = configureStore(initialState)
 
+
+import { LoopOptions } from 'ui/sequencer/loop-options'
+
 const Aura = () => {
     return (
         <Provider store={store}>
@@ -23,10 +26,10 @@ const Aura = () => {
                     <Midi />
                 </Panel>
                 <Popup
+                    design='floating'
                     caret={{ pos: 'top', x:'285px' }}
-                    x={1920-350}
-                    y={45}>
-                    <div style={{ width: 300, height: 200 }}>Hello</div>
+                    right={20} top={45}>
+                    <LoopOptions loop={{loopid: 'testing', bars: 4}} />
                 </Popup>
                 <Sequencer />
             </div>
