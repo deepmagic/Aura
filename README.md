@@ -4,7 +4,6 @@ A collaborative sequencer based on [Korg Gadget](http://www.korg.com/us/products
 
 ### Setup
 
-npm install
-npm run start
+npm install && npm start
 
 http://localhost:8080/

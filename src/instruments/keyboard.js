@@ -7,11 +7,11 @@ export const Keyboard = (instrument) => {
     }
 
     const midiOn = (data) => {
-        instrument.triggerAttack(`${data.note.name}${data.note.octave}`, undefined, data.velocity)
+        instrument.triggerAttack(data.note.name + data.note.octave, undefined, data.velocity)
     }
 
     const midiOff = (data) => {
-        instrument.triggerRelease(`${data.note.name}${data.note.octave}`)
+        instrument.triggerRelease(data.note.name+ data.note.octave)
     }
 
     return {

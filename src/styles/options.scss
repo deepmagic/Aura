@@ -87,3 +87,43 @@
     }
 
 }
+.song-options {
+    display: flex;
+
+    table {
+        width: 60px;
+
+        input {
+            height: 48px;
+            width: 64px;
+            border-radius: 8px;
+            border: 2px #999 solid;
+            font-size: 1em;
+            text-align: right;
+        }
+    }
+    .right {
+        width: 100px;
+
+        div {
+            border: 2px #999 solid;
+            border-radius: 8px;
+            padding: 8px;
+        }
+
+        div:first-child {
+            height: 66px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        div:last-child {
+            font-size: 0.9em;
+            height: 32px;
+            display: flex;
+            align-items: center;
+        }
+    }
+}

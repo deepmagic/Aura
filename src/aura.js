@@ -15,21 +15,20 @@ import { initialState } from 'store/initial-state'
 const store = configureStore(initialState)
 
 
-import { LoopOptions } from 'ui/sequencer/loop-options'
+import { SongOptions } from 'ui/sequencer/song-options'
 
 const Aura = () => {
     return (
         <Provider store={store}>
             <div className='aura'>
                 <AuraKeys />
-                <Panel>
+                <Panel open={false}>
                     <Midi />
                 </Panel>
                 <Popup
-                    design='floating'
-                    caret={{ pos: 'top', x:'285px' }}
-                    right={20} top={45}>
-                    <LoopOptions loop={{loopid: 'testing', bars: 4}} />
+                    caret={{ pos: 'bottom' }}
+                    left={350} bottom={56}>
+                    <SongOptions song={{ tempo: 120 }} />
                 </Popup>
                 <Sequencer />
             </div>
