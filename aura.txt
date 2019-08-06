@@ -1,4 +1,8 @@
 TODO:
+    instrument uis
+    backend websocket updates
+    selection/moving/copy of notes
+
     record midi into pattern
         -input notes into midi active notes, push to loop on note off
         input loop / active notes renderer to show notes while being input

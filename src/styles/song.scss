@@ -49,8 +49,10 @@
     }
 
     .song-content {
+        // consider content class here & pattern-content
         display: flex;
         flex: 1;
+        overflow: auto;
 
         .scene-heads {
             // border-right: $border;

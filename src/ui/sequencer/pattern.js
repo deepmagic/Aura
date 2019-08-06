@@ -7,6 +7,9 @@ import { PatternModulation } from 'ui/sequencer/pattern-modulation'
 // import cssColors from 'styles/colors.scss'
 import cssConstants from 'styles/constants.scss'
 
+import dragscroll from 'dragscroll'
+
+window.dragscroll = dragscroll
 // on/off time bar:beat:sixteenths
 // https://tonejs.github.io/docs/r12/Type#barsbeatssixteenths
 
@@ -107,7 +110,7 @@ class PatternView extends React.Component {
             this.setState({ zoom })
         }
 
-        event.preventDefault()
+        event.preventDefault() // doesn't work, due to react treating this event as passive
     }
 
     getNoteAtPoint = (x, y) => {
